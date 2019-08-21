@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 <img src="Documentation/Images/oggb.jpg" width=100%" />
 
 # Information Systems 320 | Virtual Reality Project
+=======
+# InfoSys320
+Information Systems 320 
+>>>>>>> parent of 42d121a... Modified ReadMe
 
-Hi there! 
-This project was created for the University of Auckland's Information Systems 320 project. The project requirements were to make an Mixed Reality environment to be used in learning
+### Challenge
+The Challenge is to create a Mixed Reality information system to be used in Education
 
-# Project Members
-- Dan Richards
-- Nicol Park 
-- Liam Mendoza
-- Damon Choi
 
+### People
+Dan 
+Nicol
+Liam
+Damon
