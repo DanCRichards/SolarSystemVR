@@ -1,5 +1,3 @@
-<img src="Documentation/Images/oggb.jpg" width=100%" />
-
 # Information Systems 320 | Virtual Reality Project
 
 Hi there! 
