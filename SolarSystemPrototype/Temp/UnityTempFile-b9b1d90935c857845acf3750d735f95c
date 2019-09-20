@@ -1,0 +1,631 @@
+/target:library
+/nowarn:0169
+/out:Temp/Microsoft.MixedReality.Toolkit.dll
+/debug:portable
+/optimize-
+/nostdlib+
+/preferreduilang:en-US
+/langversion:latest
+/reference:Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Core.Utilities.Editor.dll
+/reference:Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Core.Definitions.Utilities.Editor.dll
+/reference:Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Core.Utilities.Async.dll
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.AIModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.ARModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.AccessibilityModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.AnimationModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.AssetBundleModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.AudioModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.BaselibModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.ClothModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.CoreModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.CrashReportingModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.DirectorModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.FileSystemHttpModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.GameCenterModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.GridModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.HotReloadModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.IMGUIModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.ImageConversionModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.InputModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.JSONSerializeModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.LocalizationModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.ParticleSystemModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.PerformanceReportingModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.PhysicsModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.Physics2DModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.ProfilerModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.ScreenCaptureModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.SharedInternalsModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.SpatialTrackingModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.SpriteMaskModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.SpriteShapeModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.StreamingModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.StyleSheetsModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.SubstanceModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.TLSModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.TerrainModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.TerrainPhysicsModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.TextCoreModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.TextRenderingModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.TilemapModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.TimelineModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UIModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UIElementsModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UNETModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UmbraModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UnityAnalyticsModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UnityConnectModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UnityTestProtocolModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UnityWebRequestModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UnityWebRequestAssetBundleModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UnityWebRequestAudioModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UnityWebRequestTextureModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.UnityWebRequestWWWModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.VFXModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.VRModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.VehiclesModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.VideoModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.WindModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport/Tools/UnityEngine.XRModule.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\Managed/UnityEditor.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\Managed/Unity.Locator.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Timeline/Editor/UnityEditor.Timeline.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/Editor/UnityEditor.GoogleAudioSpatializer.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/Editor/UnityEditor.SpatialTracking.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.WSA.Extensions.dll"
+/reference:"C:/Program Files/Unity/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll"
+/reference:C:/Users/liamm/OneDrive/Desktop/SolarSystemF/SolarSystemPrototype/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll
+/reference:C:/Users/liamm/OneDrive/Desktop/SolarSystemF/SolarSystemPrototype/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll
+/reference:C:/Users/liamm/OneDrive/Desktop/SolarSystemF/SolarSystemPrototype/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll
+/reference:C:/Users/liamm/OneDrive/Desktop/SolarSystemF/SolarSystemPrototype/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll
+/reference:C:/Users/liamm/OneDrive/Desktop/SolarSystemF/SolarSystemPrototype/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll
+/reference:Assets/Photon/PhotonLibs/Photon3Unity3D.dll
+/reference:Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\mscorlib.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.Core.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.Runtime.Serialization.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.Xml.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.Xml.Linq.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.Numerics.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.Numerics.Vectors.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.Net.Http.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Microsoft.CSharp.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\System.Data.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\Microsoft.Win32.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\netstandard.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.AppContext.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Collections.Concurrent.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Collections.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Collections.NonGeneric.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Collections.Specialized.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ComponentModel.Annotations.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ComponentModel.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ComponentModel.EventBasedAsync.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ComponentModel.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ComponentModel.TypeConverter.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Console.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Data.Common.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Diagnostics.Contracts.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Diagnostics.Debug.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Diagnostics.FileVersionInfo.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Diagnostics.Process.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Diagnostics.StackTrace.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Diagnostics.TextWriterTraceListener.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Diagnostics.Tools.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Diagnostics.TraceSource.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Drawing.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Dynamic.Runtime.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Globalization.Calendars.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Globalization.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Globalization.Extensions.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.Compression.ZipFile.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.FileSystem.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.FileSystem.DriveInfo.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.FileSystem.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.FileSystem.Watcher.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.IsolatedStorage.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.MemoryMappedFiles.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.Pipes.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.IO.UnmanagedMemoryStream.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Linq.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Linq.Expressions.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Linq.Parallel.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Linq.Queryable.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.Http.Rtc.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.NameResolution.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.NetworkInformation.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.Ping.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.Requests.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.Security.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.Sockets.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.WebHeaderCollection.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.WebSockets.Client.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Net.WebSockets.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ObjectModel.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Reflection.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Reflection.Emit.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Reflection.Emit.ILGeneration.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Reflection.Emit.Lightweight.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Reflection.Extensions.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Reflection.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Resources.Reader.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Resources.ResourceManager.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Resources.Writer.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.CompilerServices.VisualC.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.Extensions.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.Handles.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.InteropServices.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.InteropServices.RuntimeInformation.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.InteropServices.WindowsRuntime.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.Numerics.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.Serialization.Formatters.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.Serialization.Json.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.Serialization.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Runtime.Serialization.Xml.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Security.Claims.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Security.Cryptography.Algorithms.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Security.Cryptography.Csp.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Security.Cryptography.Encoding.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Security.Cryptography.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Security.Cryptography.X509Certificates.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Security.Principal.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Security.SecureString.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ServiceModel.Duplex.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ServiceModel.Http.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ServiceModel.NetTcp.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ServiceModel.Primitives.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ServiceModel.Security.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Text.Encoding.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Text.Encoding.Extensions.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Text.RegularExpressions.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Threading.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Threading.Overlapped.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Threading.Tasks.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Threading.Tasks.Parallel.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Threading.Thread.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Threading.ThreadPool.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Threading.Timer.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.ValueTuple.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Xml.ReaderWriter.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Xml.XDocument.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Xml.XmlDocument.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Xml.XmlSerializer.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Xml.XPath.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Xml.XPath.XDocument.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\unityscript\UnityScript.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\unityscript\UnityScript.Lang.dll"
+/reference:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\unityscript\Boo.Lang.dll"
+/define:UNITY_5_3_OR_NEWER
+/define:UNITY_5_4_OR_NEWER
+/define:UNITY_5_5_OR_NEWER
+/define:UNITY_5_6_OR_NEWER
+/define:UNITY_2017_1_OR_NEWER
+/define:UNITY_2017_2_OR_NEWER
+/define:UNITY_2017_3_OR_NEWER
+/define:UNITY_2017_4_OR_NEWER
+/define:UNITY_2018_1_OR_NEWER
+/define:UNITY_2018_2_OR_NEWER
+/define:UNITY_2018_3_OR_NEWER
+/define:UNITY_2018_4_OR_NEWER
+/define:UNITY_2018_4_5
+/define:UNITY_2018_4
+/define:UNITY_2018
+/define:UNITY_INCLUDE_TESTS
+/define:ENABLE_AUDIO
+/define:ENABLE_CACHING
+/define:ENABLE_CLOTH
+/define:ENABLE_MICROPHONE
+/define:ENABLE_MULTIPLE_DISPLAYS
+/define:ENABLE_PHYSICS
+/define:ENABLE_SPRITES
+/define:ENABLE_GRID
+/define:ENABLE_TILEMAP
+/define:ENABLE_TERRAIN
+/define:ENABLE_TEXTURE_STREAMING
+/define:ENABLE_DIRECTOR
+/define:ENABLE_UNET
+/define:ENABLE_LZMA
+/define:ENABLE_UNITYEVENTS
+/define:ENABLE_WEBCAM
+/define:ENABLE_WWW
+/define:ENABLE_CLOUD_SERVICES_COLLAB
+/define:ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS
+/define:ENABLE_CLOUD_HUB
+/define:ENABLE_CLOUD_PROJECT_ID
+/define:ENABLE_CLOUD_SERVICES_USE_WEBREQUEST
+/define:ENABLE_CLOUD_SERVICES_UNET
+/define:ENABLE_CLOUD_SERVICES_BUILD
+/define:ENABLE_CLOUD_LICENSE
+/define:ENABLE_EDITOR_HUB
+/define:ENABLE_EDITOR_HUB_LICENSE
+/define:ENABLE_WEBSOCKET_CLIENT
+/define:ENABLE_DIRECTOR_AUDIO
+/define:ENABLE_DIRECTOR_TEXTURE
+/define:ENABLE_TIMELINE
+/define:ENABLE_EDITOR_METRICS
+/define:ENABLE_EDITOR_METRICS_CACHING
+/define:ENABLE_MANAGED_TRANSFORM_JOBS
+/define:ENABLE_MANAGED_ANIMATION_JOBS
+/define:INCLUDE_DYNAMIC_GI
+/define:INCLUDE_GI
+/define:ENABLE_MONO_BDWGC
+/define:RENDER_SOFTWARE_CURSOR
+/define:INCLUDE_PUBNUB
+/define:ENABLE_VIDEO
+/define:ENABLE_CUSTOM_RENDER_TEXTURE
+/define:ENABLE_LOCALIZATION
+/define:PLATFORM_METRO
+/define:UNITY_METRO
+/define:UNITY_METRO_API
+/define:UNITY_WSA
+/define:UNITY_WSA_10_0
+/define:UNITY_WINRT_10_0
+/define:PLATFORM_WINRT
+/define:UNITY_WINRT
+/define:ENABLE_WINRT_PINVOKE
+/define:ENABLE_LAZY_METHOD_CACHING
+/define:ENABLE_MOVIES
+/define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+/define:ENABLE_NETWORK
+/define:ENABLE_EVENT_QUEUE
+/define:UNITY_PLATFORM_THREAD_TO_CORE_MAPPING
+/define:ENABLE_SUBSTANCE
+/define:PLATFORM_SUPPORTS_ADS_ID
+/define:ENABLE_UNITYWEBREQUEST
+/define:ENABLE_CLOUD_SERVICES
+/define:ENABLE_CLOUD_SERVICES_ADS
+/define:ENABLE_CLOUD_SERVICES_ANALYTICS
+/define:ENABLE_CLOUD_SERVICES_PURCHASING
+/define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
+/define:CURL_STATICLIB
+/define:ENABLE_VR
+/define:ENABLE_AR
+/define:PLATFORM_OVERRIDES_APPLICATION_PACKAGE_NAME
+/define:ENABLE_MONO
+/define:NET_4_6
+/define:ENABLE_MANAGED_JOBS
+/define:ENABLE_PROFILER
+/define:DEBUG
+/define:TRACE
+/define:UNITY_ASSERTIONS
+/define:UNITY_EDITOR
+/define:UNITY_EDITOR_64
+/define:UNITY_EDITOR_WIN
+/define:ENABLE_UNITY_COLLECTIONS_CHECKS
+/define:ENABLE_BURST_AOT
+/define:UNITY_TEAM_LICENSE
+/define:PHOTON_UNITY_NETWORKING
+/define:PUN_2_0_OR_NEWER
+/define:PUN_2_OR_NEWER
+/define:CSHARP_7_OR_LATER
+/define:CSHARP_7_3_OR_NEWER
+Assets\MixedRealityToolkit\Attributes\EnumFlagsAttribute.cs
+Assets\MixedRealityToolkit\Attributes\ExtendsAttribute.cs
+Assets\MixedRealityToolkit\Attributes\HelpAttribute.cs
+Assets\MixedRealityToolkit\Attributes\ImplementsAttribute.cs
+Assets\MixedRealityToolkit\Attributes\MixedRealityControllerAttribute.cs
+Assets\MixedRealityToolkit\Attributes\MixedRealityDataProviderAttribute.cs
+Assets\MixedRealityToolkit\Attributes\MixedRealityExtensionServiceAttribute.cs
+Assets\MixedRealityToolkit\Attributes\MixedRealityServiceProfileAttribute.cs
+Assets\MixedRealityToolkit\Attributes\PhysicsLayerAttribute.cs
+Assets\MixedRealityToolkit\Attributes\PrefabAttribute.cs
+Assets\MixedRealityToolkit\Attributes\ReadOnlyAttribute.cs
+Assets\MixedRealityToolkit\Attributes\ScenePickAttribute.cs
+Assets\MixedRealityToolkit\Attributes\SystemTypeAttribute.cs
+Assets\MixedRealityToolkit\Attributes\TagPropertyAttribute.cs
+Assets\MixedRealityToolkit\Attributes\Vector3RangeAttribute.cs
+Assets\MixedRealityToolkit\Definitions\BaseMixedRealityProfile.cs
+Assets\MixedRealityToolkit\Definitions\BoundarySystem\Edge.cs
+Assets\MixedRealityToolkit\Definitions\BoundarySystem\InscribedRectangle.cs
+Assets\MixedRealityToolkit\Definitions\BoundarySystem\MixedRealityBoundaryVisualizationProfile.cs
+Assets\MixedRealityToolkit\Definitions\Devices\ControllerMappingLibrary.cs
+Assets\MixedRealityToolkit\Definitions\Devices\DeviceInputType.cs
+Assets\MixedRealityToolkit\Definitions\Devices\GestureInputType.cs
+Assets\MixedRealityToolkit\Definitions\Devices\Headset.cs
+Assets\MixedRealityToolkit\Definitions\Devices\InputSourceType.cs
+Assets\MixedRealityToolkit\Definitions\Devices\MixedRealityControllerConfigurationFlags.cs
+Assets\MixedRealityToolkit\Definitions\Devices\MixedRealityControllerMapping.cs
+Assets\MixedRealityToolkit\Definitions\Devices\MixedRealityControllerMappingProfile.cs
+Assets\MixedRealityToolkit\Definitions\Devices\MixedRealityControllerVisualizationProfile.cs
+Assets\MixedRealityToolkit\Definitions\Devices\MixedRealityControllerVisualizationSetting.cs
+Assets\MixedRealityToolkit\Definitions\Devices\MixedRealityEyeTrackingProfile.cs
+Assets\MixedRealityToolkit\Definitions\Devices\MixedRealityHandTrackingProfile.cs
+Assets\MixedRealityToolkit\Definitions\Devices\MixedRealityInteractionMapping.cs
+Assets\MixedRealityToolkit\Definitions\Devices\SDKType.cs
+Assets\MixedRealityToolkit\Definitions\Devices\SupportedControllerType.cs
+Assets\MixedRealityToolkit\Definitions\Devices\TrackingState.cs
+Assets\MixedRealityToolkit\Definitions\Diagnostics\MixedRealityDiagnosticsProfile.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\AnimatedCursorData.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\CursorStateEnum.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionEventPair.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionRuleDigital.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionRuleDualAxis.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionRulePoseAxis.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionRuleQuaternionAxis.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionRuleSingleAxis.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionRuleVectorAxis.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\KeywordAndResponse.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityGestureMapping.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityGesturesProfile.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityInputAction.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityInputActionRulesProfile.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityInputActionsProfile.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityInputSystemProfile.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityPointerProfile.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealitySpeechCommandsProfile.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\PointerOption.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\SpeechCommands.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\TouchableEventType.cs
+Assets\MixedRealityToolkit\Definitions\InputSystem\WindowsGestureSettings.cs
+Assets\MixedRealityToolkit\Definitions\Lines\DistortionMode.cs
+Assets\MixedRealityToolkit\Definitions\Lines\InterpolationMode.cs
+Assets\MixedRealityToolkit\Definitions\Lines\InterpolationType.cs
+Assets\MixedRealityToolkit\Definitions\Lines\LinePointTransformMode.cs
+Assets\MixedRealityToolkit\Definitions\Lines\LineRotationMode.cs
+Assets\MixedRealityToolkit\Definitions\Lines\PointDistributionMode.cs
+Assets\MixedRealityToolkit\Definitions\Lines\StepMode.cs
+Assets\MixedRealityToolkit\Definitions\MixedRealityCameraProfile.cs
+Assets\MixedRealityToolkit\Definitions\MixedRealityInputDataProviderConfiguration.cs
+Assets\MixedRealityToolkit\Definitions\MixedRealityRegisteredServiceProvidersProfile.cs
+Assets\MixedRealityToolkit\Definitions\MixedRealityServiceConfiguration.cs
+Assets\MixedRealityToolkit\Definitions\MixedRealitySpatialObserverConfiguration.cs
+Assets\MixedRealityToolkit\Definitions\MixedRealityToolkitConfigurationProfile.cs
+Assets\MixedRealityToolkit\Definitions\Physics\ComparableRaycastResult.cs
+Assets\MixedRealityToolkit\Definitions\Physics\FocusDetails.cs
+Assets\MixedRealityToolkit\Definitions\Physics\RayStep.cs
+Assets\MixedRealityToolkit\Definitions\Physics\SceneQueryType.cs
+Assets\MixedRealityToolkit\Definitions\Physics\TeleportSurfaceResult.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\BaseSpatialAwarenessObject.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\BaseSpatialAwarenessObserverProfile.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\MixedRealitySpatialAwarenessMeshObserverProfile.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\MixedRealitySpatialAwarenessSystemProfile.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\SpatialAwarenessMeshLevelOfDetail.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\SpatialAwarenessMeshObject.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\SpatialAwarenessPlanarObject.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\SpatialAwarenessSurfaceTypes.cs
+Assets\MixedRealityToolkit\Definitions\SpatialAwareness\SpatialMeshDisplayOptions.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\AnimatorParameter.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\AutoStartBehavior.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\AxisType.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\CollationOrder.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\ControllerElement.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\ExperienceScale.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\Handedness.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\MixedRealityPose.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\MovementConstraintType.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\OrientationType.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\PivotAxis.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\ProcessResult.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\ProfileMenuItemIndices.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\QuaternionSmoothed.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\RadialViewReferenceDirection.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\RecognitionConfidenceLevel.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\RotationConstraintType.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\ScaleState.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\SolverOrientationType.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\SupportedPlatforms.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\SystemType.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\TrackedHandJoint.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\TrackedObjectType.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\TypeGrouping.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\Vector3Smoothed.cs
+Assets\MixedRealityToolkit\Definitions\Utilities\VolumeType.cs
+Assets\MixedRealityToolkit\EventDatum\Boundary\BoundaryEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Diagnostics\DiagnosticsEventData.cs
+Assets\MixedRealityToolkit\EventDatum\GenericBaseEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\BaseInputEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\DictationEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\FocusEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\HandPanEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\HandTrackingInputEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\InputEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\MixedRealityPointerEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\SourcePoseEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\SourceStateEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Input\SpeechEventData.cs
+Assets\MixedRealityToolkit\EventDatum\PlacementEventData.cs
+Assets\MixedRealityToolkit\EventDatum\SpatialAwareness\MixedRealitySpatialAwarenessEventData.cs
+Assets\MixedRealityToolkit\EventDatum\Teleport\TeleportEventData.cs
+Assets\MixedRealityToolkit\Extensions\AnimationCurveExtensions.cs
+Assets\MixedRealityToolkit\Extensions\ArrayExtensions.cs
+Assets\MixedRealityToolkit\Extensions\BoundsExtensions.cs
+Assets\MixedRealityToolkit\Extensions\CameraExtensions.cs
+Assets\MixedRealityToolkit\Extensions\CanvasExtensions.cs
+Assets\MixedRealityToolkit\Extensions\CollectionsExtensions.cs
+Assets\MixedRealityToolkit\Extensions\Color32Extensions.cs
+Assets\MixedRealityToolkit\Extensions\ComparerExtensions.cs
+Assets\MixedRealityToolkit\Extensions\ComponentExtensions.cs
+Assets\MixedRealityToolkit\Extensions\DoubleExtensions.cs
+Assets\MixedRealityToolkit\Extensions\EnumerableExtensions.cs
+Assets\MixedRealityToolkit\Extensions\EventSystemExtensions.cs
+Assets\MixedRealityToolkit\Extensions\FloatExtensions.cs
+Assets\MixedRealityToolkit\Extensions\GameObjectExtensions.cs
+Assets\MixedRealityToolkit\Extensions\GestureRecognizerExtensions.cs
+Assets\MixedRealityToolkit\Extensions\InteractionSourceExtensions.cs
+Assets\MixedRealityToolkit\Extensions\LayerExtensions.cs
+Assets\MixedRealityToolkit\Extensions\MathfExtensions.cs
+Assets\MixedRealityToolkit\Extensions\ProcessExtensions.cs
+Assets\MixedRealityToolkit\Extensions\QuaternionExtensions.cs
+Assets\MixedRealityToolkit\Extensions\RayExtensions.cs
+Assets\MixedRealityToolkit\Extensions\ReflectionExtensions.cs
+Assets\MixedRealityToolkit\Extensions\StringExtensions.cs
+Assets\MixedRealityToolkit\Extensions\Texture2DExtensions.cs
+Assets\MixedRealityToolkit\Extensions\TransformExtensions.cs
+Assets\MixedRealityToolkit\Extensions\UnityObjectExtensions.cs
+Assets\MixedRealityToolkit\Extensions\VectorExtensions.cs
+Assets\MixedRealityToolkit\Interfaces\Audio\IAudioInfluencer.cs
+Assets\MixedRealityToolkit\Interfaces\BoundarySystem\IMixedRealityBoundaryHandler.cs
+Assets\MixedRealityToolkit\Interfaces\BoundarySystem\IMixedRealityBoundarySystem.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityController.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityControllerPoseSynchronizer.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityControllerVisualizer.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityDictationSystem.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityHand.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityHandJointService.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityHandVisualizer.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityInputDeviceManager.cs
+Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealitySpeechSystem.cs
+Assets\MixedRealityToolkit\Interfaces\Diagnostics\IMixedRealityDiagnosticsHandler.cs
+Assets\MixedRealityToolkit\Interfaces\Diagnostics\IMixedRealityDiagnosticsSystem.cs
+Assets\MixedRealityToolkit\Interfaces\EventSystem\Handlers\IMixedRealityEventHandler.cs
+Assets\MixedRealityToolkit\Interfaces\EventSystem\Handlers\IMixedRealityPlacementHandler.cs
+Assets\MixedRealityToolkit\Interfaces\EventSystem\IMixedRealityEventSource.cs
+Assets\MixedRealityToolkit\Interfaces\EventSystem\IMixedRealityEventSystem.cs
+Assets\MixedRealityToolkit\Interfaces\IMixedRealityServiceConfiguration.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityDictationHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityFocusChangedHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityFocusHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityGestureHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityHandJointHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityHandMeshHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityHandPanHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityHandTrackHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityInputHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityPointerHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealitySourcePoseHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealitySourceStateHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealitySpeechHandler.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\ICursorModifier.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IInputActionRule.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityCursor.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityEyeGazeDataProvider.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityEyeGazeProvider.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityEyeSaccadeProvider.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityFocusProvider.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityGazeProvider.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityInputSource.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityInputSystem.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityMousePointer.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityNearPointer.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityPointer.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityPointerMediator.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityTeleportPointer.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityTouchPointer.cs
+Assets\MixedRealityToolkit\Interfaces\InputSystem\IPointerResult.cs
+Assets\MixedRealityToolkit\Interfaces\Physics\IBaseRayStabilizer.cs
+Assets\MixedRealityToolkit\Interfaces\Registrars\IMixedRealityServiceRegistrar.cs
+Assets\MixedRealityToolkit\Interfaces\Services\IMixedRealityDataProvider.cs
+Assets\MixedRealityToolkit\Interfaces\Services\IMixedRealityExtensionService.cs
+Assets\MixedRealityToolkit\Interfaces\Services\IMixedRealityService.cs
+Assets\MixedRealityToolkit\Interfaces\SpatialAwareness\Handlers\IMixedRealitySpatialAwarenessObservationHandler.cs
+Assets\MixedRealityToolkit\Interfaces\SpatialAwareness\IMixedRealitySpatialAwarenessObject.cs
+Assets\MixedRealityToolkit\Interfaces\SpatialAwareness\IMixedRealitySpatialAwarenessSystem.cs
+Assets\MixedRealityToolkit\Interfaces\SpatialAwareness\Observers\IMixedRealitySpatialAwarenessMeshObserver.cs
+Assets\MixedRealityToolkit\Interfaces\SpatialAwareness\Observers\IMixedRealitySpatialAwarenessObserver.cs
+Assets\MixedRealityToolkit\Interfaces\TeleportSystem\Handlers\IMixedRealityTeleportHandler.cs
+Assets\MixedRealityToolkit\Interfaces\TeleportSystem\IMixedRealityTeleportHotSpot.cs
+Assets\MixedRealityToolkit\Interfaces\TeleportSystem\IMixedRealityTeleportSystem.cs
+Assets\MixedRealityToolkit\Providers\BaseController.cs
+Assets\MixedRealityToolkit\Providers\BaseGenericInputSource.cs
+Assets\MixedRealityToolkit\Providers\BaseInputDeviceManager.cs
+Assets\MixedRealityToolkit\Providers\BaseSpatialObserver.cs
+Assets\MixedRealityToolkit\Providers\GenericPointer.cs
+Assets\MixedRealityToolkit\Providers\Hands\BaseHand.cs
+Assets\MixedRealityToolkit\Providers\Hands\BaseHandVisualizer.cs
+Assets\MixedRealityToolkit\Providers\Hands\HandJointService.cs
+Assets\MixedRealityToolkit\Providers\Hands\HandJointUtils.cs
+Assets\MixedRealityToolkit\Providers\Hands\HandRay.cs
+Assets\MixedRealityToolkit\Providers\UnityInput\GenericJoystickController.cs
+Assets\MixedRealityToolkit\Providers\UnityInput\MouseController.cs
+Assets\MixedRealityToolkit\Providers\UnityInput\MouseDeviceManager.cs
+Assets\MixedRealityToolkit\Providers\UnityInput\UnityJoystickManager.cs
+Assets\MixedRealityToolkit\Providers\UnityInput\UnityTouchController.cs
+Assets\MixedRealityToolkit\Providers\UnityInput\UnityTouchDeviceManager.cs
+Assets\MixedRealityToolkit\Providers\UnityInput\XboxController.cs
+Assets\MixedRealityToolkit\Services\BaseCoreSystem.cs
+Assets\MixedRealityToolkit\Services\BaseDataProvider.cs
+Assets\MixedRealityToolkit\Services\BaseEventSystem.cs
+Assets\MixedRealityToolkit\Services\BaseExtensionService.cs
+Assets\MixedRealityToolkit\Services\BaseService.cs
+Assets\MixedRealityToolkit\Services\MixedRealityToolkit.cs
+Assets\MixedRealityToolkit\Utilities\CalibrationSpace.cs
+Assets\MixedRealityToolkit\Utilities\CameraCache.cs
+Assets\MixedRealityToolkit\Utilities\ClippingBox.cs
+Assets\MixedRealityToolkit\Utilities\ClippingPlane.cs
+Assets\MixedRealityToolkit\Utilities\ClippingPrimitive.cs
+Assets\MixedRealityToolkit\Utilities\ClippingSphere.cs
+Assets\MixedRealityToolkit\Utilities\DebugUtilities.cs
+Assets\MixedRealityToolkit\Utilities\EdgeUtilities.cs
+Assets\MixedRealityToolkit\Utilities\FastSimplexNoise.cs
+Assets\MixedRealityToolkit\Utilities\HoverLight.cs
+Assets\MixedRealityToolkit\Utilities\InspectorFields\InspectorField.cs
+Assets\MixedRealityToolkit\Utilities\InspectorFields\InspectorFieldData.cs
+Assets\MixedRealityToolkit\Utilities\InspectorFields\InspectorGenericFields.cs
+Assets\MixedRealityToolkit\Utilities\InspectorFields\InspectorPropertySettings.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\BaseMixedRealityLineDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\BezierDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\BezierInertia.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\EllipseLineDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\ParabolaConstrainedLineDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\ParabolaLineDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\ParabolaPhysicalLineDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\RectangleLineDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\SimpleLineDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\DataProviders\SplineDataProvider.cs
+Assets\MixedRealityToolkit\Utilities\Lines\LineFollower.cs
+Assets\MixedRealityToolkit\Utilities\Lines\LineUtility.cs
+Assets\MixedRealityToolkit\Utilities\Lines\Renderers\BaseMixedRealityLineRenderer.cs
+Assets\MixedRealityToolkit\Utilities\Lines\Renderers\MeshLineRenderer.cs
+Assets\MixedRealityToolkit\Utilities\Lines\Renderers\MixedRealityLineRenderer.cs
+Assets\MixedRealityToolkit\Utilities\Lines\Renderers\ParticleSystemLineRenderer.cs
+Assets\MixedRealityToolkit\Utilities\Lines\Renderers\StripMeshLineRenderer.cs
+Assets\MixedRealityToolkit\Utilities\MathUtilities.cs
+Assets\MixedRealityToolkit\Utilities\Physics\BaseRayStabilizer.cs
+Assets\MixedRealityToolkit\Utilities\Physics\Distorters\Distorter.cs
+Assets\MixedRealityToolkit\Utilities\Physics\Distorters\DistorterBulge.cs
+Assets\MixedRealityToolkit\Utilities\Physics\Distorters\DistorterGravity.cs
+Assets\MixedRealityToolkit\Utilities\Physics\Distorters\DistorterSimplex.cs
+Assets\MixedRealityToolkit\Utilities\Physics\Distorters\DistorterSphere.cs
+Assets\MixedRealityToolkit\Utilities\Physics\Distorters\DistorterWiggly.cs
+Assets\MixedRealityToolkit\Utilities\Physics\GazeStabilizer.cs
+Assets\MixedRealityToolkit\Utilities\Physics\InterpolationUtilities.cs
+Assets\MixedRealityToolkit\Utilities\Physics\Interpolator.cs
+Assets\MixedRealityToolkit\Utilities\Physics\MixedRealityRaycaster.cs
+Assets\MixedRealityToolkit\Utilities\Physics\RaycastResultComparer.cs
+Assets\MixedRealityToolkit\Utilities\Physics\TwoHandMoveLogic.cs
+Assets\MixedRealityToolkit\Utilities\Physics\TwoHandRotateLogic.cs
+Assets\MixedRealityToolkit\Utilities\Physics\TwoHandScaleLogic.cs
+Assets\MixedRealityToolkit\Utilities\Physics\VectorRollingStatistics.cs
+Assets\MixedRealityToolkit\Utilities\PlatformUtility.cs
+Assets\MixedRealityToolkit\Utilities\ProximityLight.cs
+Assets\MixedRealityToolkit\Utilities\WebRequestRest\Response.cs
+Assets\MixedRealityToolkit\Utilities\WebRequestRest\Rest.cs
+Assets\MixedRealityToolkit\Utilities\WindowsApiChecker.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\ActivePowerSchemeInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\AdapterInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\ApplicationInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\AvailableWiFiNetworks.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\BatteryInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\DeviceInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\DeviceOsInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\DevicePortalConnections.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\DHCPInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\FileInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\FileList.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\InstalledApps.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\InstallStatus.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\InterfaceInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\IpAddressInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\IpConfigInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\MachineName.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\NetworkInterfaces.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\NetworkProfileInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\PowerStateInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\ProcessInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\ProcessList.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DataStructures\WirelessNetworkInfo.cs
+Assets\MixedRealityToolkit\Utilities\WindowsDevicePortal\DevicePortal.cs
