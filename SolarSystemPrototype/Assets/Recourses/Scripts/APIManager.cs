@@ -6,9 +6,21 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using APIObjects;
+using TMPro;
 
 public class APIManager : MonoBehaviour
 {
+
+    public GameObject planetList;
+    public GameObject earth;
+    public GameObject mars;
+    public GameObject neptune;
+    public GameObject saturn;
+    public GameObject jupiter;
+    public GameObject uranus;
+    public GameObject venus;
+    public GameObject mercury;
+    private List<GameObject> solarSystem; 
    
    void GetPlanets()
         {
@@ -21,10 +33,20 @@ public class APIManager : MonoBehaviour
 
         Debug.Log(bodies.BodiesBodies[0].Name);
 
-        foreach(Body b in bodies.BodiesBodies)
+        for(int i = 0; i <= bodies.BodiesBodies.Count; i++)
         {
-
+            int j = 0; 
+            if (bodies.BodiesBodies[i + 1].EnglishName.Contains("Eris") || bodies.BodiesBodies[i + 1].EnglishName.Contains("Haumea") || bodies.BodiesBodies[i + 1].EnglishName.Contains("Makemake"))
+            {
+                continue;
+            }
+            else
+            {
+                var newCube = (GameObject)Instantiate(planetList, new Vector3(-1, (i * 0.5f) + 1, 4), Quaternion.identity);
+                newCube.GetComponent<TextMeshPro>().text = bodies.BodiesBodies[i + 1].EnglishName;
+            }
         }
+        
 
     }
     // Start is called before the first frame update

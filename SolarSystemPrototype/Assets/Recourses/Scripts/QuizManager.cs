@@ -81,14 +81,12 @@ public class QuizManager : MonoBehaviour
                 break;
 
             case 3:
-
                 questionText.GetComponent<TextMeshPro>().text = "Well done you completed the quiz and got: " + score;
                 radial1.SetActive(false);
                 radial2.SetActive(false);
                 radial3.SetActive(false);
                 radial4.SetActive(false);
                 break;
-
         }
 
     }
