@@ -18,6 +18,7 @@ public class QuizManager : MonoBehaviour
     private int questionNumber;
     private bool currentSelection;
     private int score;
+    private bool quizFinished = false;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class QuizManager : MonoBehaviour
     // Start is called before the first frame update
     public void startQuiz()
     {
+        CanvasApi.Start();
         string[] ans1 = new string[4] { "Pluto", "Mars", "Earth", "Mickey Mouse" };
         QuizQuestion qz1 = new QuizQuestion("What planet has a Disney character named after it?", ans1);
         //qq.Add(qz1);         
@@ -37,11 +39,11 @@ public class QuizManager : MonoBehaviour
         radial3.SetActive(true);
         radial4.SetActive(true);
 
-        questionText.GetComponent<TextMeshPro>().text = "What planet has a Disney Character named after it?";
-        radial1.GetComponentInChildren<TextMesh>().text = "Pluto";
-        radial2.GetComponentInChildren<TextMesh>().text = "Mars";
-        radial3.GetComponentInChildren<TextMesh>().text = "Earth";
-        radial4.GetComponentInChildren<TextMesh>().text = "Venus";
+        questionText.GetComponent<TextMeshPro>().text = CanvasApi.getQuestionText(0);
+        radial1.GetComponentInChildren<TextMesh>().text = CanvasApi.answer(0);
+        radial2.GetComponentInChildren<TextMesh>().text = CanvasApi.answer(1);
+        radial3.GetComponentInChildren<TextMesh>().text = CanvasApi.answer(2);
+        radial4.GetComponentInChildren<TextMesh>().text = CanvasApi.answer(3);
 
         questionNumber = 1;
         score = 0;
@@ -63,29 +65,21 @@ public class QuizManager : MonoBehaviour
         switch (questionNumber)
         {
             case 1:
-                questionText.GetComponent<TextMeshPro>().text = "What is the 3rd Planet away from the Sun?";
-                radial4.GetComponentInChildren<TextMesh>().text = "Pluto";
-                radial2.GetComponentInChildren<TextMesh>().text = "Neptune";
-                radial1.GetComponentInChildren<TextMesh>().text = "Earth";
-                radial3.GetComponentInChildren<TextMesh>().text = "Jupiter";
+                questionText.GetComponent<TextMeshPro>().text = CanvasApi.getQuestionText(1);
+                radial4.GetComponentInChildren<TextMesh>().text = CanvasApi.answer(3);
+                radial2.GetComponentInChildren<TextMesh>().text = CanvasApi.answer(1);
+                radial1.GetComponentInChildren<TextMesh>().text = CanvasApi.answer(0);
+                radial3.GetComponentInChildren<TextMesh>().text = CanvasApi.answer(2);
                 questionNumber = 2;
                 break;
 
-            case 2:
-                questionText.GetComponent<TextMeshPro>().text = "What does our Solar System Revolve around?";
-                radial4.GetComponentInChildren<TextMesh>().text = "Your Ego";
-                radial2.GetComponentInChildren<TextMesh>().text = "Your GPA Results";
-                radial1.GetComponentInChildren<TextMesh>().text = "The Sun";
-                radial3.GetComponentInChildren<TextMesh>().text = "Earth";
-                questionNumber = 3;
-                break;
-
-            case 3:
+            case 2:      
                 questionText.GetComponent<TextMeshPro>().text = "Well done you completed the quiz and got: " + score;
                 radial1.SetActive(false);
                 radial2.SetActive(false);
                 radial3.SetActive(false);
                 radial4.SetActive(false);
+                quizFinished = true;
                 break;
         }
 
@@ -97,8 +91,10 @@ public class QuizManager : MonoBehaviour
         {
             score++;
         }
-        changeQuestion();
-
+        if (!quizFinished)
+        {
+            changeQuestion();
+        }
     }
 
     // Update is called once per frame
