@@ -3241,12 +3241,25 @@ Animator:
   m_Controller: {fileID: 9100000, guid: c1a6ebbec284f474c95397f4ee80090f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2246494109189647874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2246494109189647872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd45f8522ebeec4ebe483084564f088, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planet: Earth
 --- !u!1001 &3083114097344757364
 PrefabInstance:
   m_ObjectHideFlags: 0
