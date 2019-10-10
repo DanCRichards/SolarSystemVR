@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SolarSystem.unity
     guid: b213c33544205aa4791595639ac5985c
+  - enabled: 1
+    path: Assets/Scenes/SolarSystemFinal.unity
+    guid: 2d60b8cda24b0a7458629e935fbb7795
   m_configObjects: {}

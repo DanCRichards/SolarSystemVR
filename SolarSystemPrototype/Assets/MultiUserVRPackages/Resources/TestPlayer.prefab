@@ -235,19 +235,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   m_maskType: 0
---- !u!135 &2225227870944834835
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154720889597088452}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &8709229583686912820
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -322,8 +309,8 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
---- !u!135 &9029416479185227876
-SphereCollider:
+--- !u!136 &6950983178090746664
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -332,9 +319,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.0144532
-  m_Center: {x: -0.000034868717, y: 1.0145723, z: 0.12982008}
+  m_Radius: 0.5326369
+  m_Height: 2.280748
+  m_Direction: 1
+  m_Center: {x: -0.000034878245, y: 0.98813844, z: -0.073355086}
 --- !u!1 &8945379502083842525
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +449,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7227440044341257370}
     m_Modifications:
+    - target: {fileID: 100000, guid: 2f14ce1c00edad34f97ec50a061737da, type: 3}
+      propertyPath: m_Name
+      value: astro Variant
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2f14ce1c00edad34f97ec50a061737da, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.4905076
@@ -516,10 +508,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 2f14ce1c00edad34f97ec50a061737da, type: 3}
       propertyPath: m_LocalScale.z
       value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 2f14ce1c00edad34f97ec50a061737da, type: 3}
-      propertyPath: m_Name
-      value: astro Variant
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 2f14ce1c00edad34f97ec50a061737da, type: 3}
       propertyPath: m_LocalPosition.x
