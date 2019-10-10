@@ -12,10 +12,13 @@ public class getPlanetInfo : MonoBehaviour
     public TextMeshPro discoveryDate;
     public TextMeshPro generalInfo;
     public GameObject hammer;
+
+
     void Start()
-    {
+       {
         Body bd = APIManager.getPlanetInfo(planet);
         // Earth information here. 
+        Debug.Log("English Name next");
         Debug.Log(bd.EnglishName);
         planetTitle.text = bd.EnglishName;
         latinName.text = bd.Name;
