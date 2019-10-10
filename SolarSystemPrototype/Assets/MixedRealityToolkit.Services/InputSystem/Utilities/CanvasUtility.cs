@@ -38,12 +38,12 @@ namespace Microsoft.MixedReality.Toolkit.Input.Utilities
                     }
                 }
 
-                if (CanSupportMrtkInput(canvas) && (canvas.GetComponentInChildren<NearInteractionTouchable>() == null))
+                if (CanSupportMrtkInput(canvas) && (canvas.GetComponentInChildren<NearInteractionTouchableUnityUI>() == null))
                 {
-                    UnityEditor.EditorGUILayout.HelpBox($"Canvas does not contain any {typeof(NearInteractionTouchable).Name} components for supporting near interaction.", UnityEditor.MessageType.Warning);
+                    UnityEditor.EditorGUILayout.HelpBox($"Canvas does not contain any {typeof(NearInteractionTouchableUnityUI).Name} components for supporting near interaction.", UnityEditor.MessageType.Warning);
                     if (GUILayout.Button("Add NearInteractionTouchable"))
                     {
-                        UnityEditor.Undo.AddComponent<NearInteractionTouchable>(canvas.gameObject);
+                        UnityEditor.Undo.AddComponent<NearInteractionTouchableUnityUI>(canvas.gameObject);
                     }
                 }
 
@@ -51,6 +51,23 @@ namespace Microsoft.MixedReality.Toolkit.Input.Utilities
             }
         }
 #endif
+
+        private IMixedRealityInputSystem inputSystem = null;
+
+        /// <summary>
+        /// The active instance of the input system.
+        /// </summary>
+        private IMixedRealityInputSystem InputSystem
+        {
+            get
+            {
+                if (inputSystem == null)
+                {
+                    MixedRealityServiceRegistry.TryGetService<IMixedRealityInputSystem>(out inputSystem);
+                }
+                return inputSystem;
+            }
+        }
 
         private void Start()
         {
@@ -61,8 +78,8 @@ namespace Microsoft.MixedReality.Toolkit.Input.Utilities
             {
                 if (canvas.worldCamera == null)
                 {
-                    Debug.Assert(MixedRealityToolkit.InputSystem.FocusProvider.UIRaycastCamera != null, this);
-                    canvas.worldCamera = MixedRealityToolkit.InputSystem.FocusProvider.UIRaycastCamera;
+                    Debug.Assert(InputSystem?.FocusProvider?.UIRaycastCamera != null, this);
+                    canvas.worldCamera = InputSystem?.FocusProvider?.UIRaycastCamera;
 
                     if (EventSystem.current == null)
                     {

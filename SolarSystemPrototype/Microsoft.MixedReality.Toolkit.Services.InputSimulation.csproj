@@ -60,17 +60,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\IInputSimulationService.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\InputSimulationEnum.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\InputSimulationService.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\ManualCameraControl.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\MixedRealityInputSimulationProfile.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\SimulatedArticulatedHand.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\SimulatedGestureHand.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\SimulatedHand.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\SimulatedHandDataProvider.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\SimulatedHandPose.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\SimulatedHandUtils.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.Services\InputSimulation\Utilities\HandGestureRecorder.cs" />
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity2018-5/Editor/Data/PlaybackEngines/MetroSupport/Tools/UnityEngine.AIModule.dll</HintPath>
     </Reference>
@@ -346,12 +344,6 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>C:/Users/dric372/Documents/Github/InfoSys320/SolarSystemPrototype/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
-      <HintPath>C:/Program Files/Unity2018-5/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Common">
-      <HintPath>C:/Program Files/Unity2018-5/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity2018-5/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

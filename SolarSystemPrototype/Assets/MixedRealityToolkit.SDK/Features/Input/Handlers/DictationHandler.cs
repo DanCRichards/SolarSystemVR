@@ -75,6 +75,20 @@ namespace Microsoft.MixedReality.Toolkit.Input
             }
         }
 
+        #region InputSystemGlobalHandlerListener Implementation
+
+        protected override void RegisterHandlers()
+        {
+            InputSystem?.RegisterHandler<IMixedRealityDictationHandler>(this);
+        }
+
+        protected override void UnregisterHandlers()
+        {
+            InputSystem?.UnregisterHandler<IMixedRealityDictationHandler>(this);
+        }
+
+        #endregion InputSystemGlobalHandlerListener Implementation
+
         #region IMixedRealityDictationHandler implementation
 
         void IMixedRealityDictationHandler.OnDictationHypothesis(DictationEventData eventData)
@@ -105,7 +119,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             base.Start();
 
-            dictationSystem = MixedRealityToolkit.Instance.GetService<IMixedRealityDictationSystem>();
+            dictationSystem = (InputSystem as IMixedRealityDataProviderAccess)?.GetDataProvider<IMixedRealityDictationSystem>();
             Debug.Assert(dictationSystem != null, "No dictation system found. In order to use dictation, add a dictation system like 'Windows Dictation Input Provider' to the Data Providers in the Input System profile");
 
             if (startRecordingOnStart)

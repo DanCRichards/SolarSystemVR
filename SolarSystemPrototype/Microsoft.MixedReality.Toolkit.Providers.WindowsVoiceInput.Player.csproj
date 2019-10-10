@@ -50,8 +50,8 @@
     <Reference Include="Microsoft.MixedReality.Toolkit">
       <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.MixedReality.Toolkit.Core.Utilities.Async">
-      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Core.Utilities.Async.dll</HintPath>
+    <Reference Include="Microsoft.MixedReality.Toolkit.Async">
+      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Async.dll</HintPath>
     </Reference>
     <Reference Include="MetroSupport/Managed/il2cpp/UnityEngine">
       <HintPath>C:\Program Files\Unity2018-5\Editor\Data\PlaybackEngines\MetroSupport/Managed/il2cpp/UnityEngine.dll</HintPath>

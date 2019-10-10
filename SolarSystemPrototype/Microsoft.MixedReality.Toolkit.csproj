@@ -60,13 +60,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MixedRealityToolkit\Attributes\DocLinkAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\EnumFlagsAttribute.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Attributes\ExperimentalAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\ExtendsAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\HelpAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\ImplementsAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\MixedRealityControllerAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\MixedRealityDataProviderAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\MixedRealityExtensionServiceAttribute.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Attributes\MixedRealityServiceInspectorAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\MixedRealityServiceProfileAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\PhysicsLayerAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Attributes\PrefabAttribute.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Devices\TrackingState.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Diagnostics\MixedRealityDiagnosticsProfile.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\AnimatedCursorData.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\CursorContextEnum.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\CursorStateEnum.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionEventPair.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\InputActionRuleDigital.cs" />
@@ -113,6 +117,7 @@
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityInputActionsProfile.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityInputSystemProfile.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityPointerProfile.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealityRaycastHit.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\MixedRealitySpeechCommandsProfile.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\PointerOption.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\InputSystem\SpeechCommands.cs" />
@@ -136,6 +141,13 @@
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Physics\RayStep.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Physics\SceneQueryType.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Physics\TeleportSurfaceResult.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\SceneSystem\LightingSceneTransitionType.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\SceneSystem\MixedRealitySceneSystemProfile.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\SceneSystem\RuntimeLightingSettings.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\SceneSystem\RuntimeRenderSettings.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\SceneSystem\RuntimeSunlightSettings.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\SceneSystem\SceneActivationToken.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\SceneSystem\SceneInfo.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\SpatialAwareness\BaseSpatialAwarenessObject.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\SpatialAwareness\BaseSpatialAwarenessObserverProfile.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\SpatialAwareness\MixedRealitySpatialAwarenessMeshObserverProfile.cs" />
@@ -146,23 +158,24 @@
     <Compile Include="Assets\MixedRealityToolkit\Definitions\SpatialAwareness\SpatialAwarenessSurfaceTypes.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\SpatialAwareness\SpatialMeshDisplayOptions.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\AnimatorParameter.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\ArticulatedHandPose.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\AutoStartBehavior.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\AxisType.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\CollationOrder.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\ControllerElement.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\ExperienceScale.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\Handedness.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\MixedRealityCapability.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\MixedRealityPose.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\MovementConstraintType.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\OrientationType.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\PivotAxis.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\ProcessResult.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\ProfileMenuItemIndices.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\QuaternionSmoothed.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\RadialViewReferenceDirection.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\RecognitionConfidenceLevel.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\RotationConstraintType.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\ScaleState.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\SceneAssetReferenceAttribute.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\SolverOrientationType.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\SupportedPlatforms.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Definitions\Utilities\SystemType.cs" />
@@ -177,7 +190,6 @@
     <Compile Include="Assets\MixedRealityToolkit\EventDatum\Input\BaseInputEventData.cs" />
     <Compile Include="Assets\MixedRealityToolkit\EventDatum\Input\DictationEventData.cs" />
     <Compile Include="Assets\MixedRealityToolkit\EventDatum\Input\FocusEventData.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\EventDatum\Input\HandPanEventData.cs" />
     <Compile Include="Assets\MixedRealityToolkit\EventDatum\Input\HandTrackingInputEventData.cs" />
     <Compile Include="Assets\MixedRealityToolkit\EventDatum\Input\InputEventData.cs" />
     <Compile Include="Assets\MixedRealityToolkit\EventDatum\Input\MixedRealityPointerEventData.cs" />
@@ -201,8 +213,6 @@
     <Compile Include="Assets\MixedRealityToolkit\Extensions\EventSystemExtensions.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Extensions\FloatExtensions.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Extensions\GameObjectExtensions.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Extensions\GestureRecognizerExtensions.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Extensions\InteractionSourceExtensions.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Extensions\LayerExtensions.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Extensions\MathfExtensions.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Extensions\ProcessExtensions.cs" />
@@ -217,6 +227,7 @@
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Audio\IAudioInfluencer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\BoundarySystem\IMixedRealityBoundaryHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\BoundarySystem\IMixedRealityBoundarySystem.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\CameraSystem\IMixedRealityCameraSystem.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityController.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityControllerPoseSynchronizer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Devices\IMixedRealityControllerVisualizer.cs" />
@@ -229,18 +240,18 @@
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Diagnostics\IMixedRealityDiagnosticsHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Diagnostics\IMixedRealityDiagnosticsSystem.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\EventSystem\Handlers\IMixedRealityEventHandler.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Interfaces\EventSystem\Handlers\IMixedRealityPlacementHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\EventSystem\IMixedRealityEventSource.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\EventSystem\IMixedRealityEventSystem.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\IMixedRealityServiceConfiguration.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityBaseInputHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityDictationHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityFocusChangedHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityFocusHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityGestureHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityHandJointHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityHandMeshHandler.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityHandPanHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityHandTrackHandler.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityInputActionHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityInputHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealityPointerHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\Handlers\IMixedRealitySourcePoseHandler.cs" />
@@ -256,16 +267,23 @@
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityGazeProvider.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityInputSource.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityInputSystem.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityMouseDeviceManager.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityMousePointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityNearPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityPointerMediator.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityPrimaryPointerSelector.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityRaycastProvider.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityTeleportPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IMixedRealityTouchPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\InputSystem\IPointerResult.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Physics\IBaseRayStabilizer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Registrars\IMixedRealityServiceRegistrar.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\SceneSystem\IMixedRealitySceneSystem.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\SceneSystem\IMixedRealitySceneSystemEditor.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\Services\IMixedRealityCapabilityCheck.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Services\IMixedRealityDataProvider.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Interfaces\Services\IMixedRealityDataProviderAccess.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Services\IMixedRealityExtensionService.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\Services\IMixedRealityService.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Interfaces\SpatialAwareness\Handlers\IMixedRealitySpatialAwarenessObservationHandler.cs" />
@@ -283,10 +301,12 @@
     <Compile Include="Assets\MixedRealityToolkit\Providers\GenericPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\Hands\BaseHand.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\Hands\BaseHandVisualizer.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Providers\Hands\HandBounds.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\Hands\HandJointService.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\Hands\HandJointUtils.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\Hands\HandRay.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\UnityInput\GenericJoystickController.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Providers\UnityInput\MixedRealityMouseInputProfile.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\UnityInput\MouseController.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\UnityInput\MouseDeviceManager.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Providers\UnityInput\UnityJoystickManager.cs" />
@@ -295,20 +315,22 @@
     <Compile Include="Assets\MixedRealityToolkit\Providers\UnityInput\XboxController.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Services\BaseCoreSystem.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Services\BaseDataProvider.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Services\BaseDataProviderAccessCoreSystem.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Services\BaseEventSystem.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Services\BaseExtensionService.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Services\BaseService.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Services\MixedRealityToolkit.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Utilities\CalibrationSpace.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\CameraCache.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Utilities\ClippingBox.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Utilities\ClippingPlane.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Utilities\ClippingPrimitive.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Utilities\ClippingSphere.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\CameraEventRouter.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\CoreServices.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\DebugUtilities.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\EdgeUtilities.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\Facades\ServiceFacade.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\FastSimplexNoise.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Utilities\HoverLight.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\GameObjectManagement\GameObjectCreator.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\GameObjectManagement\GameObjectPool.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\GameObjectManagement\GenericPrefabInstanceCreator.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\GameObjectManagement\IGameObjectCreatorListener.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\InspectorFields\InspectorField.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\InspectorFields\InspectorFieldData.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\InspectorFields\InspectorGenericFields.cs" />
@@ -330,7 +352,10 @@
     <Compile Include="Assets\MixedRealityToolkit\Utilities\Lines\Renderers\MixedRealityLineRenderer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\Lines\Renderers\ParticleSystemLineRenderer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\Lines\Renderers\StripMeshLineRenderer.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\MaintainBorderLightWidth.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\MathUtilities.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\MixedRealityPlayspace.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\MixedRealityServiceRegistry.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\Physics\BaseRayStabilizer.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\Physics\Distorters\Distorter.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\Physics\Distorters\DistorterBulge.cs" />
@@ -348,7 +373,15 @@
     <Compile Include="Assets\MixedRealityToolkit\Utilities\Physics\TwoHandScaleLogic.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\Physics\VectorRollingStatistics.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\PlatformUtility.cs" />
-    <Compile Include="Assets\MixedRealityToolkit\Utilities\ProximityLight.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\Scenes\EditorSceneUtils.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\Scenes\RuntimeSceneUtils.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\Scenes\SerializedObjectUtils.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\StandardShader\ClippingBox.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\StandardShader\ClippingPlane.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\StandardShader\ClippingPrimitive.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\StandardShader\ClippingSphere.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\StandardShader\HoverLight.cs" />
+    <Compile Include="Assets\MixedRealityToolkit\Utilities\StandardShader\ProximityLight.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\WebRequestRest\Response.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\WebRequestRest\Rest.cs" />
     <Compile Include="Assets\MixedRealityToolkit\Utilities\WindowsApiChecker.cs" />
@@ -387,6 +420,7 @@
     <None Include="Assets\MixedRealityToolkit\StandardAssets\Shaders\InstancedColored.shader" />
     <None Include="Assets\MixedRealityToolkit\StandardAssets\Shaders\ChannelPacker.shader" />
     <None Include="Assets\MixedRealityToolkit\StandardAssets\Shaders\MRTK_Wireframe.shader" />
+    <None Include="Assets\MixedRealityToolkit\WhereToStart.txt" />
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity2018-5/Editor/Data/PlaybackEngines/MetroSupport/Tools/UnityEngine.AIModule.dll</HintPath>
     </Reference>
@@ -1019,17 +1053,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Core.Utilities.Editor.csproj">
-      <Project>{6D9B53FC-DD93-1AF0-7550-FC51E2D714AA}</Project>
-      <Name>Microsoft.MixedReality.Toolkit.Core.Utilities.Editor</Name>
+    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Async.csproj">
+      <Project>{2B39B067-E05D-D580-9C98-C7147C86361D}</Project>
+      <Name>Microsoft.MixedReality.Toolkit.Async</Name>
     </ProjectReference>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Core.Definitions.Utilities.Editor.csproj">
-      <Project>{9277312B-D684-BD42-2D24-C5307746D0D1}</Project>
-      <Name>Microsoft.MixedReality.Toolkit.Core.Definitions.Utilities.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Core.Utilities.Async.csproj">
-      <Project>{AB601170-1F66-A77A-E9FC-807A6E5C4165}</Project>
-      <Name>Microsoft.MixedReality.Toolkit.Core.Utilities.Async</Name>
+    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Editor.Utilities.csproj">
+      <Project>{5C7CCAD9-2C7C-DD3C-1DDC-7BB8B55ECF83}</Project>
+      <Name>Microsoft.MixedReality.Toolkit.Editor.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

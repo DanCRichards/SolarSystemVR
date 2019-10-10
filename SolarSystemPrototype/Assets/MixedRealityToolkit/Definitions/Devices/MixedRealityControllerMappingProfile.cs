@@ -14,7 +14,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// New controller types can be registered by adding the MixedRealityControllerAttribute to
     /// the controller class.
     /// </summary>
-    [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Mixed Reality Controller Mapping Profile", fileName = "MixedRealityControllerMappingProfile", order = (int)CreateProfileMenuItemIndices.ControllerMapping)]
+    [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Profiles/Mixed Reality Controller Mapping Profile", fileName = "MixedRealityControllerMappingProfile", order = (int)CreateProfileMenuItemIndices.ControllerMapping)]
     public class MixedRealityControllerMappingProfile : BaseMixedRealityProfile
     {
         [SerializeField]
@@ -35,25 +35,52 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             if (controllerMappingTypes == null)
             {
-                List<Type> tmp = new List<Type>();
+                List<Type> controllerTypes = new List<Type>();
                 foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
+                    IEnumerable<Type> types = null;
                     try
                     {
-                        foreach (Type type in assembly.ExportedTypes)
+                        types = assembly.ExportedTypes;
+                    }
+                    catch (NotSupportedException)
+                    {
+                        // assembly.ExportedTypes may not be supported.
+                    }
+                    catch (ReflectionTypeLoadException e)
+                    {
+                        // Not all assemblies may load correctly, but even upon encountering error
+                        // some subset may have loaded in.
+                        if (e.Types != null)
+                        {
+                            List<Type> loadedTypes = new List<Type>();
+                            foreach (Type type in e.Types)
+                            {
+                                // According to API docs, this array may contain null values
+                                // so they must be filtered out here.
+                                if (type != null)
+                                {
+                                    loadedTypes.Add(type);
+                                }
+                            }
+                            types = loadedTypes;
+                        }
+                    }
+
+                    if (types != null)
+                    {
+                        foreach (Type type in types)
                         {
                             if (type.IsSubclassOf(typeof(BaseController)) &&
                                 MixedRealityControllerAttribute.Find(type) != null)
                             {
-                                tmp.Add(type);
+                                controllerTypes.Add(type);
                             }
                         }
                     }
-                    catch (NotSupportedException) // assembly.ExportedTypes may not be supported.
-                    { }
                 }
 
-                controllerMappingTypes = tmp.ToArray();
+                controllerMappingTypes = controllerTypes.ToArray();
             }
         }
 

@@ -61,6 +61,20 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         #endregion MonoBehaviour Implementation
 
+        #region InputSystemGlobalHandlerListener Implementation
+
+        protected override void RegisterHandlers()
+        {
+            InputSystem?.RegisterHandler<IMixedRealitySpeechHandler>(this);
+        }
+
+        protected override void UnregisterHandlers()
+        {
+            InputSystem?.UnregisterHandler<IMixedRealitySpeechHandler>(this);
+        }
+
+        #endregion InputSystemGlobalHandlerListener Implementation
+
         #region SpeechInputHandler public methods
         public void AddResponse(string keyword, UnityAction action)
         {
@@ -93,6 +107,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             if (enabled && responses.TryGetValue(eventData.Command.Keyword.ToLower(), out keywordResponse))
             {
                 keywordResponse.Invoke();
+                eventData.Use();
             }
         }
 

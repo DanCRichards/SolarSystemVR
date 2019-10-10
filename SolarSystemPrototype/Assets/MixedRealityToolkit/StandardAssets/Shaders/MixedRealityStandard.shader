@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 Shader "Mixed Reality Toolkit/Standard"
@@ -35,23 +35,30 @@ Shader "Mixed Reality Toolkit/Standard"
         _RimColor("Rim Color", Color) = (0.5, 0.5, 0.5, 1.0)
         _RimPower("Rim Power", Range(0.0, 8.0)) = 0.25
         [Toggle(_VERTEX_COLORS)] _VertexColors("Vertex Colors", Float) = 0.0
-        [Toggle(_CLIPPING_PLANE)] _ClippingPlane("Clipping Plane", Float) = 0.0
-        [Toggle(_CLIPPING_SPHERE)] _ClippingSphere("Clipping Sphere", Float) = 0.0
-        [Toggle(_CLIPPING_BOX)] _ClippingBox("Clipping Box", Float) = 0.0
+        [Toggle(_VERTEX_EXTRUSION)] _VertexExtrusion("Vertex Extrusion", Float) = 0.0
+        _VertexExtrusionValue("Vertex Extrusion Value", Float) = 0.0
+        _BlendedClippingWidth("Blended Clipping With", Range(0.0, 10.0)) = 1.0
         [Toggle(_CLIPPING_BORDER)] _ClippingBorder("Clipping Border", Float) = 0.0
-        _ClippingBorderWidth("Clipping Border Width", Range(0.005, 1.0)) = 0.025
+        _ClippingBorderWidth("Clipping Border Width", Range(0.0, 1.0)) = 0.025
         _ClippingBorderColor("Clipping Border Color", Color) = (1.0, 0.2, 0.0, 1.0)
         [Toggle(_NEAR_PLANE_FADE)] _NearPlaneFade("Near Plane Fade", Float) = 0.0
         [Toggle(_NEAR_LIGHT_FADE)] _NearLightFade("Near Light Fade", Float) = 0.0
-        _FadeBeginDistance("Fade Begin Distance", Range(0.01, 10.0)) = 0.85
-        _FadeCompleteDistance("Fade Complete Distance", Range(0.01, 10.0)) = 0.5
+        _FadeBeginDistance("Fade Begin Distance", Range(0.0, 10.0)) = 0.85
+        _FadeCompleteDistance("Fade Complete Distance", Range(0.0, 10.0)) = 0.5
+        _FadeMinValue("Fade Min Value", Range(0.0, 1.0)) = 0.0
 
         // Fluent options.
         [Toggle(_HOVER_LIGHT)] _HoverLight("Hover Light", Float) = 1.0
         [Toggle(_HOVER_COLOR_OVERRIDE)] _EnableHoverColorOverride("Hover Color Override", Float) = 0.0
         _HoverColorOverride("Hover Color Override", Color) = (1.0, 1.0, 1.0, 1.0)
         [Toggle(_PROXIMITY_LIGHT)] _ProximityLight("Proximity Light", Float) = 0.0
+        [Toggle(_PROXIMITY_LIGHT_COLOR_OVERRIDE)] _EnableProximityLightColorOverride("Proximity Light Color Override", Float) = 0.0
+        [HDR]_ProximityLightCenterColorOverride("Proximity Light Center Color Override", Color) = (1.0, 0.0, 0.0, 0.0)
+        [HDR]_ProximityLightMiddleColorOverride("Proximity Light Middle Color Override", Color) = (0.0, 1.0, 0.0, 0.5)
+        [HDR]_ProximityLightOuterColorOverride("Proximity Light Outer Color Override", Color) = (0.0, 0.0, 1.0, 1.0)
+        [Toggle(_PROXIMITY_LIGHT_SUBTRACTIVE)] _ProximityLightSubtractive("Proximity Light Subtractive", Float) = 0.0
         [Toggle(_PROXIMITY_LIGHT_TWO_SIDED)] _ProximityLightTwoSided("Proximity Light Two Sided", Float) = 0.0
+        _FluentLightIntensity("Fluent Light Intensity", Range(0.0, 1.0)) = 1.0
         [Toggle(_ROUND_CORNERS)] _RoundCorners("Round Corners", Float) = 0.0
         _RoundCornerRadius("Round Corner Radius", Range(0.0, 0.5)) = 0.25
         _RoundCornerMargin("Round Corner Margin", Range(0.0, 0.5)) = 0.01
@@ -61,7 +68,7 @@ Shader "Mixed Reality Toolkit/Standard"
         [Toggle(_BORDER_LIGHT_OPAQUE)] _BorderLightOpaque("Border Light Opaque", Float) = 0.0
         _BorderWidth("Border Width", Range(0.0, 1.0)) = 0.1
         _BorderMinValue("Border Min Value", Range(0.0, 1.0)) = 0.1
-        _EdgeSmoothingValue("Edge Smoothing Value", Range(0.0001, 0.2)) = 0.002
+        _EdgeSmoothingValue("Edge Smoothing Value", Range(0.0, 0.2)) = 0.002
         _BorderLightOpaqueAlpha("Border Light Opaque Alpha", Range(0.0, 1.0)) = 1.0
         [Toggle(_INNER_GLOW)] _InnerGlow("Inner Glow", Float) = 0.0
         _InnerGlowColor("Inner Glow Color (RGB) and Intensity (A)", Color) = (1.0, 1.0, 1.0, 0.75)
@@ -86,10 +93,13 @@ Shader "Mixed Reality Toolkit/Standard"
         [Enum(UnityEngine.Rendering.BlendOp)] _BlendOp("Blend Operation", Float) = 0                 // "Add"
         [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("Depth Test", Float) = 4                // "LessEqual"
         [Enum(DepthWrite)] _ZWrite("Depth Write", Float) = 1                                         // "On"
+        _ZOffsetFactor("Depth Offset Factor", Float) = 0                                             // "Zero"
+        _ZOffsetUnits("Depth Offset Units", Float) = 0                                               // "Zero"
         [Enum(UnityEngine.Rendering.ColorWriteMask)] _ColorWriteMask("Color Write Mask", Float) = 15 // "All"
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode("Cull Mode", Float) = 2                     // "Back"
         _RenderQueueOverride("Render Queue Override", Range(-1.0, 5000)) = -1
         [Toggle(_INSTANCED_COLOR)] _InstancedColor("Instanced Color", Float) = 0.0
+        [Toggle(_IGNORE_Z_SCALE)] _IgnoreZScale("Ignore Z Scale", Float) = 0.0
         [Toggle(_STENCIL)] _Stencil("Enable Stencil Testing", Float) = 0.0
         _StencilReference("Stencil Reference", Range(0, 255)) = 0
         [Enum(UnityEngine.Rendering.CompareFunction)]_StencilComparison("Stencil Comparison", Int) = 0
@@ -116,6 +126,9 @@ Shader "Mixed Reality Toolkit/Standard"
             #include "UnityCG.cginc"
             #include "UnityMetaPass.cginc"
 
+            // This define will get commented in by the UpgradeShaderForLightweightRenderPipeline method.
+            //#define _LIGHTWEIGHT_RENDER_PIPELINE
+
             struct v2f
             {
                 float4 vertex : SV_POSITION;
@@ -138,7 +151,15 @@ Shader "Mixed Reality Toolkit/Standard"
 
             fixed4 _Color;
             fixed4 _EmissiveColor;
+
+#if defined(_LIGHTWEIGHT_RENDER_PIPELINE)
+            CBUFFER_START(_LightBuffer)
+            float4 _MainLightPosition;
+            half4 _MainLightColor;
+            CBUFFER_END
+#else
             fixed4 _LightColor0;
+#endif
 
             half4 frag(v2f i) : SV_Target
             {
@@ -153,7 +174,11 @@ Shader "Mixed Reality Toolkit/Standard"
                 output.Emission += _EmissiveColor;
 #endif
 #endif
+#if defined(_LIGHTWEIGHT_RENDER_PIPELINE)
+                output.SpecularColor = _MainLightColor.rgb;
+#else
                 output.SpecularColor = _LightColor0.rgb;
+#endif
 
                 return UnityMetaFragment(output);
             }
@@ -163,13 +188,14 @@ Shader "Mixed Reality Toolkit/Standard"
         Pass
         {
             Name "Main"
-            Tags{ "RenderType" = "Opaque" "LightMode" = "ForwardBase" "PerformanceChecks" = "False" }
+            Tags{ "RenderType" = "Opaque" "LightMode" = "ForwardBase" }
             LOD 100
             Blend[_SrcBlend][_DstBlend]
             BlendOp[_BlendOp]
             ZTest[_ZTest]
             ZWrite[_ZWrite]
             Cull[_CullMode]
+            Offset[_ZOffsetFactor],[_ZOffsetUnits]
             ColorMask[_ColorWriteMask]
 
             Stencil
@@ -189,8 +215,10 @@ Shader "Mixed Reality Toolkit/Standard"
 
             #pragma multi_compile_instancing
             #pragma multi_compile _ LIGHTMAP_ON
-            #pragma multi_compile _ UNITY_COLORSPACE_GAMMA
             #pragma multi_compile _ _MULTI_HOVER_LIGHT
+            #pragma multi_compile _ _CLIPPING_PLANE
+            #pragma multi_compile _ _CLIPPING_SPHERE
+            #pragma multi_compile _ _CLIPPING_BOX
 
             #pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON
             #pragma shader_feature _DISABLE_ALBEDO_MAP
@@ -207,15 +235,15 @@ Shader "Mixed Reality Toolkit/Standard"
             #pragma shader_feature _REFRACTION
             #pragma shader_feature _RIM_LIGHT
             #pragma shader_feature _VERTEX_COLORS
-            #pragma shader_feature _CLIPPING_PLANE
-            #pragma shader_feature _CLIPPING_SPHERE
-            #pragma shader_feature _CLIPPING_BOX
+            #pragma shader_feature _VERTEX_EXTRUSION
             #pragma shader_feature _CLIPPING_BORDER
             #pragma shader_feature _NEAR_PLANE_FADE
             #pragma shader_feature _NEAR_LIGHT_FADE
             #pragma shader_feature _HOVER_LIGHT
             #pragma shader_feature _HOVER_COLOR_OVERRIDE
             #pragma shader_feature _PROXIMITY_LIGHT
+            #pragma shader_feature _PROXIMITY_LIGHT_COLOR_OVERRIDE
+            #pragma shader_feature _PROXIMITY_LIGHT_SUBTRACTIVE
             #pragma shader_feature _PROXIMITY_LIGHT_TWO_SIDED
             #pragma shader_feature _ROUND_CORNERS
             #pragma shader_feature _BORDER_LIGHT
@@ -226,12 +254,16 @@ Shader "Mixed Reality Toolkit/Standard"
             #pragma shader_feature _IRIDESCENCE
             #pragma shader_feature _ENVIRONMENT_COLORING
             #pragma shader_feature _INSTANCED_COLOR
+            #pragma shader_feature _IGNORE_Z_SCALE
 
             #define IF(a, b, c) lerp(b, c, step((fixed) (a), 0.0)); 
 
             #include "UnityCG.cginc"
             #include "UnityStandardConfig.cginc"
             #include "UnityStandardUtils.cginc"
+
+            // This define will get commented in by the UpgradeShaderForLightweightRenderPipeline method.
+            //#define _LIGHTWEIGHT_RENDER_PIPELINE
 
 #if defined(_TRIPLANAR_MAPPING) || defined(_DIRECTIONAL_LIGHT) || defined(_SPHERICAL_HARMONICS) || defined(_REFLECTIONS) || defined(_RIM_LIGHT) || defined(_PROXIMITY_LIGHT) || defined(_ENVIRONMENT_COLORING)
             #define _NORMAL
@@ -319,8 +351,11 @@ Shader "Mixed Reality Toolkit/Standard"
 #if defined(_VERTEX_COLORS)
                 fixed4 color : COLOR0;
 #endif
+#if defined(_SPHERICAL_HARMONICS)
+                fixed3 ambient : COLOR1;
+#endif
 #if defined(_IRIDESCENCE)
-                fixed3 iridescentColor : COLOR1;
+                fixed3 iridescentColor : COLOR2;
 #endif
 #if defined(_WORLD_POSITION)
 #if defined(_NEAR_PLANE_FADE)
@@ -334,15 +369,15 @@ Shader "Mixed Reality Toolkit/Standard"
 #endif
 #if defined(_NORMAL)
 #if defined(_TRIPLANAR_MAPPING)
-                fixed3 worldNormal : COLOR2;
-                fixed3 triplanarNormal : COLOR3;
+                fixed3 worldNormal : COLOR3;
+                fixed3 triplanarNormal : COLOR4;
                 float3 triplanarPosition : TEXCOORD6;
 #elif defined(_NORMAL_MAP)
-                fixed3 tangentX : COLOR2;
-                fixed3 tangentY : COLOR3;
-                fixed3 tangentZ : COLOR4;
+                fixed3 tangentX : COLOR3;
+                fixed3 tangentY : COLOR4;
+                fixed3 tangentZ : COLOR5;
 #else
-                fixed3 worldNormal : COLOR2;
+                fixed3 worldNormal : COLOR3;
 #endif
 #endif
                 UNITY_VERTEX_OUTPUT_STEREO
@@ -386,7 +421,14 @@ Shader "Mixed Reality Toolkit/Standard"
 #endif
 
 #if defined(_DIRECTIONAL_LIGHT)
+#if defined(_LIGHTWEIGHT_RENDER_PIPELINE)
+            CBUFFER_START(_LightBuffer)
+            float4 _MainLightPosition;
+            half4 _MainLightColor;
+            CBUFFER_END
+#else
             fixed4 _LightColor0;
+#endif
 #endif
 
 #if defined(_REFRACTION)
@@ -396,6 +438,10 @@ Shader "Mixed Reality Toolkit/Standard"
 #if defined(_RIM_LIGHT)
             fixed3 _RimColor;
             fixed _RimPower;
+#endif
+
+#if defined(_VERTEX_EXTRUSION)
+            float _VertexExtrusionValue;
 #endif
 
 #if defined(_CLIPPING_PLANE)
@@ -414,6 +460,10 @@ Shader "Mixed Reality Toolkit/Standard"
             float4x4 _ClipBoxInverseTransform;
 #endif
 
+#if defined(_CLIPPING_PRIMITIVE)
+            float _BlendedClippingWidth;
+#endif
+
 #if defined(_CLIPPING_BORDER)
             fixed _ClippingBorderWidth;
             fixed3 _ClippingBorderColor;
@@ -422,6 +472,7 @@ Shader "Mixed Reality Toolkit/Standard"
 #if defined(_NEAR_PLANE_FADE)
             float _FadeBeginDistance;
             float _FadeCompleteDistance;
+            fixed _FadeMinValue;
 #endif
 
 #if defined(_HOVER_LIGHT) || defined(_NEAR_LIGHT_FADE)
@@ -441,7 +492,16 @@ Shader "Mixed Reality Toolkit/Standard"
 #define PROXIMITY_LIGHT_COUNT 2
 #define PROXIMITY_LIGHT_DATA_SIZE 6
             float4 _ProximityLightData[PROXIMITY_LIGHT_COUNT * PROXIMITY_LIGHT_DATA_SIZE];
-#endif     
+#if defined(_PROXIMITY_LIGHT_COLOR_OVERRIDE)
+            float4 _ProximityLightCenterColorOverride;
+            float4 _ProximityLightMiddleColorOverride;
+            float4 _ProximityLightOuterColorOverride;
+#endif
+#endif
+
+#if defined(_HOVER_LIGHT) || defined(_PROXIMITY_LIGHT) || defined(_BORDER_LIGHT)
+            fixed _FluentLightIntensity;
+#endif
 
 #if defined(_ROUND_CORNERS)
             fixed _RoundCornerRadius;
@@ -514,18 +574,18 @@ Shader "Mixed Reality Toolkit/Standard"
             inline float ProximityLight(float4 proximityLight, float4 proximityLightParams, float4 proximityLightPulseParams, float3 worldPosition, float3 worldNormal, out fixed colorValue)
             {
                 float proximityLightDistance = dot(proximityLight.xyz - worldPosition, worldNormal);
-                float normalizedProximityLightDistance = saturate(proximityLightDistance * proximityLightParams.y);
 #if defined(_PROXIMITY_LIGHT_TWO_SIDED)
-                float3 projectedProximityLight = proximityLight.xyz - (worldNormal * proximityLightDistance);
-#else
-                float3 projectedProximityLight = proximityLight.xyz - (worldNormal * saturate(proximityLightDistance));
+                worldNormal = IF(proximityLightDistance < 0.0, -worldNormal, worldNormal);
+                proximityLightDistance = abs(proximityLightDistance);
 #endif
+                float normalizedProximityLightDistance = saturate(proximityLightDistance * proximityLightParams.y);
+                float3 projectedProximityLight = proximityLight.xyz - (worldNormal * abs(proximityLightDistance));
                 float projectedProximityLightDistance = length(projectedProximityLight - worldPosition);
-                float attenuation = (1.0 - pow(normalizedProximityLightDistance, 2.0)) * proximityLight.w;
+                float attenuation = (1.0 - normalizedProximityLightDistance) * proximityLight.w;
                 colorValue = saturate(projectedProximityLightDistance * proximityLightParams.z);
                 float pulse = step(proximityLightPulseParams.x, projectedProximityLightDistance) * proximityLightPulseParams.y;
 
-                return smoothstep(1.0, 0.0, projectedProximityLightDistance / (proximityLightParams.x * max(normalizedProximityLightDistance, proximityLightParams.w))) * pulse * attenuation;
+                return smoothstep(1.0, 0.0, projectedProximityLightDistance / (proximityLightParams.x * max(pow(normalizedProximityLightDistance, 0.25), proximityLightParams.w))) * pulse * attenuation;
             }
 
             inline fixed3 MixProximityLightColor(fixed4 centerColor, fixed4 middleColor, fixed4 outerColor, fixed t)
@@ -600,10 +660,25 @@ Shader "Mixed Reality Toolkit/Standard"
 #if defined(_INSTANCED_COLOR)
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
 #endif
-                o.position = UnityObjectToClipPos(v.vertex);
+                float4 vertexPosition = v.vertex;
+
+#if defined(_WORLD_POSITION) || defined(_VERTEX_EXTRUSION)
+                float3 worldVertexPosition = mul(unity_ObjectToWorld, vertexPosition).xyz;
+#endif
+
+#if defined(_NORMAL) || defined(_VERTEX_EXTRUSION)
+                fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);
+#endif
+
+#if defined(_VERTEX_EXTRUSION)
+                worldVertexPosition += worldNormal * _VertexExtrusionValue;
+                vertexPosition = mul(unity_WorldToObject, float4(worldVertexPosition, 1.0));
+#endif
+
+                o.position = UnityObjectToClipPos(vertexPosition);
 
 #if defined(_WORLD_POSITION)
-                o.worldPosition.xyz = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.worldPosition.xyz = worldVertexPosition;
 #endif
 
 #if defined(_NEAR_PLANE_FADE)
@@ -625,15 +700,19 @@ Shader "Mixed Reality Toolkit/Standard"
                     fadeDistance = min(fadeDistance, NearLightDistance(_ProximityLightData[dataIndex], o.worldPosition));
                 }
 #else
-                float fadeDistance = -UnityObjectToViewPos(v.vertex.xyz).z;
+                float fadeDistance = -UnityObjectToViewPos(vertexPosition).z;
 #endif
-                o.worldPosition.w = saturate(mad(fadeDistance, rangeInverse, -_FadeCompleteDistance * rangeInverse));
+                o.worldPosition.w = max(saturate(mad(fadeDistance, rangeInverse, -_FadeCompleteDistance * rangeInverse)), _FadeMinValue);
 #endif
 
 #if defined(_SCALE)
                 o.scale.x = length(mul(unity_ObjectToWorld, float4(1.0, 0.0, 0.0, 0.0)));
                 o.scale.y = length(mul(unity_ObjectToWorld, float4(0.0, 1.0, 0.0, 0.0)));
+#if defined(_IGNORE_Z_SCALE)
+                o.scale.z = o.scale.x;
+#else
                 o.scale.z = length(mul(unity_ObjectToWorld, float4(0.0, 0.0, 1.0, 0.0)));
+#endif
 #endif
 
 #if defined(_BORDER_LIGHT) || defined(_ROUND_CORNERS)
@@ -708,6 +787,10 @@ Shader "Mixed Reality Toolkit/Standard"
                 o.color = v.color;
 #endif
 
+#if defined(_SPHERICAL_HARMONICS)
+                o.ambient = ShadeSH9(float4(worldNormal, 1.0));
+#endif
+
 #if defined(_IRIDESCENCE)
                 float3 rightTangent = normalize(mul((float3x3)unity_ObjectToWorld, float3(1.0, 0.0, 0.0)));
                 float3 incidentWithCenter = normalize(mul(unity_ObjectToWorld, float4(0.0, 0.0, 0.0, 1.0)) - _WorldSpaceCameraPos);
@@ -716,13 +799,11 @@ Shader "Mixed Reality Toolkit/Standard"
 #endif
 
 #if defined(_NORMAL)
-                fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);
-
 #if defined(_TRIPLANAR_MAPPING)
                 o.worldNormal = worldNormal;
 #if defined(_LOCAL_SPACE_TRIPLANAR_MAPPING)
                 o.triplanarNormal = v.normal;
-                o.triplanarPosition = v.vertex;
+                o.triplanarPosition = vertexPosition;
 #else
                 o.triplanarNormal = worldNormal;
                 o.triplanarPosition = o.worldPosition;
@@ -745,7 +826,7 @@ Shader "Mixed Reality Toolkit/Standard"
 #if defined(SHADER_API_D3D11) && !defined(_ALPHA_CLIP) && !defined(_TRANSPARENT)
             [earlydepthstencil]
 #endif
-            fixed4 frag(v2f i) : SV_Target
+            fixed4 frag(v2f i, fixed facing : VFACE) : SV_Target
             {
 #if defined(_INSTANCED_COLOR)
                 UNITY_SETUP_INSTANCE_ID(i);
@@ -812,12 +893,7 @@ Shader "Mixed Reality Toolkit/Standard"
 #endif
 #if defined(_CLIPPING_BORDER)
                 fixed3 primitiveBorderColor = lerp(_ClippingBorderColor, fixed3(0.0, 0.0, 0.0), primitiveDistance / _ClippingBorderWidth);
-                albedo.rgb += primitiveBorderColor * ((primitiveDistance < _ClippingBorderWidth) ? 1.0 : 0.0);
-#endif
-#if defined(_ALPHA_CLIP)
-                albedo *= (primitiveDistance > 0.0);
-#else
-                albedo *= saturate(primitiveDistance);
+                albedo.rgb += primitiveBorderColor * IF((primitiveDistance < _ClippingBorderWidth), 1.0, 0.0);
 #endif
 #endif
 
@@ -852,89 +928,7 @@ Shader "Mixed Reality Toolkit/Standard"
                 albedo.rgb += i.iridescentColor;
 #endif
 
-                fixed pointToLight = 1.0;
-                fixed3 lightColor = fixed3(0.0, 0.0, 0.0);
-
-                // Hover light.
-#if defined(_HOVER_LIGHT)
-                pointToLight = 0.0;
-
-                [unroll]
-                for (int hoverLightIndex = 0; hoverLightIndex < HOVER_LIGHT_COUNT; ++hoverLightIndex)
-                {
-                    int dataIndex = hoverLightIndex * HOVER_LIGHT_DATA_SIZE;
-                    fixed hoverValue = HoverLight(_HoverLightData[dataIndex], _HoverLightData[dataIndex + 1].w, i.worldPosition.xyz);
-                    pointToLight += hoverValue;
-#if !defined(_HOVER_COLOR_OVERRIDE)
-                    lightColor += lerp(fixed3(0.0, 0.0, 0.0), _HoverLightData[dataIndex + 1].rgb, hoverValue);
-#endif
-                }
-#if defined(_HOVER_COLOR_OVERRIDE)
-                lightColor = _HoverColorOverride.rgb;
-#endif
-#endif
-
-                // Proximity light.
-#if defined(_PROXIMITY_LIGHT)
-#if !defined(_HOVER_LIGHT)
-                pointToLight = 0.0;
-#endif
-                [unroll]
-                for (int proximityLightIndex = 0; proximityLightIndex < PROXIMITY_LIGHT_COUNT; ++proximityLightIndex)
-                {
-                    int dataIndex = proximityLightIndex * PROXIMITY_LIGHT_DATA_SIZE;
-                    fixed colorValue;
-                    fixed proximityValue = ProximityLight(_ProximityLightData[dataIndex], _ProximityLightData[dataIndex + 1], _ProximityLightData[dataIndex + 2], i.worldPosition.xyz, i.worldNormal, colorValue);
-                    pointToLight += proximityValue;
-                    fixed3 proximityColor = MixProximityLightColor(_ProximityLightData[dataIndex + 3], _ProximityLightData[dataIndex + 4], _ProximityLightData[dataIndex + 5], colorValue);
-                    lightColor += lerp(fixed3(0.0, 0.0, 0.0), proximityColor, proximityValue);
-                }
-#endif    
-
-                // Border light.
-#if defined(_BORDER_LIGHT)
-                fixed borderValue;
-#if defined(_ROUND_CORNERS)
-                fixed borderMargin = _RoundCornerMargin  + _BorderWidth * 0.5;
-                cornerCircleRadius = saturate(max(_RoundCornerRadius - borderMargin, 0.01)) * i.scale.z;
-                cornerCircleDistance = halfScale - (borderMargin * i.scale.z) - cornerCircleRadius;
-
-                borderValue =  1.0 - RoundCornersSmooth(roundCornerPosition, cornerCircleDistance, cornerCircleRadius);
-#else
-                borderValue = max(smoothstep(i.uv.z - _EdgeSmoothingValue, i.uv.z + _EdgeSmoothingValue, distanceToEdge.x),
-                                  smoothstep(i.uv.w - _EdgeSmoothingValue, i.uv.w + _EdgeSmoothingValue, distanceToEdge.y));
-#endif
-#if defined(_HOVER_LIGHT) && defined(_BORDER_LIGHT_USES_HOVER_COLOR) && defined(_HOVER_COLOR_OVERRIDE)
-                fixed3 borderColor = _HoverColorOverride.rgb;
-#else
-                fixed3 borderColor = fixed3(1.0, 1.0, 1.0);
-#endif
-                fixed3 borderContribution = borderColor * borderValue * _BorderMinValue;
-#if defined(_BORDER_LIGHT_REPLACES_ALBEDO)
-                albedo.rgb = lerp(albedo.rgb, borderContribution, borderValue);
-#else
-                albedo.rgb += borderContribution;
-#endif
-#if defined(_HOVER_LIGHT) || defined(_PROXIMITY_LIGHT)
-                albedo.rgb += (lightColor * borderValue * pointToLight) * 2.0;
-#endif
-#if defined(_BORDER_LIGHT_OPAQUE)
-                albedo.a = max(albedo.a, borderValue * _BorderLightOpaqueAlpha);
-#endif
-#endif
-
-#if defined(_ROUND_CORNERS)
-                albedo *= roundCornerClip;
-#endif
-
-#if defined(_ALPHA_CLIP)
-#if !defined(_ALPHATEST_ON)
-                _Cutoff = 0.5;
-#endif
-                clip(albedo.a - _Cutoff);
-                albedo.a = 1.0;
-#endif
-
+                // Normal calculation.
 #if defined(_NORMAL)
                 fixed3 worldViewDir = normalize(UnityWorldSpaceViewDir(i.worldPosition.xyz));
 #if defined(_REFLECTIONS) || defined(_ENVIRONMENT_COLORING)
@@ -942,7 +936,6 @@ Shader "Mixed Reality Toolkit/Standard"
 #endif
                 fixed3 worldNormal;
 
-                // Normal calculation.
 #if defined(_NORMAL_MAP)
 #if defined(_TRIPLANAR_MAPPING)
                 fixed3 tangentNormalX = UnpackScaleNormal(tex2D(_NormalMap, uvX), _NormalMapScale);
@@ -966,19 +959,118 @@ Shader "Mixed Reality Toolkit/Standard"
                 worldNormal.x = dot(i.tangentX, tangentNormal);
                 worldNormal.y = dot(i.tangentY, tangentNormal);
                 worldNormal.z = dot(i.tangentZ, tangentNormal);
-                worldNormal = normalize(worldNormal);
+                worldNormal = normalize(worldNormal) * facing;
 #endif
 #else
-                worldNormal = normalize(i.worldNormal);
+                worldNormal = normalize(i.worldNormal) * facing;
 #endif
+#endif
+
+                fixed pointToLight = 1.0;
+                fixed3 fluentLightColor = fixed3(0.0, 0.0, 0.0);
+
+                // Hover light.
+#if defined(_HOVER_LIGHT)
+                pointToLight = 0.0;
+
+                [unroll]
+                for (int hoverLightIndex = 0; hoverLightIndex < HOVER_LIGHT_COUNT; ++hoverLightIndex)
+                {
+                    int dataIndex = hoverLightIndex * HOVER_LIGHT_DATA_SIZE;
+                    fixed hoverValue = HoverLight(_HoverLightData[dataIndex], _HoverLightData[dataIndex + 1].w, i.worldPosition.xyz);
+                    pointToLight += hoverValue;
+#if !defined(_HOVER_COLOR_OVERRIDE)
+                    fluentLightColor += lerp(fixed3(0.0, 0.0, 0.0), _HoverLightData[dataIndex + 1].rgb, hoverValue);
+#endif
+                }
+#if defined(_HOVER_COLOR_OVERRIDE)
+                fluentLightColor = _HoverColorOverride.rgb * pointToLight;
+#endif
+#endif
+
+                // Proximity light.
+#if defined(_PROXIMITY_LIGHT)
+#if !defined(_HOVER_LIGHT)
+                pointToLight = 0.0;
+#endif
+                [unroll]
+                for (int proximityLightIndex = 0; proximityLightIndex < PROXIMITY_LIGHT_COUNT; ++proximityLightIndex)
+                {
+                    int dataIndex = proximityLightIndex * PROXIMITY_LIGHT_DATA_SIZE;
+                    fixed colorValue;
+                    fixed proximityValue = ProximityLight(_ProximityLightData[dataIndex], _ProximityLightData[dataIndex + 1], _ProximityLightData[dataIndex + 2], i.worldPosition.xyz, worldNormal, colorValue);
+                    pointToLight += proximityValue;
+#if defined(_PROXIMITY_LIGHT_COLOR_OVERRIDE)
+                    fixed3 proximityColor = MixProximityLightColor(_ProximityLightCenterColorOverride, _ProximityLightMiddleColorOverride, _ProximityLightOuterColorOverride, colorValue);
+#else
+                    fixed3 proximityColor = MixProximityLightColor(_ProximityLightData[dataIndex + 3], _ProximityLightData[dataIndex + 4], _ProximityLightData[dataIndex + 5], colorValue);
+#endif  
+#if defined(_PROXIMITY_LIGHT_SUBTRACTIVE)
+                    fluentLightColor -= lerp(fixed3(0.0, 0.0, 0.0), proximityColor, proximityValue);
+#else
+                    fluentLightColor += lerp(fixed3(0.0, 0.0, 0.0), proximityColor, proximityValue);
+#endif    
+                }
+#endif    
+
+                // Border light.
+#if defined(_BORDER_LIGHT)
+                fixed borderValue;
+#if defined(_ROUND_CORNERS)
+                fixed borderMargin = _RoundCornerMargin  + _BorderWidth * 0.5;
+                cornerCircleRadius = saturate(max(_RoundCornerRadius - borderMargin, 0.01)) * i.scale.z;
+                cornerCircleDistance = halfScale - (borderMargin * i.scale.z) - cornerCircleRadius;
+
+                borderValue =  1.0 - RoundCornersSmooth(roundCornerPosition, cornerCircleDistance, cornerCircleRadius);
+#else
+                borderValue = max(smoothstep(i.uv.z - _EdgeSmoothingValue, i.uv.z + _EdgeSmoothingValue, distanceToEdge.x),
+                                  smoothstep(i.uv.w - _EdgeSmoothingValue, i.uv.w + _EdgeSmoothingValue, distanceToEdge.y));
+#endif
+#if defined(_HOVER_LIGHT) && defined(_BORDER_LIGHT_USES_HOVER_COLOR) && defined(_HOVER_COLOR_OVERRIDE)
+                fixed3 borderColor = _HoverColorOverride.rgb;
+#else
+                fixed3 borderColor = fixed3(1.0, 1.0, 1.0);
+#endif
+                fixed3 borderContribution = borderColor * borderValue * _BorderMinValue * _FluentLightIntensity;
+#if defined(_BORDER_LIGHT_REPLACES_ALBEDO)
+                albedo.rgb = lerp(albedo.rgb, borderContribution, borderValue);
+#else
+                albedo.rgb += borderContribution;
+#endif
+#if defined(_HOVER_LIGHT) || defined(_PROXIMITY_LIGHT)
+                albedo.rgb += (fluentLightColor * borderValue * pointToLight * _FluentLightIntensity) * 2.0;
+#endif
+#if defined(_BORDER_LIGHT_OPAQUE)
+                albedo.a = max(albedo.a, borderValue * _BorderLightOpaqueAlpha);
+#endif
+#endif
+
+#if defined(_ROUND_CORNERS)
+                albedo *= roundCornerClip;
+                pointToLight *= roundCornerClip;
+#endif
+
+#if defined(_ALPHA_CLIP)
+#if !defined(_ALPHATEST_ON)
+                _Cutoff = 0.5;
+#endif
+#if defined(_CLIPPING_PRIMITIVE)
+                albedo *= (primitiveDistance > 0.0);
+#endif
+                clip(albedo.a - _Cutoff);
+                albedo.a = 1.0;
 #endif
 
                 // Blinn phong lighting.
 #if defined(_DIRECTIONAL_LIGHT)
-                fixed diffuse = max(0.0, dot(worldNormal, _WorldSpaceLightPos0));
-
+#if defined(_LIGHTWEIGHT_RENDER_PIPELINE)
+                float4 directionalLightDirection = _MainLightPosition;
+#else
+                float4 directionalLightDirection = _WorldSpaceLightPos0;
+#endif
+                fixed diffuse = max(0.0, dot(worldNormal, directionalLightDirection));
 #if defined(_SPECULAR_HIGHLIGHTS)
-                fixed halfVector = max(0.0, dot(worldNormal, normalize(_WorldSpaceLightPos0 + worldViewDir)));
+                fixed halfVector = max(0.0, dot(worldNormal, normalize(directionalLightDirection + worldViewDir)));
                 fixed specular = saturate(pow(halfVector, _Shininess * pow(_Smoothness, 4.0)) * _Smoothness * 0.5);
 #else
                 fixed specular = 0.0;
@@ -1010,7 +1102,7 @@ Shader "Mixed Reality Toolkit/Standard"
                 // Final lighting mix.
                 fixed4 output = albedo;
 #if defined(_SPHERICAL_HARMONICS)
-                fixed3 ambient = ShadeSH9(float4(worldNormal, 1.0));
+                fixed3 ambient = i.ambient;
 #else
                 fixed3 ambient = glstate_lightmodel_ambient + fixed3(0.25, 0.25, 0.25);
 #endif
@@ -1018,8 +1110,13 @@ Shader "Mixed Reality Toolkit/Standard"
 #if defined(_DIRECTIONAL_LIGHT)
                 fixed oneMinusMetallic = (1.0 - _Metallic);
                 output.rgb = lerp(output.rgb, ibl, minProperty);
-                output.rgb *= lerp((ambient + _LightColor0.rgb * diffuse + _LightColor0.rgb * specular) * max(oneMinusMetallic, _MinMetallicLightContribution), albedo, minProperty);
-                output.rgb += (_LightColor0.rgb * albedo * specular) + (_LightColor0.rgb * specular * _Smoothness);
+#if defined(_LIGHTWEIGHT_RENDER_PIPELINE)
+                fixed3 directionalLightColor = _MainLightColor.rgb;
+#else
+                fixed3 directionalLightColor = _LightColor0.rgb;
+#endif
+                output.rgb *= lerp((ambient + directionalLightColor * diffuse + directionalLightColor * specular) * max(oneMinusMetallic, _MinMetallicLightContribution), albedo, minProperty);
+                output.rgb += (directionalLightColor * albedo * specular) + (directionalLightColor * specular * _Smoothness);
                 output.rgb += ibl * oneMinusMetallic * _IblContribution;
 #elif defined(_REFLECTIONS)
                 output.rgb = lerp(output.rgb, ibl, minProperty);
@@ -1065,7 +1162,12 @@ Shader "Mixed Reality Toolkit/Standard"
 
                 // Hover and proximity lighting should occur after near plane fading.
 #if defined(_HOVER_LIGHT) || defined(_PROXIMITY_LIGHT)
-                output.rgb += lightColor * pointToLight;
+                output.rgb += fluentLightColor * _FluentLightIntensity * pointToLight;
+#endif
+
+                // Perform non-alpha clipped primitive clipping on the final output.
+#if defined(_CLIPPING_PRIMITIVE) && !defined(_ALPHA_CLIP)
+                output *= saturate(primitiveDistance * (1.0f / _BlendedClippingWidth));
 #endif
                 return output;
             }
@@ -1074,6 +1176,6 @@ Shader "Mixed Reality Toolkit/Standard"
         }
     }
     
-    FallBack "VertexLit"
+    Fallback "Hidden/InternalErrorShader"
     CustomEditor "Microsoft.MixedReality.Toolkit.Editor.MixedRealityStandardShaderGUI"
 }

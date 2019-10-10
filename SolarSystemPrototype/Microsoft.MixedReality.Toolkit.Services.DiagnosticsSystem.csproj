@@ -60,8 +60,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MixedRealityToolkit.Services\DiagnosticsSystem\DiagnosticsSystemVoiceControls.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\DiagnosticsSystem\MixedRealityDiagnosticsSystem.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\DiagnosticsSystem\MixedRealityToolkitVisualProfiler.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Services\DiagnosticsSystem\VisualProfilerControl.cs" />
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity2018-5/Editor/Data/PlaybackEngines/MetroSupport/Tools/UnityEngine.AIModule.dll</HintPath>
     </Reference>

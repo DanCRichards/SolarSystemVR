@@ -60,13 +60,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\BaseNearInteractionTouchable.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\DefaultRaycastProvider.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\FocusProvider.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\GazePointerVisibilityStateMachine.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\GazeProvider.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\InputSystemGlobalHandlerListener.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\InputSystemGlobalListener.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\MixedRealityInputModule.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\MixedRealityInputSystem.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\NearInteractionGrabbable.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\NearInteractionTouchable.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\NearInteractionTouchableUnityUI.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\NearInteractionTouchableVolume.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\Utilities\CanvasEditorExtension.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Services\InputSystem\Utilities\CanvasUtility.cs" />
     <Reference Include="UnityEngine.AIModule">
@@ -705,9 +711,9 @@
       <Project>{C9E05CC0-BA05-37C2-435D-E7851C8009C2}</Project>
       <Name>Microsoft.MixedReality.Toolkit</Name>
     </ProjectReference>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Core.Utilities.Async.csproj">
-      <Project>{AB601170-1F66-A77A-E9FC-807A6E5C4165}</Project>
-      <Name>Microsoft.MixedReality.Toolkit.Core.Utilities.Async</Name>
+    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Async.csproj">
+      <Project>{2B39B067-E05D-D580-9C98-C7147C86361D}</Project>
+      <Name>Microsoft.MixedReality.Toolkit.Async</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

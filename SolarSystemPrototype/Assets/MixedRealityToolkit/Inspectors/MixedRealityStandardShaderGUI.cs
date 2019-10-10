@@ -3,6 +3,7 @@
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -13,36 +14,13 @@ namespace Microsoft.MixedReality.Toolkit.Editor
     /// <summary>
     /// A custom shader inspector for the "Mixed Reality Toolkit/Standard" shader.
     /// </summary>
-    public class MixedRealityStandardShaderGUI : ShaderGUI
+    public class MixedRealityStandardShaderGUI : MixedRealityShaderGUI
     {
-        protected enum RenderingMode
-        {
-            Opaque,
-            TransparentCutout,
-            Transparent,
-            PremultipliedTransparent,
-            Additive,
-            Custom
-        }
-
-        protected enum CustomRenderingMode
-        {
-            Opaque,
-            TransparentCutout,
-            Transparent
-        }
-
         protected enum AlbedoAlphaMode
         {
             Transparency,
             Metallic,
             Smoothness
-        }
-
-        protected enum DepthWrite
-        {
-            Off,
-            On
         }
 
         protected static class Styles
@@ -51,40 +29,18 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             public static string renderingOptionsTitle = "Rendering Options";
             public static string advancedOptionsTitle = "Advanced Options";
             public static string fluentOptionsTitle = "Fluent Options";
-            public static string renderTypeName = "RenderType";
-            public static string renderingModeName = "_Mode";
-            public static string customRenderingModeName = "_CustomMode";
-            public static string sourceBlendName = "_SrcBlend";
-            public static string destinationBlendName = "_DstBlend";
-            public static string blendOperationName = "_BlendOp";
-            public static string depthTestName = "_ZTest";
-            public static string depthWriteName = "_ZWrite";
-            public static string colorWriteMaskName = "_ColorWriteMask";
             public static string instancedColorName = "_InstancedColor";
             public static string instancedColorFeatureName = "_INSTANCED_COLOR";
             public static string stencilComparisonName = "_StencilComparison";
             public static string stencilOperationName = "_StencilOperation";
-            public static string alphaTestOnName = "_ALPHATEST_ON";
-            public static string alphaBlendOnName = "_ALPHABLEND_ON";
             public static string disableAlbedoMapName = "_DISABLE_ALBEDO_MAP";
             public static string albedoMapAlphaMetallicName = "_METALLIC_TEXTURE_ALBEDO_CHANNEL_A";
             public static string albedoMapAlphaSmoothnessName = "_SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A";
-            public static string propertiesComponentHelp = "Use the {0} component to control {1} properties.";
-            public static readonly string[] renderingModeNames = Enum.GetNames(typeof(RenderingMode));
-            public static readonly string[] customRenderingModeNames = Enum.GetNames(typeof(CustomRenderingMode));
+            public static string propertiesComponentHelp = "Use the {0} component(s) to control {1} properties.";
             public static readonly string[] albedoAlphaModeNames = Enum.GetNames(typeof(AlbedoAlphaMode));
-            public static readonly string[] depthWriteNames = Enum.GetNames(typeof(DepthWrite));
-            public static GUIContent sourceBlend = new GUIContent("Source Blend", "Blend Mode of Newly Calculated Color");
-            public static GUIContent destinationBlend = new GUIContent("Destination Blend", "Blend Mode of Existing Color");
-            public static GUIContent blendOperation = new GUIContent("Blend Operation", "Operation for Blending New Color With Existing Color");
-            public static GUIContent depthTest = new GUIContent("Depth Test", "How Should Depth Testing Be Performed.");
-            public static GUIContent depthWrite = new GUIContent("Depth Write", "Controls Whether Pixels From This Object Are Written to the Depth Buffer");
-            public static GUIContent colorWriteMask = new GUIContent("Color Write Mask", "Color Channel Writing Mask");
             public static GUIContent instancedColor = new GUIContent("Instanced Color", "Enable a Unique Color Per Instance");
-            public static GUIContent cullMode = new GUIContent("Cull Mode", "Triangle Culling Mode");
-            public static GUIContent renderQueueOverride = new GUIContent("Render Queue Override", "Manually Override the Render Queue");
             public static GUIContent albedo = new GUIContent("Albedo", "Albedo (RGB) and Transparency (Alpha)");
-            public static GUIContent albedoAssignedAtRuntime = new GUIContent("Albedo Assigned at Runtime", "As an optimization albedo operations are disabled when no albedo texture is specified. If a albedo texture will be specified at runtime enable this option.");
+            public static GUIContent albedoAssignedAtRuntime = new GUIContent("Assigned at Runtime", "As an optimization albedo operations are disabled when no albedo texture is specified. If a albedo texture will be specified at runtime enable this option.");
             public static GUIContent alphaCutoff = new GUIContent("Alpha Cutoff", "Threshold for Alpha Cutoff");
             public static GUIContent metallic = new GUIContent("Metallic", "Metallic Value");
             public static GUIContent smoothness = new GUIContent("Smoothness", "Smoothness Value");
@@ -108,21 +64,28 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             public static GUIContent rimColor = new GUIContent("Color", "Rim Highlight Color");
             public static GUIContent rimPower = new GUIContent("Power", "Rim Highlight Saturation");
             public static GUIContent vertexColors = new GUIContent("Vertex Colors", "Enable Vertex Color Tinting");
-            public static GUIContent clippingPlane = new GUIContent("Clipping Plane", "Enable Clipping Against a Plane");
-            public static GUIContent clippingSphere = new GUIContent("Clipping Sphere", "Enable Clipping Against a Sphere");
-            public static GUIContent clippingBox = new GUIContent("Clipping Box", "Enable Clipping Against a Box");
+            public static GUIContent vertexExtrusion = new GUIContent("Vertex Extrusion", "Enable Vertex Extrusion Along the Vertex Normal");
+            public static GUIContent vertexExtrusionValue = new GUIContent("Vertex Extrusion Value", "How Far to Extrude the Vertex Along the Vertex Normal");
+            public static GUIContent blendedClippingWidth = new GUIContent("Blended Clipping Width", "The Width of the Clipping Primitive Clip Fade Region on Non-Cutout Materials");
             public static GUIContent clippingBorder = new GUIContent("Clipping Border", "Enable a Border Along the Clipping Primitive's Edge");
             public static GUIContent clippingBorderWidth = new GUIContent("Width", "Width of the Clipping Border");
             public static GUIContent clippingBorderColor = new GUIContent("Color", "Interpolated Color of the Clipping Border");
             public static GUIContent nearPlaneFade = new GUIContent("Near Fade", "Objects Disappear (Turn to Black/Transparent) as the Camera (or Hover/Proximity Light) Nears Them");
             public static GUIContent nearLightFade = new GUIContent("Use Light", "A Hover or Proximity Light (Rather Than the Camera) Determines Near Fade Distance");
-            public static GUIContent fadeBeginDistance = new GUIContent("Fade Begin", "Distance From Camera to Begin Fade In");
-            public static GUIContent fadeCompleteDistance = new GUIContent("Fade Complete", "Distance From Camera When Fade is Fully In");
+            public static GUIContent fadeBeginDistance = new GUIContent("Fade Begin", "Distance From Camera (or Hover/Proximity Light) to Begin Fade In");
+            public static GUIContent fadeCompleteDistance = new GUIContent("Fade Complete", "Distance From Camera (or Hover/Proximity Light) When Fade is Fully In");
+            public static GUIContent fadeMinValue = new GUIContent("Fade Min Value", "Clamps the Fade Amount to a Minimum Value");
             public static GUIContent hoverLight = new GUIContent("Hover Light", "Enable utilization of Hover Light(s)");
-            public static GUIContent enableHoverColorOverride = new GUIContent("Override Color", "Override Global Hover Light Color");
+            public static GUIContent enableHoverColorOverride = new GUIContent("Override Color", "Override Global Hover Light Color for this Material");
             public static GUIContent hoverColorOverride = new GUIContent("Color", "Override Hover Light Color");
             public static GUIContent proximityLight = new GUIContent("Proximity Light", "Enable utilization of Proximity Light(s)");
+            public static GUIContent enableProximityLightColorOverride = new GUIContent("Override Color", "Override Global Proximity Light Color for this Material");
+            public static GUIContent proximityLightCenterColorOverride = new GUIContent("Center Color", "The Override Color of the ProximityLight Gradient at the Center (RGB) and (A) is Gradient Extent");
+            public static GUIContent proximityLightMiddleColorOverride = new GUIContent("Middle Color", "The Override Color of the ProximityLight Gradient at the Middle (RGB) and (A) is Gradient Extent");
+            public static GUIContent proximityLightOuterColorOverride = new GUIContent("Outer Color", "The Override Color of the ProximityLight Gradient at the Outer Edge (RGB) and (A) is Gradient Extent");
+            public static GUIContent proximityLightSubtractive = new GUIContent("Subtractive", "Proximity Lights Remove Light from a Surface, Used to Mimic a Shadow");
             public static GUIContent proximityLightTwoSided = new GUIContent("Two Sided", "Proximity Lights Apply to Both Sides of a Surface");
+            public static GUIContent fluentLightIntensity = new GUIContent("Light Intensity", "Intensity Scaler for All Hover and Proximity Lights");
             public static GUIContent roundCorners = new GUIContent("Round Corners", "(Assumes UVs Specify Borders of Surface, Works Best on Unity Cube, Quad, and Plane)");
             public static GUIContent roundCornerRadius = new GUIContent("Unit Radius", "Rounded Rectangle Corner Unit Sphere Radius");
             public static GUIContent roundCornerMargin = new GUIContent("Margin %", "Distance From Geometry Edge");
@@ -152,21 +115,10 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             public static GUIContent stencilReference = new GUIContent("Stencil Reference", "Value to Compared Against (if Comparison is Anything but Always) and/or the Value to be Written to the Buffer (if Either Pass, Fail or ZFail is Set to Replace)");
             public static GUIContent stencilComparison = new GUIContent("Stencil Comparison", "Function to Compare the Reference Value to");
             public static GUIContent stencilOperation = new GUIContent("Stencil Operation", "What to do When the Stencil Test Passes");
+            public static GUIContent ignoreZScale = new GUIContent("Ignore Z Scale", "For Features That Use Object Scale (Round Corners, Border Light, etc.), Ignore the Z Scale of the Object");
         }
 
-        protected bool initialized;
-
-        protected MaterialProperty renderingMode;
-        protected MaterialProperty customRenderingMode;
-        protected MaterialProperty sourceBlend;
-        protected MaterialProperty destinationBlend;
-        protected MaterialProperty blendOperation;
-        protected MaterialProperty depthTest;
-        protected MaterialProperty depthWrite;
-        protected MaterialProperty colorWriteMask;
         protected MaterialProperty instancedColor;
-        protected MaterialProperty cullMode;
-        protected MaterialProperty renderQueueOverride;
         protected MaterialProperty albedoMap;
         protected MaterialProperty albedoColor;
         protected MaterialProperty albedoAlphaMode;
@@ -194,9 +146,9 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         protected MaterialProperty rimColor;
         protected MaterialProperty rimPower;
         protected MaterialProperty vertexColors;
-        protected MaterialProperty clippingPlane;
-        protected MaterialProperty clippingSphere;
-        protected MaterialProperty clippingBox;
+        protected MaterialProperty vertexExtrusion;
+        protected MaterialProperty vertexExtrusionValue;
+        protected MaterialProperty blendedClippingWidth;
         protected MaterialProperty clippingBorder;
         protected MaterialProperty clippingBorderWidth;
         protected MaterialProperty clippingBorderColor;
@@ -204,11 +156,18 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         protected MaterialProperty nearLightFade;
         protected MaterialProperty fadeBeginDistance;
         protected MaterialProperty fadeCompleteDistance;
+        protected MaterialProperty fadeMinValue;
         protected MaterialProperty hoverLight;
         protected MaterialProperty enableHoverColorOverride;
         protected MaterialProperty hoverColorOverride;
         protected MaterialProperty proximityLight;
+        protected MaterialProperty enableProximityLightColorOverride;
+        protected MaterialProperty proximityLightCenterColorOverride;
+        protected MaterialProperty proximityLightMiddleColorOverride;
+        protected MaterialProperty proximityLightOuterColorOverride;
+        protected MaterialProperty proximityLightSubtractive;
         protected MaterialProperty proximityLightTwoSided;
+        protected MaterialProperty fluentLightIntensity;
         protected MaterialProperty roundCorners;
         protected MaterialProperty roundCornerRadius;
         protected MaterialProperty roundCornerMargin;
@@ -238,20 +197,13 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         protected MaterialProperty stencilReference;
         protected MaterialProperty stencilComparison;
         protected MaterialProperty stencilOperation;
+        protected MaterialProperty ignoreZScale;
 
-        protected void FindProperties(MaterialProperty[] props)
+        protected override void FindProperties(MaterialProperty[] props)
         {
-            renderingMode = FindProperty(Styles.renderingModeName, props);
-            customRenderingMode = FindProperty(Styles.customRenderingModeName, props);
-            sourceBlend = FindProperty(Styles.sourceBlendName, props);
-            destinationBlend = FindProperty(Styles.destinationBlendName, props);
-            blendOperation = FindProperty(Styles.blendOperationName, props);
-            depthTest = FindProperty(Styles.depthTestName, props);
-            depthWrite = FindProperty(Styles.depthWriteName, props);
-            colorWriteMask = FindProperty(Styles.colorWriteMaskName, props);
+            base.FindProperties(props);
+
             instancedColor = FindProperty(Styles.instancedColorName, props);
-            cullMode = FindProperty("_CullMode", props);
-            renderQueueOverride = FindProperty("_RenderQueueOverride", props);
             albedoMap = FindProperty("_MainTex", props);
             albedoColor = FindProperty("_Color", props);
             albedoAlphaMode = FindProperty("_AlbedoAlphaMode", props);
@@ -279,9 +231,9 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             rimColor = FindProperty("_RimColor", props);
             rimPower = FindProperty("_RimPower", props);
             vertexColors = FindProperty("_VertexColors", props);
-            clippingPlane = FindProperty("_ClippingPlane", props);
-            clippingSphere = FindProperty("_ClippingSphere", props);
-            clippingBox = FindProperty("_ClippingBox", props);
+            vertexExtrusion = FindProperty("_VertexExtrusion", props);
+            vertexExtrusionValue = FindProperty("_VertexExtrusionValue", props);
+            blendedClippingWidth = FindProperty("_BlendedClippingWidth", props);
             clippingBorder = FindProperty("_ClippingBorder", props);
             clippingBorderWidth = FindProperty("_ClippingBorderWidth", props);
             clippingBorderColor = FindProperty("_ClippingBorderColor", props);
@@ -289,11 +241,18 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             nearLightFade = FindProperty("_NearLightFade", props);
             fadeBeginDistance = FindProperty("_FadeBeginDistance", props);
             fadeCompleteDistance = FindProperty("_FadeCompleteDistance", props);
+            fadeMinValue = FindProperty("_FadeMinValue", props);
             hoverLight = FindProperty("_HoverLight", props);
             enableHoverColorOverride = FindProperty("_EnableHoverColorOverride", props);
             hoverColorOverride = FindProperty("_HoverColorOverride", props);
             proximityLight = FindProperty("_ProximityLight", props);
+            enableProximityLightColorOverride = FindProperty("_EnableProximityLightColorOverride", props);
+            proximityLightCenterColorOverride = FindProperty("_ProximityLightCenterColorOverride", props);
+            proximityLightMiddleColorOverride = FindProperty("_ProximityLightMiddleColorOverride", props);
+            proximityLightOuterColorOverride = FindProperty("_ProximityLightOuterColorOverride", props);
+            proximityLightSubtractive = FindProperty("_ProximityLightSubtractive", props);
             proximityLightTwoSided = FindProperty("_ProximityLightTwoSided", props);
+            fluentLightIntensity = FindProperty("_FluentLightIntensity", props);
             roundCorners = FindProperty("_RoundCorners", props);
             roundCornerRadius = FindProperty("_RoundCornerRadius", props);
             roundCornerMargin = FindProperty("_RoundCornerMargin", props);
@@ -323,16 +282,15 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             stencilReference = FindProperty("_StencilReference", props);
             stencilComparison = FindProperty(Styles.stencilComparisonName, props);
             stencilOperation = FindProperty(Styles.stencilOperationName, props);
+            ignoreZScale = FindProperty("_IgnoreZScale", props);
         }
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
         {
             Material material = (Material)materialEditor.target;
 
-            FindProperties(props);
-            Initialize(material);
+            base.OnGUI(materialEditor, props);
 
-            RenderingModeOptions(materialEditor);
             MainMapOptions(materialEditor, material);
             RenderingOptions(materialEditor, material);
             FluentOptions(materialEditor, material);
@@ -376,104 +334,53 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             base.AssignNewShaderToMaterial(material, oldShader, newShader);
 
             // Apply old shader properties to the new shader.
-            SetFloatProperty(material, null, "_Smoothness", smoothness);
-            SetFloatProperty(material, "_DIRECTIONAL_LIGHT", "_DirectionalLight", diffuse);
-            SetFloatProperty(material, "_SPECULAR_HIGHLIGHTS", "_SpecularHighlights", specularHighlights);
-            SetFloatProperty(material, "_NORMAL_MAP", "_EnableNormalMap", normalMap);
+            SetShaderFeatureActive(material, null, "_Smoothness", smoothness);
+            SetShaderFeatureActive(material, "_DIRECTIONAL_LIGHT", "_DirectionalLight", diffuse);
+            SetShaderFeatureActive(material, "_SPECULAR_HIGHLIGHTS", "_SpecularHighlights", specularHighlights);
+            SetShaderFeatureActive(material, "_NORMAL_MAP", "_EnableNormalMap", normalMap);
 
             if (normalMapTexture)
             {
                 material.SetTexture("_NormalMap", normalMapTexture);
             }
 
-            SetFloatProperty(material, null, "_NormalMapScale", normalMapScale);
-            SetFloatProperty(material, "_EMISSION", "_EnableEmission", emission);
+            SetShaderFeatureActive(material, null, "_NormalMapScale", normalMapScale);
+            SetShaderFeatureActive(material, "_EMISSION", "_EnableEmission", emission);
             SetColorProperty(material, "_EmissiveColor", emissionColor);
-            SetFloatProperty(material, "_REFLECTIONS", "_Reflections", reflections);
-            SetFloatProperty(material, "_RIM_LIGHT", "_RimLight", rimLighting);
+            SetShaderFeatureActive(material, "_REFLECTIONS", "_Reflections", reflections);
+            SetShaderFeatureActive(material, "_RIM_LIGHT", "_RimLight", rimLighting);
             SetVectorProperty(material, "_MainTex_ST", textureScaleOffset);
-            SetFloatProperty(material, null, "_CullMode", cullMode);
+            SetShaderFeatureActive(material, null, "_CullMode", cullMode);
 
             // Setup the rendering mode based on the old shader.
-            if (oldShader == null || !oldShader.name.Contains("Legacy Shaders/"))
+            if (oldShader == null || !oldShader.name.Contains(LegacyShadersPath))
             {
-                SetupMaterialWithRenderingMode(material, (RenderingMode)material.GetFloat(Styles.renderingModeName), CustomRenderingMode.Opaque, -1);
+                SetupMaterialWithRenderingMode(material, (RenderingMode)material.GetFloat(BaseStyles.renderingModeName), CustomRenderingMode.Opaque, -1);
             }
             else
             {
                 RenderingMode mode = RenderingMode.Opaque;
 
-                if (oldShader.name.Contains("/Transparent/Cutout/"))
+                if (oldShader.name.Contains(TransparentCutoutShadersPath))
                 {
                     mode = RenderingMode.TransparentCutout;
                 }
-                else if (oldShader.name.Contains("/Transparent/"))
+                else if (oldShader.name.Contains(TransparentShadersPath))
                 {
                     mode = RenderingMode.Transparent;
                 }
 
-                material.SetFloat(Styles.renderingModeName, (float)mode);
+                material.SetFloat(BaseStyles.renderingModeName, (float)mode);
 
                 MaterialChanged(material);
             }
         }
 
-        protected void Initialize(Material material)
-        {
-            if (!initialized)
-            {
-                MaterialChanged(material);
-                initialized = true;
-            }
-        }
-
-        protected void MaterialChanged(Material material)
+        protected override void MaterialChanged(Material material)
         {
             SetupMaterialWithAlbedo(material, albedoMap, albedoAlphaMode, albedoAssignedAtRuntime);
-            SetupMaterialWithRenderingMode(material, (RenderingMode)renderingMode.floatValue, (CustomRenderingMode)customRenderingMode.floatValue, (int)renderQueueOverride.floatValue);
-        }
 
-        protected void RenderingModeOptions(MaterialEditor materialEditor)
-        {
-            EditorGUI.BeginChangeCheck();
-
-            EditorGUI.showMixedValue = renderingMode.hasMixedValue;
-            RenderingMode mode = (RenderingMode)renderingMode.floatValue;
-            EditorGUI.BeginChangeCheck();
-            mode = (RenderingMode)EditorGUILayout.Popup(renderingMode.displayName, (int)mode, Styles.renderingModeNames);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                materialEditor.RegisterPropertyChangeUndo(renderingMode.displayName);
-                renderingMode.floatValue = (float)mode;
-            }
-
-            EditorGUI.showMixedValue = false;
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                Object[] targets = renderingMode.targets;
-
-                foreach (Object target in targets)
-                {
-                    MaterialChanged((Material)target);
-                }
-            }
-
-            if ((RenderingMode)renderingMode.floatValue == RenderingMode.Custom)
-            {
-                EditorGUI.indentLevel += 2;
-                customRenderingMode.floatValue = EditorGUILayout.Popup(customRenderingMode.displayName, (int)customRenderingMode.floatValue, Styles.customRenderingModeNames);
-                materialEditor.ShaderProperty(sourceBlend, Styles.sourceBlend);
-                materialEditor.ShaderProperty(destinationBlend, Styles.destinationBlend);
-                materialEditor.ShaderProperty(blendOperation, Styles.blendOperation);
-                materialEditor.ShaderProperty(depthTest, Styles.depthTest);
-                depthWrite.floatValue = EditorGUILayout.Popup(depthWrite.displayName, (int)depthWrite.floatValue, Styles.depthWriteNames);
-                materialEditor.ShaderProperty(colorWriteMask, Styles.colorWriteMask);
-                EditorGUI.indentLevel -= 2;
-            }
-
-            materialEditor.ShaderProperty(cullMode, Styles.cullMode);
+            base.MaterialChanged(material);
         }
 
         protected void MainMapOptions(MaterialEditor materialEditor, Material material)
@@ -481,6 +388,12 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             GUILayout.Label(Styles.primaryMapsTitle, EditorStyles.boldLabel);
 
             materialEditor.TexturePropertySingleLine(Styles.albedo, albedoMap, albedoColor);
+
+            if (albedoMap.textureValue == null)
+            {
+                materialEditor.ShaderProperty(albedoAssignedAtRuntime, Styles.albedoAssignedAtRuntime, 2);
+            }
+
             materialEditor.ShaderProperty(enableChannelMap, Styles.enableChannelMap);
 
             if (PropertyEnabled(enableChannelMap))
@@ -497,7 +410,8 @@ namespace Microsoft.MixedReality.Toolkit.Editor
 
                 albedoAlphaMode.floatValue = EditorGUILayout.Popup(albedoAlphaMode.displayName, (int)albedoAlphaMode.floatValue, Styles.albedoAlphaModeNames);
 
-                if ((RenderingMode)renderingMode.floatValue == RenderingMode.TransparentCutout)
+                if ((RenderingMode)renderingMode.floatValue == RenderingMode.TransparentCutout || 
+                    (RenderingMode)renderingMode.floatValue == RenderingMode.Custom)
                 {
                     materialEditor.ShaderProperty(alphaCutoff, Styles.alphaCutoff.text);
                 }
@@ -587,36 +501,27 @@ namespace Microsoft.MixedReality.Toolkit.Editor
 
             materialEditor.ShaderProperty(vertexColors, Styles.vertexColors);
 
-            materialEditor.ShaderProperty(clippingPlane, Styles.clippingPlane);
+            materialEditor.ShaderProperty(vertexExtrusion, Styles.vertexExtrusion);
 
-            if (PropertyEnabled(clippingPlane))
+            if (PropertyEnabled(vertexExtrusion))
             {
-                GUILayout.Box(string.Format(Styles.propertiesComponentHelp, nameof(ClippingPlane), Styles.clippingPlane.text), EditorStyles.helpBox, new GUILayoutOption[0]);
+                materialEditor.ShaderProperty(vertexExtrusionValue, Styles.vertexExtrusionValue, 2);
             }
 
-            materialEditor.ShaderProperty(clippingSphere, Styles.clippingSphere);
-
-            if (PropertyEnabled(clippingSphere))
+            if ((RenderingMode)renderingMode.floatValue != RenderingMode.Opaque &&
+                (RenderingMode)renderingMode.floatValue != RenderingMode.TransparentCutout)
             {
-                GUILayout.Box(string.Format(Styles.propertiesComponentHelp, nameof(ClippingSphere), Styles.clippingSphere.text), EditorStyles.helpBox, new GUILayoutOption[0]);
+                materialEditor.ShaderProperty(blendedClippingWidth, Styles.blendedClippingWidth);
+                GUILayout.Box(string.Format(Styles.propertiesComponentHelp, nameof(ClippingPrimitive), "other clipping"), EditorStyles.helpBox, new GUILayoutOption[0]);
             }
 
-            materialEditor.ShaderProperty(clippingBox, Styles.clippingBox);
+            materialEditor.ShaderProperty(clippingBorder, Styles.clippingBorder);
 
-            if (PropertyEnabled(clippingBox))
+            if (PropertyEnabled(clippingBorder))
             {
-                GUILayout.Box(string.Format(Styles.propertiesComponentHelp, nameof(ClippingBox), Styles.clippingBox.text), EditorStyles.helpBox, new GUILayoutOption[0]);
-            }
-
-            if (PropertyEnabled(clippingPlane) || PropertyEnabled(clippingSphere) || PropertyEnabled(clippingBox))
-            {
-                materialEditor.ShaderProperty(clippingBorder, Styles.clippingBorder);
-                
-                if (PropertyEnabled(clippingBorder))
-                {
-                    materialEditor.ShaderProperty(clippingBorderWidth, Styles.clippingBorderWidth, 2);
-                    materialEditor.ShaderProperty(clippingBorderColor, Styles.clippingBorderColor, 2);
-                }
+                materialEditor.ShaderProperty(clippingBorderWidth, Styles.clippingBorderWidth, 2);
+                materialEditor.ShaderProperty(clippingBorderColor, Styles.clippingBorderColor, 2);
+                GUILayout.Box(string.Format(Styles.propertiesComponentHelp, nameof(ClippingPrimitive), "other clipping"), EditorStyles.helpBox, new GUILayoutOption[0]);
             }
 
             materialEditor.ShaderProperty(nearPlaneFade, Styles.nearPlaneFade);
@@ -626,6 +531,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor
                 materialEditor.ShaderProperty(nearLightFade, Styles.nearLightFade, 2);
                 materialEditor.ShaderProperty(fadeBeginDistance, Styles.fadeBeginDistance, 2);
                 materialEditor.ShaderProperty(fadeCompleteDistance, Styles.fadeCompleteDistance, 2);
+                materialEditor.ShaderProperty(fadeMinValue, Styles.fadeMinValue, 2);
             }
         }
 
@@ -654,16 +560,18 @@ namespace Microsoft.MixedReality.Toolkit.Editor
 
             if (PropertyEnabled(proximityLight))
             {
+                materialEditor.ShaderProperty(enableProximityLightColorOverride, Styles.enableProximityLightColorOverride, 2);
+
+                if (PropertyEnabled(enableProximityLightColorOverride))
+                {
+                    materialEditor.ShaderProperty(proximityLightCenterColorOverride, Styles.proximityLightCenterColorOverride, 4);
+                    materialEditor.ShaderProperty(proximityLightMiddleColorOverride, Styles.proximityLightMiddleColorOverride, 4);
+                    materialEditor.ShaderProperty(proximityLightOuterColorOverride, Styles.proximityLightOuterColorOverride, 4);
+                }
+
+                materialEditor.ShaderProperty(proximityLightSubtractive, Styles.proximityLightSubtractive, 2);
                 materialEditor.ShaderProperty(proximityLightTwoSided, Styles.proximityLightTwoSided, 2);
                 GUILayout.Box(string.Format(Styles.propertiesComponentHelp, nameof(ProximityLight), Styles.proximityLight.text), EditorStyles.helpBox, new GUILayoutOption[0]);
-            }
-
-            materialEditor.ShaderProperty(roundCorners, Styles.roundCorners);
-
-            if (PropertyEnabled(roundCorners))
-            {
-                materialEditor.ShaderProperty(roundCornerRadius, Styles.roundCornerRadius, 2);
-                materialEditor.ShaderProperty(roundCornerMargin, Styles.roundCornerMargin, 2);
             }
 
             materialEditor.ShaderProperty(borderLight, Styles.borderLight);
@@ -692,6 +600,19 @@ namespace Microsoft.MixedReality.Toolkit.Editor
                         materialEditor.ShaderProperty(borderLightOpaqueAlpha, Styles.borderLightOpaqueAlpha, 4);
                     }
                 }
+            }
+
+            if (PropertyEnabled(hoverLight) || PropertyEnabled(proximityLight) || PropertyEnabled(borderLight))
+            {
+                materialEditor.ShaderProperty(fluentLightIntensity, Styles.fluentLightIntensity);
+            }
+
+            materialEditor.ShaderProperty(roundCorners, Styles.roundCorners);
+
+            if (PropertyEnabled(roundCorners))
+            {
+                materialEditor.ShaderProperty(roundCornerRadius, Styles.roundCornerRadius, 2);
+                materialEditor.ShaderProperty(roundCornerMargin, Styles.roundCornerMargin, 2);
             }
 
             if (PropertyEnabled(roundCorners) || PropertyEnabled(borderLight))
@@ -738,7 +659,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor
 
             EditorGUI.BeginChangeCheck();
 
-            materialEditor.ShaderProperty(renderQueueOverride, Styles.renderQueueOverride);
+            materialEditor.ShaderProperty(renderQueueOverride, BaseStyles.renderQueueOverride);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -749,18 +670,13 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             GUI.enabled = false;
             materialEditor.RenderQueueField();
 
-            // When round corner or border light features are used, enable instancing to disable batching. Static and dynamic 
-            // batching will normalize the object scale, which breaks border related features.
-            GUI.enabled = !PropertyEnabled(roundCorners) && !PropertyEnabled(borderLight);
+            // Enable instancing to disable batching. Static and dynamic batching will normalize the object scale, which breaks 
+            // features which utilize object scale.
+            GUI.enabled = !ScaleRequired();
 
             if (!GUI.enabled && !material.enableInstancing)
             {
                 material.enableInstancing = true;
-            }
-
-            if (albedoMap.textureValue == null)
-            {
-                materialEditor.ShaderProperty(albedoAssignedAtRuntime, Styles.albedoAssignedAtRuntime);
             }
 
             materialEditor.EnableInstancingField();
@@ -773,7 +689,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             else
             {
                 // When instancing is disable, disable instanced color.
-                SetFloatProperty(material, Styles.instancedColorFeatureName, Styles.instancedColorName, 0.0f);
+                SetShaderFeatureActive(material, Styles.instancedColorFeatureName, Styles.instancedColorName, 0.0f);
             }
 
             materialEditor.ShaderProperty(stencil, Styles.stencil);
@@ -791,6 +707,18 @@ namespace Microsoft.MixedReality.Toolkit.Editor
                 material.SetInt(Styles.stencilComparisonName, (int)CompareFunction.Disabled);
                 material.SetInt(Styles.stencilOperationName, (int)StencilOp.Keep);
             }
+
+            if (ScaleRequired())
+            {
+                materialEditor.ShaderProperty(ignoreZScale, Styles.ignoreZScale);
+            }
+        }
+
+        protected bool ScaleRequired()
+        {
+            return PropertyEnabled(roundCorners) || 
+                   PropertyEnabled(borderLight) ||
+                   (PropertyEnabled(enableTriplanarMapping) && PropertyEnabled(enableLocalSpaceTriplanarMapping));
         }
 
         protected static void SetupMaterialWithAlbedo(Material material, MaterialProperty albedoMap, MaterialProperty albedoAlphaMode, MaterialProperty albedoAssignedAtRuntime)
@@ -829,194 +757,48 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             }
         }
 
-        protected static void SetupMaterialWithRenderingMode(Material material, RenderingMode mode, CustomRenderingMode customMode, int renderQueueOverride)
+        [MenuItem("Mixed Reality Toolkit/Utilities/Upgrade MRTK Standard Shader for Lightweight Render Pipeline")]
+        protected static void UpgradeShaderForLightweightRenderPipeline()
         {
-            switch (mode)
+            if (EditorUtility.DisplayDialog("Upgrade MRTK Standard Shader?", 
+                                            "This will alter the MRTK Standard Shader for use with Unity's Lightweight Render Pipeline. You cannot undo this action.", 
+                                            "Ok", 
+                                            "Cancel"))
             {
-                case RenderingMode.Opaque:
-                    {
-                        material.SetOverrideTag(Styles.renderTypeName, Styles.renderingModeNames[(int)RenderingMode.Opaque]);
-                        material.SetInt(Styles.customRenderingModeName, (int)CustomRenderingMode.Opaque);
-                        material.SetInt(Styles.sourceBlendName, (int)BlendMode.One);
-                        material.SetInt(Styles.destinationBlendName, (int)BlendMode.Zero);
-                        material.SetInt(Styles.blendOperationName, (int)BlendOp.Add);
-                        material.SetInt(Styles.depthTestName, (int)CompareFunction.LessEqual);
-                        material.SetInt(Styles.depthWriteName, (int)DepthWrite.On);
-                        material.SetInt(Styles.colorWriteMaskName, (int)ColorWriteMask.All);
-                        material.DisableKeyword(Styles.alphaTestOnName);
-                        material.DisableKeyword(Styles.alphaBlendOnName);
-                        material.renderQueue = (renderQueueOverride >= 0) ? renderQueueOverride : (int)RenderQueue.Geometry;
-                    }
-                    break;
+                string shaderName = "Mixed Reality Toolkit/Standard";
+                string path = AssetDatabase.GetAssetPath(Shader.Find(shaderName));
 
-                case RenderingMode.TransparentCutout:
-                    {
-                        material.SetOverrideTag(Styles.renderTypeName, Styles.renderingModeNames[(int)RenderingMode.TransparentCutout]);
-                        material.SetInt(Styles.customRenderingModeName, (int)CustomRenderingMode.TransparentCutout);
-                        material.SetInt(Styles.sourceBlendName, (int)BlendMode.One);
-                        material.SetInt(Styles.destinationBlendName, (int)BlendMode.Zero);
-                        material.SetInt(Styles.blendOperationName, (int)BlendOp.Add);
-                        material.SetInt(Styles.depthTestName, (int)CompareFunction.LessEqual);
-                        material.SetInt(Styles.depthWriteName, (int)DepthWrite.On);
-                        material.SetInt(Styles.colorWriteMaskName, (int)ColorWriteMask.All);
-                        material.EnableKeyword(Styles.alphaTestOnName);
-                        material.DisableKeyword(Styles.alphaBlendOnName);
-                        material.renderQueue = (renderQueueOverride >= 0) ? renderQueueOverride : (int)RenderQueue.AlphaTest;
-                    }
-                    break;
-
-                case RenderingMode.Transparent:
-                    {
-                        material.SetOverrideTag(Styles.renderTypeName, Styles.renderingModeNames[(int)RenderingMode.Transparent]);
-                        material.SetInt(Styles.customRenderingModeName, (int)CustomRenderingMode.Transparent);
-                        material.SetInt(Styles.sourceBlendName, (int)BlendMode.SrcAlpha);
-                        material.SetInt(Styles.destinationBlendName, (int)BlendMode.OneMinusSrcAlpha);
-                        material.SetInt(Styles.blendOperationName, (int)BlendOp.Add);
-                        material.SetInt(Styles.depthTestName, (int)CompareFunction.LessEqual);
-                        material.SetInt(Styles.depthWriteName, (int)DepthWrite.Off);
-                        material.SetInt(Styles.colorWriteMaskName, (int)ColorWriteMask.All);
-                        material.DisableKeyword(Styles.alphaTestOnName);
-                        material.EnableKeyword(Styles.alphaBlendOnName);
-                        material.renderQueue = (renderQueueOverride >= 0) ? renderQueueOverride : (int)RenderQueue.Transparent;
-                    }
-                    break;
-
-                case RenderingMode.PremultipliedTransparent:
-                    {
-                        material.SetOverrideTag(Styles.renderTypeName, Styles.renderingModeNames[(int)RenderingMode.Transparent]);
-                        material.SetInt(Styles.customRenderingModeName, (int)CustomRenderingMode.Transparent);
-                        material.SetInt(Styles.sourceBlendName, (int)BlendMode.One);
-                        material.SetInt(Styles.destinationBlendName, (int)BlendMode.OneMinusSrcAlpha);
-                        material.SetInt(Styles.blendOperationName, (int)BlendOp.Add);
-                        material.SetInt(Styles.depthTestName, (int)CompareFunction.LessEqual);
-                        material.SetInt(Styles.depthWriteName, (int)DepthWrite.Off);
-                        material.SetInt(Styles.colorWriteMaskName, (int)ColorWriteMask.All);
-                        material.DisableKeyword(Styles.alphaTestOnName);
-                        material.EnableKeyword(Styles.alphaBlendOnName);
-                        material.renderQueue = (renderQueueOverride >= 0) ? renderQueueOverride : (int)RenderQueue.Transparent;
-                    }
-                    break;
-
-                case RenderingMode.Additive:
-                    {
-                        material.SetOverrideTag(Styles.renderTypeName, Styles.renderingModeNames[(int)RenderingMode.Transparent]);
-                        material.SetInt(Styles.customRenderingModeName, (int)CustomRenderingMode.Transparent);
-                        material.SetInt(Styles.sourceBlendName, (int)BlendMode.One);
-                        material.SetInt(Styles.destinationBlendName, (int)BlendMode.One);
-                        material.SetInt(Styles.blendOperationName, (int)BlendOp.Add);
-                        material.SetInt(Styles.depthTestName, (int)CompareFunction.LessEqual);
-                        material.SetInt(Styles.depthWriteName, (int)DepthWrite.Off);
-                        material.SetInt(Styles.colorWriteMaskName, (int)ColorWriteMask.All);
-                        material.DisableKeyword(Styles.alphaTestOnName);
-                        material.EnableKeyword(Styles.alphaBlendOnName);
-                        material.renderQueue = (renderQueueOverride >= 0) ? renderQueueOverride : (int)RenderQueue.Transparent;
-                    }
-                    break;
-
-                case RenderingMode.Custom:
-                    {
-                        material.SetOverrideTag(Styles.renderTypeName, Styles.customRenderingModeNames[(int)customMode]);
-                        // _SrcBlend, _DstBlend, _BlendOp, _ZTest, _ZWrite, _ColorWriteMask are controlled by UI.
-
-                        switch (customMode)
-                        {
-                            case CustomRenderingMode.Opaque:
-                                {
-                                    material.DisableKeyword(Styles.alphaTestOnName);
-                                    material.DisableKeyword(Styles.alphaBlendOnName);
-                                }
-                                break;
-
-                            case CustomRenderingMode.TransparentCutout:
-                                {
-                                    material.EnableKeyword(Styles.alphaTestOnName);
-                                    material.DisableKeyword(Styles.alphaBlendOnName);
-                                }
-                                break;
-
-                            case CustomRenderingMode.Transparent:
-                                {
-                                    material.DisableKeyword(Styles.alphaTestOnName);
-                                    material.EnableKeyword(Styles.alphaBlendOnName);
-                                }
-                                break;
-                        }
-
-                        material.renderQueue = (renderQueueOverride >= 0) ? renderQueueOverride : material.renderQueue;
-                    }
-                    break;
-            }
-        }
-
-        protected static bool PropertyEnabled(MaterialProperty property)
-        {
-            return !property.floatValue.Equals(0.0f);
-        }
-
-        protected static float? GetFloatProperty(Material material, string propertyName)
-        {
-            if (material.HasProperty(propertyName))
-            {
-                return material.GetFloat(propertyName);
-            }
-
-            return null;
-        }
-
-        protected static Vector4? GetVectorProperty(Material material, string propertyName)
-        {
-            if (material.HasProperty(propertyName))
-            {
-                return material.GetVector(propertyName);
-            }
-
-            return null;
-        }
-
-        protected static Color? GetColorProperty(Material material, string propertyName)
-        {
-            if (material.HasProperty(propertyName))
-            {
-                return material.GetColor(propertyName);
-            }
-
-            return null;
-        }
-
-        protected static void SetFloatProperty(Material material, string keywordName, string propertyName, float? propertyValue)
-        {
-            if (propertyValue.HasValue)
-            {
-                if (keywordName != null)
+                if (!string.IsNullOrEmpty(path))
                 {
-                    if (!propertyValue.Value.Equals(0.0f))
+                    try
                     {
-                        material.EnableKeyword(keywordName);
+                        string upgradedShader = File.ReadAllText(path);
+                        upgradedShader = upgradedShader.Replace("Tags{ \"RenderType\" = \"Opaque\" \"LightMode\" = \"ForwardBase\" }",
+                                                                "Tags{ \"RenderType\" = \"Opaque\" \"LightMode\" = \"LightweightForward\" }");
+                        upgradedShader = upgradedShader.Replace("//#define _LIGHTWEIGHT_RENDER_PIPELINE",
+                                                                "#define _LIGHTWEIGHT_RENDER_PIPELINE");
+                        File.WriteAllText(path, upgradedShader);
+                        AssetDatabase.Refresh();
+
+                        Debug.LogFormat("Upgraded {0} for use with the Lightweight Render Pipeline.", path);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        material.DisableKeyword(keywordName);
+                        Debug.LogException(e);
                     }
                 }
-
-                material.SetFloat(propertyName, propertyValue.Value);
+                else
+                {
+                    Debug.LogErrorFormat("Failed to get asset path to: {0}", shaderName);
+                }
             }
         }
 
-        protected static void SetVectorProperty(Material material, string propertyName, Vector4? propertyValue)
+        [MenuItem("Mixed Reality Toolkit/Utilities/Upgrade MRTK Standard Shader for Lightweight Render Pipeline", true)]
+        protected static bool UpgradeShaderForLightweightRenderPipelineValidate()
         {
-            if (propertyValue.HasValue)
-            {
-                material.SetVector(propertyName, propertyValue.Value);
-            }
-        }
-
-        protected static void SetColorProperty(Material material, string propertyName, Color? propertyValue)
-        {
-            if (propertyValue.HasValue)
-            {
-                material.SetColor(propertyName, propertyValue.Value);
-            }
+            // If a scriptable render pipeline is not present, no need to upgrade the shader.
+            return GraphicsSettings.renderPipelineAsset != null;
         }
     }
 }

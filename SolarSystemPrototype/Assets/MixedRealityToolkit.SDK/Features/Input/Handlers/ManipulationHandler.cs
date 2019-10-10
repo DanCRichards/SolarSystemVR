@@ -17,7 +17,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
     /// You may also configure the script on only enable certain manipulations. The script works with 
     /// both HoloLens' gesture input and immersive headset's motion controller input.
     /// </summary>
-    public class ManipulationHandler : MonoBehaviour, IMixedRealityPointerHandler, IMixedRealityFocusHandler
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_ManipulationHandler.html")]
+    public class ManipulationHandler : MonoBehaviour, IMixedRealityPointerHandler, IMixedRealityFocusChangedHandler
     {
         #region Public Enums
         public enum HandMovementType
@@ -59,77 +60,125 @@ namespace Microsoft.MixedReality.Toolkit.UI
         [Tooltip("Transform that will be dragged. Defaults to the object of the component.")]
         private Transform hostTransform = null;
 
-        public Transform HostTransform => hostTransform;
+        public Transform HostTransform
+        {
+            get => hostTransform;
+            set => hostTransform = value;
+        }
 
         [Header("Manipulation")]
         [SerializeField]
         [Tooltip("Can manipulation be done only with one hand, only with two hands, or with both?")]
         private HandMovementType manipulationType = HandMovementType.OneAndTwoHanded;
 
-        public HandMovementType ManipulationType => manipulationType;
+        public HandMovementType ManipulationType
+        {
+            get => manipulationType;
+            set => manipulationType = value;
+        }
 
         [SerializeField]
         [Tooltip("What manipulation will two hands perform?")]
         private TwoHandedManipulation twoHandedManipulationType = TwoHandedManipulation.MoveRotateScale;
-
-        public TwoHandedManipulation TwoHandedManipulationType => twoHandedManipulationType;
+        
+        public TwoHandedManipulation TwoHandedManipulationType
+        {
+            get => twoHandedManipulationType;
+            set => twoHandedManipulationType = value;
+        }
 
         [SerializeField]
         [Tooltip("Specifies whether manipulation can be done using far interaction with pointers.")]
         private bool allowFarManipulation = true;
 
-        public bool AllowFarManipulation => allowFarManipulation;
+        public bool AllowFarManipulation
+        {
+            get => allowFarManipulation;
+            set => allowFarManipulation = value;
+        }
 
         [SerializeField]
         [Tooltip("Rotation behavior of object when using one hand near")]
         private RotateInOneHandType oneHandRotationModeNear = RotateInOneHandType.RotateAboutGrabPoint;
 
+        public RotateInOneHandType OneHandRotationModeNear
+        {
+            get => oneHandRotationModeNear;
+            set => oneHandRotationModeNear = value;
+        }
+
         [SerializeField]
         [Tooltip("Rotation behavior of object when using one hand at distance")]
         private RotateInOneHandType oneHandRotationModeFar = RotateInOneHandType.RotateAboutGrabPoint;
+
+        public RotateInOneHandType OneHandRotationModeFar
+        {
+            get => oneHandRotationModeFar;
+            set => oneHandRotationModeFar = value;
+        }
 
         [SerializeField]
         [EnumFlags]
         [Tooltip("Rigid body behavior of the dragged object when releasing it.")]
         private ReleaseBehaviorType releaseBehavior = ReleaseBehaviorType.KeepVelocity | ReleaseBehaviorType.KeepAngularVelocity;
 
-        public ReleaseBehaviorType ReleaseBehavior => releaseBehavior;
+        public ReleaseBehaviorType ReleaseBehavior
+        {
+            get => releaseBehavior;
+            set => releaseBehavior = value;
+        }
 
         [Header("Constraints")]
         [SerializeField]
         [Tooltip("Constrain rotation along an axis")]
         private RotationConstraintType constraintOnRotation = RotationConstraintType.None;
 
-        public RotationConstraintType ConstraintOnRotation => constraintOnRotation;
+        public RotationConstraintType ConstraintOnRotation
+        {
+            get => constraintOnRotation;
+            set => constraintOnRotation = value;
+        }
 
         [SerializeField]
         [Tooltip("Constrain movement")]
         private MovementConstraintType constraintOnMovement = MovementConstraintType.None;
 
-        public MovementConstraintType ConstraintOnMovement => constraintOnMovement;
+        public MovementConstraintType ConstraintOnMovement
+        {
+            get => constraintOnMovement;
+            set => constraintOnMovement = value;
+        }
 
         [Header("Smoothing")]
         [SerializeField]
         [Tooltip("Check to enable frame-rate independent smoothing. ")]
         private bool smoothingActive = true;
 
-        public bool SmoothingActive => smoothingActive;
+        public bool SmoothingActive
+        {
+            get => smoothingActive;
+            set => smoothingActive = value;
+        }
 
         [SerializeField]
         [Range(0, 1)]
         [Tooltip("Enter amount representing amount of smoothing to apply to the movement, scale, rotation.  Smoothing of 0 means no smoothing. Max value means no change to value.")]
         private float smoothingAmountOneHandManip = 0.001f;
 
-        public float SmoothingAmoutOneHandManip => smoothingAmountOneHandManip;
+        public float SmoothingAmoutOneHandManip
+        {
+            get => smoothingAmountOneHandManip;
+            set => smoothingAmountOneHandManip = value;
+        }
 
         #endregion Serialized Fields
 
         #region Event handlers
         [Header("Manipulation Events")]
-        public ManipulationEvent OnManipulationStarted;
-        public ManipulationEvent OnManipulationEnded;
-        public ManipulationEvent OnHoverEntered;
-        public ManipulationEvent OnHoverExited;
+        public ManipulationEvent OnManipulationStarted = new ManipulationEvent();
+        public ManipulationEvent OnManipulationEnded = new ManipulationEvent();
+        public ManipulationEvent OnHoverEntered = new ManipulationEvent();
+        public ManipulationEvent OnHoverExited = new ManipulationEvent();
         #endregion
 
         #region Private Properties
@@ -148,13 +197,40 @@ namespace Microsoft.MixedReality.Toolkit.UI
         };
 
         private State currentState = State.Start;
-        private TwoHandMoveLogic m_moveLogic;
-        private TwoHandScaleLogic m_scaleLogic;
-        private TwoHandRotateLogic m_rotateLogic;
-        private Dictionary<uint, IMixedRealityPointer> pointerIdToPointerMap = new Dictionary<uint, IMixedRealityPointer>();
+        private TwoHandMoveLogic moveLogic;
+        private TwoHandScaleLogic scaleLogic;
+        private TwoHandRotateLogic rotateLogic;
+        /// <summary>
+        /// Holds the pointer and the initial intersection point of the pointer ray 
+        /// with the object on pointer down in pointer space
+        /// </summary>
+        private struct PointerData
+        {
+            public IMixedRealityPointer pointer;
+            private Vector3 initialGrabPointInPointer;
 
+            public PointerData(IMixedRealityPointer pointer, Vector3 initialGrabPointInPointer) : this()
+            {
+                this.pointer = pointer;
+                this.initialGrabPointInPointer = initialGrabPointInPointer;
+            }
+
+            public bool IsNearPointer()
+            {
+                return (pointer is IMixedRealityNearPointer);
+            }
+
+            /// Returns the grab point on the manipulated object in world space
+            public Vector3 GrabPoint
+            {
+                get
+                {
+                    return (pointer.Rotation * initialGrabPointInPointer) + pointer.Position;
+                }
+            }
+        }
+        private Dictionary<uint, PointerData> pointerIdToPointerMap = new Dictionary<uint, PointerData>();
         private Quaternion objectToHandRotation;
-        private Vector3 objectToHandTranslation;
         private bool isNearManipulation;
         // This can probably be consolidated so that we use same for one hand and two hands
         private Quaternion targetRotationTwoHands;
@@ -164,15 +240,19 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private Quaternion startObjectRotationCameraSpace;
         private Quaternion startObjectRotationFlatCameraSpace;
+        private Quaternion hostWorldRotationOnManipulationStart;
+
+        private TransformScaleHandler scaleHandler;
 
         #endregion
 
         #region MonoBehaviour Functions
+
         private void Awake()
         {
-            m_moveLogic = new TwoHandMoveLogic(constraintOnMovement);
-            m_rotateLogic = new TwoHandRotateLogic();
-            m_scaleLogic = new TwoHandScaleLogic();
+            moveLogic = new TwoHandMoveLogic();
+            rotateLogic = new TwoHandRotateLogic();
+            scaleLogic = new TwoHandScaleLogic();
         }
         private void Start()
         {
@@ -180,13 +260,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
             {
                 hostTransform = transform;
             }
-        }
-        private void Update()
-        {
-            if (currentState != State.Start)
-            {
-                UpdateStateMachine();
-            }
+
+            scaleHandler = this.GetComponent<TransformScaleHandler>();
         }
         #endregion MonoBehaviour Functions
 
@@ -197,37 +272,72 @@ namespace Microsoft.MixedReality.Toolkit.UI
             int count = 0;
             foreach (var p in pointerIdToPointerMap.Values)
             {
-                sum += p.Position;
+                sum += p.GrabPoint;
                 count++;
             }
             return sum / Math.Max(1, count);
         }
 
+        private MixedRealityPose GetAveragePointerPose()
+        {
+            Vector3 sumPos = Vector3.zero;
+            Vector3 sumDir = Vector3.zero;
+            int count = 0;
+            foreach (var p in pointerIdToPointerMap.Values)
+            {
+                sumPos += p.pointer.Position;
+                sumDir += p.pointer.Rotation * Vector3.forward;
+                count++;
+            }
+
+            MixedRealityPose pose = new MixedRealityPose();
+
+            if (count > 0)
+            {
+                pose.Position = sumPos / count;
+                pose.Rotation = Quaternion.LookRotation(sumDir / count);
+            }
+
+            return pose;
+        }
+
         private Vector3 GetPointersVelocity()
         {
             Vector3 sum = Vector3.zero;
+            int numControllers = 0;
             foreach (var p in pointerIdToPointerMap.Values)
             {
-                sum += p.Controller.Velocity;
+                // Check pointer has a valid controller (e.g. gaze pointer doesn't)
+                if (p.pointer.Controller != null)
+                {
+                    numControllers++;
+                    sum += p.pointer.Controller.Velocity;
+                }
             }
-            return sum / Math.Max(1, pointerIdToPointerMap.Count);
+            return sum / Math.Max(1, numControllers);
         }
 
         private Vector3 GetPointersAngularVelocity()
         {
             Vector3 sum = Vector3.zero;
+            int numControllers = 0;
             foreach (var p in pointerIdToPointerMap.Values)
             {
-                sum += p.Controller.AngularVelocity;
+                // Check pointer has a valid controller (e.g. gaze pointer doesn't)
+                if (p.pointer.Controller != null)
+                {
+                    numControllers++;
+                    sum += p.pointer.Controller.AngularVelocity;
+                }
             }
-            return sum / Math.Max(1, pointerIdToPointerMap.Count);
+            return sum / Math.Max(1, numControllers);
         }
 
         private bool IsNearManipulation()
         {
             foreach (var item in pointerIdToPointerMap)
             {
-                if (item.Value is IMixedRealityNearPointer)
+                if (item.Value.IsNearPointer())
                 {
                     return true;
                 }
@@ -239,63 +349,63 @@ namespace Microsoft.MixedReality.Toolkit.UI
         {
             var handsPressedCount = pointerIdToPointerMap.Count;
             State newState = currentState;
-            switch (currentState)
+            // early out for no hands or one hand if TwoHandedOnly is active
+            if (handsPressedCount == 0 || (handsPressedCount == 1 && manipulationType == HandMovementType.TwoHandedOnly))
             {
-                case State.Start:
-                case State.Moving:
-                    if (handsPressedCount == 0)
-                    {
-                        newState = State.Start;
-                    }
-                    else if (handsPressedCount == 1 && manipulationType != HandMovementType.TwoHandedOnly)
-                    {
-                        newState = State.Moving;
-                    }
-                    else if (handsPressedCount > 1 && manipulationType != HandMovementType.OneHandedOnly)
-                    {
-                        switch (twoHandedManipulationType)
+                newState = State.Start;
+            }
+            else
+            {
+                switch (currentState)
+                {
+                    case State.Start:
+                    case State.Moving:
+                        if (handsPressedCount == 1)
                         {
-                            case TwoHandedManipulation.Scale:
-                                newState = State.Scaling;
-                                break;
-                            case TwoHandedManipulation.Rotate:
-                                newState = State.Rotating;
-                                break;
-                            case TwoHandedManipulation.MoveRotate:
-                                newState = State.MovingRotating;
-                                break;
-                            case TwoHandedManipulation.MoveScale:
-                                newState = State.MovingScaling;
-                                break;
-                            case TwoHandedManipulation.RotateScale:
-                                newState = State.RotatingScaling;
-                                break;
-                            case TwoHandedManipulation.MoveRotateScale:
-                                newState = State.MovingRotatingScaling;
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
+                            newState = State.Moving;
                         }
-                    }
-                    break;
-                case State.Scaling:
-                case State.Rotating:
-                case State.MovingScaling:
-                case State.MovingRotating:
-                case State.RotatingScaling:
-                case State.MovingRotatingScaling:
-                    // TODO: if < 2, make this go to start state ('drop it')
-                    if (handsPressedCount == 0)
-                    {
-                        newState = State.Start;
-                    }
-                    else if (handsPressedCount == 1)
-                    {
-                        newState = State.Moving;
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                        else if (handsPressedCount > 1 && manipulationType != HandMovementType.OneHandedOnly)
+                        {
+                            switch (twoHandedManipulationType)
+                            {
+                                case TwoHandedManipulation.Scale:
+                                    newState = State.Scaling;
+                                    break;
+                                case TwoHandedManipulation.Rotate:
+                                    newState = State.Rotating;
+                                    break;
+                                case TwoHandedManipulation.MoveRotate:
+                                    newState = State.MovingRotating;
+                                    break;
+                                case TwoHandedManipulation.MoveScale:
+                                    newState = State.MovingScaling;
+                                    break;
+                                case TwoHandedManipulation.RotateScale:
+                                    newState = State.RotatingScaling;
+                                    break;
+                                case TwoHandedManipulation.MoveRotateScale:
+                                    newState = State.MovingRotatingScaling;
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
+                        break;
+                    case State.Scaling:
+                    case State.Rotating:
+                    case State.MovingScaling:
+                    case State.MovingRotating:
+                    case State.RotatingScaling:
+                    case State.MovingRotatingScaling:
+                        // one hand only supports move for now
+                        if (handsPressedCount == 1)
+                        {
+                            newState = State.Moving;
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
             InvokeStateUpdateFunctions(currentState, newState);
@@ -360,17 +470,37 @@ namespace Microsoft.MixedReality.Toolkit.UI
         }
         #endregion Private Methods
 
-        #region Hand Event Handlers
+        #region Public Methods
 
-        private MixedRealityInteractionMapping GetSpatialGripInfoForController(IMixedRealityController controller)
+        /// <summary>
+        /// Releases the object that is currently manipulated
+        /// </summary>
+        public void ForceEndManipulation()
         {
-            if (controller == null)
-            {
-                return null;
-            }
+            // release rigidbody and clear pointers
+            ReleaseRigidBody();
+            pointerIdToPointerMap.Clear();
 
-            return controller.Interactions?.First(x => x.InputType == DeviceInputType.SpatialGrip);
+            // end manipulation
+            State newState = State.Start;
+            InvokeStateUpdateFunctions(currentState, newState);
+            currentState = newState;
         }
+
+        /// <summary>
+        /// Gets the grab point for the given pointer id.
+        /// Only use if you know that your given pointer id corresponds to a pointer that has grabbed
+        /// this component.
+        /// </summary>
+        public Vector3 GetPointerGrabPoint(uint pointerId)
+        {
+            Assert.IsTrue(pointerIdToPointerMap.ContainsKey(pointerId));
+            return pointerIdToPointerMap[pointerId].GrabPoint;
+        }
+
+        #endregion Public Methods
+
+        #region Hand Event Handlers
 
         /// <inheritdoc />
         public void OnPointerDown(MixedRealityPointerEventData eventData)
@@ -397,7 +527,10 @@ namespace Microsoft.MixedReality.Toolkit.UI
                             rigidBody.isKinematic = true;
                         }
                     }
-                    pointerIdToPointerMap.Add(id, eventData.Pointer);
+
+                    // cache start ptr grab point
+                    Vector3 initialGrabPoint = Quaternion.Inverse(eventData.Pointer.Rotation) * (eventData.Pointer.Result.Details.Point - eventData.Pointer.Position);
+                    pointerIdToPointerMap.Add(id, new PointerData(eventData.Pointer, initialGrabPoint));
 
                     UpdateStateMachine();
                 }
@@ -412,6 +545,14 @@ namespace Microsoft.MixedReality.Toolkit.UI
             }
         }
 
+        public void OnPointerDragged(MixedRealityPointerEventData eventData)
+        {
+            if (currentState != State.Start)
+            {
+                UpdateStateMachine();
+            }
+        }
+
         /// <inheritdoc />
         public void OnPointerUp(MixedRealityPointerEventData eventData)
         {
@@ -420,19 +561,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             {
                 if (pointerIdToPointerMap.Count == 1 && rigidBody != null)
                 {
-                    rigidBody.isKinematic = wasKinematic;
-
-                    if (releaseBehavior.HasFlag(ReleaseBehaviorType.KeepVelocity))
-                    {
-                        rigidBody.velocity = GetPointersVelocity();
-                    }
-
-                    if (releaseBehavior.HasFlag(ReleaseBehaviorType.KeepAngularVelocity))
-                    {
-                        rigidBody.angularVelocity = GetPointersAngularVelocity();
-                    }
-
-                    rigidBody = null;
+                    ReleaseRigidBody();
                 }
 
                 pointerIdToPointerMap.Remove(id);
@@ -450,102 +579,105 @@ namespace Microsoft.MixedReality.Toolkit.UI
             var targetPosition = hostTransform.position;
             var targetScale = hostTransform.localScale;
 
-            if ((currentState & State.Moving) > 0)
-            {
-                targetPosition = m_moveLogic.Update(GetPointersCentroid(), IsNearManipulation());
-            }
-
             var handPositionMap = GetHandPositionMap();
 
             if ((currentState & State.Rotating) > 0)
             {
-                targetRotationTwoHands = m_rotateLogic.Update(handPositionMap, targetRotationTwoHands, constraintOnRotation);
+                targetRotationTwoHands = rotateLogic.Update(handPositionMap, targetRotationTwoHands, constraintOnRotation);
             }
             if ((currentState & State.Scaling) > 0)
             {
-                targetScale = m_scaleLogic.UpdateMap(handPositionMap);
+                targetScale = scaleLogic.UpdateMap(handPositionMap);
+            }
+
+            if ((currentState & State.Moving) > 0)
+            {
+                MixedRealityPose pose = GetAveragePointerPose();
+                targetPosition = moveLogic.Update(pose, targetRotationTwoHands, targetScale, IsNearManipulation(), true, constraintOnMovement);
             }
 
             float lerpAmount = GetLerpAmount();
             hostTransform.position = Vector3.Lerp(hostTransform.position, targetPosition, lerpAmount);
             // Currently the two hand rotation algorithm doesn't allow for lerping, but it should. Fix this.
             hostTransform.rotation = Quaternion.Lerp(hostTransform.rotation, targetRotationTwoHands, lerpAmount);
+
+            if (scaleHandler != null)
+            {
+                targetScale = scaleHandler.ClampScale(targetScale);
+            }
             hostTransform.localScale = Vector3.Lerp(hostTransform.localScale, targetScale, lerpAmount);
         }
 
+        private Quaternion ApplyConstraints(Quaternion newRotation)
+        {
+            // apply constraint on rotation diff
+            Quaternion diffRotation = newRotation * Quaternion.Inverse(hostWorldRotationOnManipulationStart);
+            switch (constraintOnRotation)
+            {
+                case RotationConstraintType.XAxisOnly:
+                    diffRotation.eulerAngles = Vector3.Scale(diffRotation.eulerAngles, Vector3.right);
+                    break;
+                case RotationConstraintType.YAxisOnly:
+                    diffRotation.eulerAngles = Vector3.Scale(diffRotation.eulerAngles, Vector3.up);
+                    break;
+                case RotationConstraintType.ZAxisOnly:
+                    diffRotation.eulerAngles = Vector3.Scale(diffRotation.eulerAngles, Vector3.forward);
+                    break;
+            }
+
+            return diffRotation * hostWorldRotationOnManipulationStart;
+        }
+		
         private void HandleOneHandMoveUpdated()
         {
             Debug.Assert(pointerIdToPointerMap.Count == 1);
-            IMixedRealityPointer pointer = pointerIdToPointerMap.Values.First();
+            PointerData pointerData = GetFirstPointer();
+            IMixedRealityPointer pointer = pointerData.pointer;
 
-            var interactionMapping = GetSpatialGripInfoForController(pointer.Controller);
-            if (interactionMapping != null)
+            Quaternion targetRotation = Quaternion.identity;
+            RotateInOneHandType rotateInOneHandType = isNearManipulation ? oneHandRotationModeNear : oneHandRotationModeFar;
+            switch (rotateInOneHandType)
             {
-                Quaternion targetRotation = Quaternion.identity;
-                RotateInOneHandType rotateInOneHandType = isNearManipulation ? oneHandRotationModeNear : oneHandRotationModeFar;
-                if (rotateInOneHandType == RotateInOneHandType.MaintainOriginalRotation)
-                {
+                case RotateInOneHandType.MaintainOriginalRotation:
                     targetRotation = hostTransform.rotation;
-                }
-                else if (rotateInOneHandType == RotateInOneHandType.MaintainRotationToUser)
-                {
-                    targetRotation = CameraCache.Main.transform.rotation * startObjectRotationCameraSpace;
-                }
-                else if (rotateInOneHandType == RotateInOneHandType.GravityAlignedMaintainRotationToUser)
-                {
+                    break;
+                case RotateInOneHandType.MaintainRotationToUser:
+                    Vector3 euler = CameraCache.Main.transform.rotation.eulerAngles;
+                    // don't use roll (feels awkward) - just maintain yaw / pitch angle
+                    targetRotation = Quaternion.Euler(euler.x, euler.y, 0) * startObjectRotationCameraSpace;
+                    break;
+                case RotateInOneHandType.GravityAlignedMaintainRotationToUser:
                     var cameraForwardFlat = CameraCache.Main.transform.forward;
                     cameraForwardFlat.y = 0;
                     targetRotation = Quaternion.LookRotation(cameraForwardFlat, Vector3.up) * startObjectRotationFlatCameraSpace;
-                }
-                else if (rotateInOneHandType == RotateInOneHandType.FaceUser)
+                    break;
+                case RotateInOneHandType.FaceUser:
                 {
-                    Vector3 directionToTarget = hostTransform.position - CameraCache.Main.transform.position;
+                    Vector3 directionToTarget = pointerData.GrabPoint - CameraCache.Main.transform.position;
+                    // Vector3 directionToTarget = hostTransform.position - CameraCache.Main.transform.position;
                     targetRotation = Quaternion.LookRotation(-directionToTarget);
+                    break;
                 }
-                else if (rotateInOneHandType == RotateInOneHandType.FaceAwayFromUser)
+                case RotateInOneHandType.FaceAwayFromUser:
                 {
-                    Vector3 directionToTarget = hostTransform.position - CameraCache.Main.transform.position;
+                    Vector3 directionToTarget = pointerData.GrabPoint - CameraCache.Main.transform.position;
                     targetRotation = Quaternion.LookRotation(directionToTarget);
+                    break;
                 }
-                else
-                {
-                    targetRotation = interactionMapping.PoseData.Rotation * objectToHandRotation;
-                    switch (constraintOnRotation)
-                    {
-                        case RotationConstraintType.XAxisOnly:
-                            targetRotation.eulerAngles = Vector3.Scale(targetRotation.eulerAngles, Vector3.right);
-                            break;
-                        case RotationConstraintType.YAxisOnly:
-                            targetRotation.eulerAngles = Vector3.Scale(targetRotation.eulerAngles, Vector3.up);
-                            break;
-                        case RotationConstraintType.ZAxisOnly:
-                            targetRotation.eulerAngles = Vector3.Scale(targetRotation.eulerAngles, Vector3.forward);
-                            break;
-                    }
-                }
-
-                Vector3 targetPosition;
-                if (IsNearManipulation())
-                {
-                    if (oneHandRotationModeNear == RotateInOneHandType.RotateAboutGrabPoint)
-                    {
-                        targetPosition = (interactionMapping.PoseData.Rotation * objectToHandTranslation) + interactionMapping.PoseData.Position;
-                    }
-                    else // RotateAboutCenter or DoNotRotateInOneHand
-                    {
-                        targetPosition = objectToHandTranslation + interactionMapping.PoseData.Position;
-                    }
-                }
-                else
-                {
-                    targetPosition = m_moveLogic.Update(GetPointersCentroid(), IsNearManipulation());
-                }
-
-                float lerpAmount = GetLerpAmount();
-                Quaternion smoothedRotation = Quaternion.Lerp(hostTransform.rotation, targetRotation, lerpAmount);
-                Vector3 smoothedPosition = Vector3.Lerp(hostTransform.position, targetPosition, lerpAmount);
-                hostTransform.SetPositionAndRotation(smoothedPosition, smoothedRotation);
+                case RotateInOneHandType.RotateAboutObjectCenter:
+                case RotateInOneHandType.RotateAboutGrabPoint:
+                    targetRotation = pointer.Rotation * objectToHandRotation;
+                    break;
             }
+
+            targetRotation = ApplyConstraints(targetRotation);
+            MixedRealityPose pointerPose = new MixedRealityPose(pointer.Position, pointer.Rotation);
+            Vector3 targetPosition = moveLogic.Update(pointerPose, targetRotation, hostTransform.localScale, IsNearManipulation(), rotateInOneHandType != RotateInOneHandType.RotateAboutObjectCenter, constraintOnMovement);
+
+            float lerpAmount = GetLerpAmount();
+            Quaternion smoothedRotation = Quaternion.Lerp(hostTransform.rotation, targetRotation, lerpAmount);
+            Vector3 smoothedPosition = Vector3.Lerp(hostTransform.position, targetPosition, lerpAmount);
+            hostTransform.SetPositionAndRotation(smoothedPosition, smoothedRotation);
         }
 
         private void HandleTwoHandManipulationStarted(State newState)
@@ -555,15 +687,17 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             if ((newState & State.Rotating) > 0)
             {
-                m_rotateLogic.Setup(handPositionMap, hostTransform, ConstraintOnRotation);
+                rotateLogic.Setup(handPositionMap, hostTransform, ConstraintOnRotation);
             }
-            if ((newState & State.Moving) > 0)
+            if ((newState & State.Moving) > 0) 
             {
-                m_moveLogic.Setup(GetPointersCentroid(), hostTransform.position);
+                MixedRealityPose pointerPose = GetAveragePointerPose();
+                MixedRealityPose hostPose = new MixedRealityPose(hostTransform.position, hostTransform.rotation);
+                moveLogic.Setup(pointerPose, GetPointersCentroid(), hostPose, hostTransform.localScale);
             }
             if ((newState & State.Scaling) > 0)
             {
-                m_scaleLogic.Setup(handPositionMap, hostTransform);
+                scaleLogic.Setup(handPositionMap, hostTransform);
             }
         }
         private void HandleTwoHandManipulationEnded() { }
@@ -571,22 +705,24 @@ namespace Microsoft.MixedReality.Toolkit.UI
         private void HandleOneHandMoveStarted()
         {
             Assert.IsTrue(pointerIdToPointerMap.Count == 1);
-            IMixedRealityPointer pointer = pointerIdToPointerMap.Values.First();
+            PointerData pointerData = GetFirstPointer();
+            IMixedRealityPointer pointer = pointerData.pointer;
 
-            m_moveLogic.Setup(GetPointersCentroid(), hostTransform.position);
+            // cache objects rotation on start to have a reference for constraint calculations
+            // if we don't cache this on manipulation start the near rotation might drift off the hand
+            // over time
+            hostWorldRotationOnManipulationStart = hostTransform.rotation;
 
-            var interactionMapping = GetSpatialGripInfoForController(pointer.Controller);
-            if (interactionMapping != null)
-            {
-                // Calculate relative transform from object to hand.
-                Quaternion worldToPalmRotation = Quaternion.Inverse(interactionMapping.PoseData.Rotation);
-                objectToHandRotation = worldToPalmRotation * hostTransform.rotation;
-                objectToHandTranslation = (hostTransform.position - interactionMapping.PoseData.Position);
-                if (oneHandRotationModeNear == RotateInOneHandType.RotateAboutGrabPoint)
-                {
-                    objectToHandTranslation = worldToPalmRotation * objectToHandTranslation;
-                }
-            }
+            // Calculate relative transform from object to hand.
+            Quaternion worldToPalmRotation = Quaternion.Inverse(pointer.Rotation);
+            objectToHandRotation = worldToPalmRotation * hostTransform.rotation;
+
+            MixedRealityPose pointerPose = new MixedRealityPose(pointer.Position, pointer.Rotation);
+            MixedRealityPose hostPose = new MixedRealityPose(hostTransform.position, hostTransform.rotation);
+            moveLogic.Setup(pointerPose, pointerData.GrabPoint, hostPose, hostTransform.localScale);
+
+            Vector3 worldGrabPoint = pointerData.GrabPoint;
+
             startObjectRotationCameraSpace = Quaternion.Inverse(CameraCache.Main.transform.rotation) * hostTransform.rotation;
             var cameraFlat = CameraCache.Main.transform.forward;
             cameraFlat.y = 0;
@@ -601,21 +737,43 @@ namespace Microsoft.MixedReality.Toolkit.UI
             isNearManipulation = IsNearManipulation();
             // TODO: If we are on HoloLens 1, push and pop modal input handler so that we can use old
             // gaze/gesture/voice manipulation. For HoloLens 2, we don't want to do this.
-            OnManipulationStarted.Invoke(new ManipulationEventData { IsNearInteraction = isNearManipulation });
-
+            if (OnManipulationStarted != null)
+            {
+                OnManipulationStarted.Invoke(new ManipulationEventData
+                {
+                    ManipulationSource = this,
+                    IsNearInteraction = isNearManipulation,
+                    PointerCentroid = GetPointersCentroid(),
+                    PointerVelocity = GetPointersVelocity(),
+                    PointerAngularVelocity = GetPointersAngularVelocity()
+                });
+            }
         }
+
         private void HandleManipulationEnded()
         {
             // TODO: If we are on HoloLens 1, push and pop modal input handler so that we can use old
             // gaze/gesture/voice manipulation. For HoloLens 2, we don't want to do this.
-            OnManipulationEnded.Invoke(new ManipulationEventData { IsNearInteraction = isNearManipulation });
-
+            if (OnManipulationEnded != null)
+            {
+                OnManipulationEnded.Invoke(new ManipulationEventData
+                {
+                    ManipulationSource = this,
+                    IsNearInteraction = isNearManipulation,
+                    PointerCentroid = GetPointersCentroid(),
+                    PointerVelocity = GetPointersVelocity(),
+                    PointerAngularVelocity = GetPointersAngularVelocity()
+                }); 
+            }
         }
+
         #endregion Private Event Handlers
 
         #region Unused Event Handlers
         /// <inheritdoc />
         public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
+        public void OnBeforeFocusChange(FocusEventData eventData) { }
+
         #endregion Unused Event Handlers
 
         #region Private methods
@@ -637,30 +795,75 @@ namespace Microsoft.MixedReality.Toolkit.UI
             var handPositionMap = new Dictionary<uint, Vector3>();
             foreach (var item in pointerIdToPointerMap)
             {
-                handPositionMap.Add(item.Key, item.Value.Position);
+                handPositionMap.Add(item.Key, item.Value.pointer.Position);
             }
             return handPositionMap;
         }
 
-        public void OnFocusEnter(FocusEventData eventData)
+        public void OnFocusChanged(FocusEventData eventData)
         {
             bool isFar = !(eventData.Pointer is IMixedRealityNearPointer);
-            if (isFar && !AllowFarManipulation)
+            if (eventData.OldFocusedObject == null ||
+                !eventData.OldFocusedObject.transform.IsChildOf(transform))
             {
-                return;
+                if (isFar && !AllowFarManipulation)
+                {
+                    return;
+                }
+                if (OnHoverEntered != null)
+                {
+                    OnHoverEntered.Invoke(new ManipulationEventData
+                    {
+                        ManipulationSource = this,
+                        IsNearInteraction = !isFar
+                    });
+                }
             }
-            OnHoverEntered.Invoke(new ManipulationEventData { IsNearInteraction = !isFar });
+            else if (eventData.NewFocusedObject == null ||
+                    !eventData.NewFocusedObject.transform.IsChildOf(transform))
+            {
+                if (isFar && !AllowFarManipulation)
+                {
+                    return;
+                }
+                if (OnHoverExited != null)
+                {
+                    OnHoverExited.Invoke(new ManipulationEventData
+                    {
+                        ManipulationSource = this,
+                        IsNearInteraction = !isFar
+                    });
+                }
+            }
         }
 
-        public void OnFocusExit(FocusEventData eventData)
+        private void ReleaseRigidBody()
         {
-            bool isFar = !(eventData.Pointer is IMixedRealityNearPointer);
-            if (isFar && !AllowFarManipulation)
+            if (rigidBody != null)
             {
-                return;
+                rigidBody.isKinematic = wasKinematic;
+
+                if (releaseBehavior.HasFlag(ReleaseBehaviorType.KeepVelocity))
+                {
+                    rigidBody.velocity = GetPointersVelocity();
+                }
+
+                if (releaseBehavior.HasFlag(ReleaseBehaviorType.KeepAngularVelocity))
+                {
+                    rigidBody.angularVelocity = GetPointersAngularVelocity();
+                }
+
+                rigidBody = null;
             }
-            OnHoverExited.Invoke(new ManipulationEventData { IsNearInteraction = !isFar });
         }
+
+        private PointerData GetFirstPointer()
+        {
+            // We may be able to do this without allocating memory.
+            // Moving to a method for later investigation.
+            return pointerIdToPointerMap.Values.First();
+        }
+
         #endregion
     }
 }

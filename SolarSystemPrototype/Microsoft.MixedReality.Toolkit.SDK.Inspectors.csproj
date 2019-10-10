@@ -63,26 +63,30 @@
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Input\Handlers\BaseInputHandlerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Input\Handlers\ControllerPoseSynchronizerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Input\Handlers\MixedRealityControllerVisualizerInspector.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Input\Handlers\PointerClickHandlerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Input\Handlers\SpeechInputHandlerInspector.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Utilities\Solvers\AttachToControllerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Utilities\Solvers\ControllerFinderInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Utilities\Solvers\InBetweenInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Utilities\Solvers\SolverHandlerInspector.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Utilities\Solvers\SolverInspector.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\Utilities\Solvers\SurfaceMagnetismInspector.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\BoundingBox\BoundingBoxInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Collections\BaseCollectionInspector.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Interactable\ButtonBackgroundSizeGizmo.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Collections\GridObjectCollectionInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Interactable\InteractableInspector.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Interactable\InteractableOnFocusInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Interactable\InteractableReceiverInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Interactable\InteractableReceiverListInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Interactable\PressableButtonInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Interactable\StatesInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Interactable\ThemeInspector.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\ManipulationHandler\ManipulationHandlerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Pointers\BaseControllerPointerInspector.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Pointers\BaseMousePointerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Pointers\LinePointerInspector.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Pointers\MousePointerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Pointers\ParabolicTeleportPointerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Pointers\SpherePointerInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Pointers\TeleportPointerInspector.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Sliders\PinchSliderInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Tooltips\ToolTipConnectorInspector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Inspectors\UX\Tooltips\ToolTipInspector.cs" />
     <Reference Include="UnityEngine.AIModule">
@@ -727,13 +731,13 @@
       <Project>{C9E05CC0-BA05-37C2-435D-E7851C8009C2}</Project>
       <Name>Microsoft.MixedReality.Toolkit</Name>
     </ProjectReference>
+    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Editor.Inspectors.csproj">
+      <Project>{E5F217A6-2EC5-6FF1-0F41-89D099139142}</Project>
+      <Name>Microsoft.MixedReality.Toolkit.Editor.Inspectors</Name>
+    </ProjectReference>
     <ProjectReference Include="Microsoft.MixedReality.Toolkit.SDK.csproj">
       <Project>{B8690D6F-B9EE-AC42-3BB4-F8C996770570}</Project>
       <Name>Microsoft.MixedReality.Toolkit.SDK</Name>
-    </ProjectReference>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Core.Inspectors.csproj">
-      <Project>{3176CD06-AA02-3A9D-F608-6116FD90234F}</Project>
-      <Name>Microsoft.MixedReality.Toolkit.Core.Inspectors</Name>
     </ProjectReference>
     <ProjectReference Include="Microsoft.MixedReality.Toolkit.Services.InputSystem.csproj">
       <Project>{81383DD1-BF77-D255-8369-F998B521F02F}</Project>

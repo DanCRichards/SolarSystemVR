@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
-using Microsoft.MixedReality.Toolkit.Input;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,29 +12,18 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// <summary>
     /// The Mixed Reality Toolkit's specific implementation of the <see cref="Microsoft.MixedReality.Toolkit.Input.IMixedRealityInputSystem"/>
     /// </summary>
-    public class MixedRealityInputSystem : BaseCoreSystem, IMixedRealityInputSystem
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/Overview.html")]
+    public class MixedRealityInputSystem : BaseDataProviderAccessCoreSystem, IMixedRealityInputSystem, IMixedRealityCapabilityCheck
     {
         public MixedRealityInputSystem(
             IMixedRealityServiceRegistrar registrar,
-            MixedRealityInputSystemProfile profile,
-            Transform playspace) : base(registrar, profile)
+            MixedRealityInputSystemProfile profile) : base(registrar, profile)
         {
             if (registrar == null)
             {
                 Debug.LogError("The MixedRealityInputSystem object requires a valid IMixedRealityServiceRegistrar instance.");
             }
-
-            if (playspace == null)
-            {
-                Debug.LogError("The MixedRealityInputSystem object requires a valid playspace Transform.");
-            }
-            Playspace = playspace;
         }
-
-        /// <summary>
-        /// The transform of the playspace scene object.
-        /// </summary>
-        private Transform Playspace = null;
 
         /// <inheritdoc />
         public event Action InputEnabled;
@@ -49,10 +37,31 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public HashSet<IMixedRealityController> DetectedControllers { get; } = new HashSet<IMixedRealityController>();
 
+
+        private MixedRealityInputSystemProfile inputSystemProfile = null;
+
+        /// <inheritdoc/>
+        public MixedRealityInputSystemProfile InputSystemProfile
+        {
+            get
+            {
+                if (inputSystemProfile == null)
+                {
+                    inputSystemProfile = ConfigurationProfile as MixedRealityInputSystemProfile;
+                }
+                return inputSystemProfile;
+            }
+        }
+
         private IMixedRealityFocusProvider focusProvider = null;
 
         /// <inheritdoc />
         public IMixedRealityFocusProvider FocusProvider => focusProvider ?? (focusProvider = Registrar.GetService<IMixedRealityFocusProvider>());
+
+        private IMixedRealityRaycastProvider raycastProvider = null;
+
+        /// <inheritdoc />
+        public IMixedRealityRaycastProvider RaycastProvider => raycastProvider ?? (raycastProvider = Registrar.GetService<IMixedRealityRaycastProvider>());
 
         /// <inheritdoc />
         public IMixedRealityGazeProvider GazeProvider { get; private set; }
@@ -67,6 +76,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         public bool IsInputEnabled => disabledRefCount <= 0;
 
         private int disabledRefCount;
+        private bool isInputModuleAdded = false;
 
         private SourceStateEventData sourceStateEventData;
         private SourcePoseEventData<TrackingState> sourceTrackingEventData;
@@ -95,6 +105,29 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         private MixedRealityInputActionRulesProfile CurrentInputActionRulesProfile { get; set; }
 
+        #region IMixedRealityCapabilityCheck Implementation
+
+        /// <inheritdoc />
+        public bool CheckCapability(MixedRealityCapability capability)
+        {
+            foreach (var deviceManager in GetDataProviders<IMixedRealityInputDeviceManager>())
+            {
+                IMixedRealityCapabilityCheck capabilityChecker = deviceManager as IMixedRealityCapabilityCheck;
+
+                // If one of the running data providers supports the requested capability, 
+                // the application has the needed support to leverage the desired functionality.
+                if ((capabilityChecker != null) &&
+                    capabilityChecker.CheckCapability(capability))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        #endregion IMixedRealityCapabilityCheck Implementation
+
         #region IMixedRealityService Implementation
 
         /// <inheritdoc />
@@ -113,29 +146,22 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 return;
             }
 
-            if (!Application.isPlaying)
+            BaseInputModule[] inputModules = UnityEngine.Object.FindObjectsOfType<BaseInputModule>();
+
+            if (inputModules.Length == 0)
             {
-                CameraCache.Main.transform.position = Vector3.zero;
-                CameraCache.Main.transform.rotation = Quaternion.identity;
-
-                var inputModules = UnityEngine.Object.FindObjectsOfType<BaseInputModule>();
-
-                if (inputModules.Length == 0)
-                {
-                    Debug.LogWarning($"Automatically adding a {typeof(MixedRealityInputModule).Name} to main camera. You should save this change to the scene.", CameraCache.Main);
-                    CameraCache.Main.gameObject.AddComponent<MixedRealityInputModule>();
-                }
-                else if ((inputModules.Length == 1) && (inputModules[0] is MixedRealityInputModule))
-                {
-                    // Nothing. Input module is setup correctly.
-                }
-                else
-                {
-                    Debug.LogError($"For Mixed Reality Toolkit input to work properly, please remove your other input module(s) and add a {typeof(MixedRealityInputModule).Name} to your main camera.", inputModules[0]);
-                }
+                // There is no input module attached to the camera, add one.
+                CameraCache.Main.gameObject.AddComponent<MixedRealityInputModule>();
+                isInputModuleAdded = true;
+            }
+            else if ((inputModules.Length == 1) && (inputModules[0] is MixedRealityInputModule))
+            { /* Nothing to do, a MixedRealityInputModule was applied in the editor. */ }
+            else
+            {
+                Debug.LogError($"For Mixed Reality Toolkit input to work properly, please remove your other input module(s) and add a {typeof(MixedRealityInputModule).Name} to your main camera.", inputModules[0]);
             }
 
-            if (MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile == null)
+            if (InputSystemProfile == null)
             {
                 Debug.LogError("The Input system is missing the required Input System Profile!");
                 return;
@@ -156,8 +182,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 if (profile.PointerProfile.GazeProviderType?.Type != null)
                 {
                     GazeProvider = CameraCache.Main.gameObject.EnsureComponent(profile.PointerProfile.GazeProviderType.Type) as IMixedRealityGazeProvider;
-                    GazeProvider.InputSystem = this;
-                    GazeProvider.Playspace = Playspace;
                     GazeProvider.GazeCursorPrefab = profile.PointerProfile.GazeCursorPrefab;
                     // Current implementation implements both provider types in one concrete class.
                     EyeGazeProvider = GazeProvider as IMixedRealityEyeGazeProvider;
@@ -201,30 +225,28 @@ namespace Microsoft.MixedReality.Toolkit.Input
             handTrackingInputEventData = new HandTrackingInputEventData(EventSystem.current);
         }
 
-        private List<IMixedRealityInputDeviceManager> deviceManagers = new List<IMixedRealityInputDeviceManager>();
-
         /// <inheritdoc />
         public override void Enable()
         {
             MixedRealityInputSystemProfile profile = ConfigurationProfile as MixedRealityInputSystemProfile;
 
-            if ((deviceManagers.Count == 0) && (profile != null))
+            if ((GetDataProviders().Count == 0) && (profile != null))
             {
                 // Register the input device managers.
                 for (int i = 0; i < profile.DataProviderConfigurations.Length; i++)
                 {
                     MixedRealityInputDataProviderConfiguration configuration = profile.DataProviderConfigurations[i];
-                    object[] args = { Registrar, this, profile, Playspace, configuration.ComponentName, configuration.Priority, configuration.DeviceManagerProfile };
+                    object[] args = { Registrar, this, configuration.ComponentName, configuration.Priority, configuration.DeviceManagerProfile };
 
-                    if (Registrar.RegisterDataProvider<IMixedRealityInputDeviceManager>(
+                    RegisterDataProvider<IMixedRealityInputDeviceManager>(
                         configuration.ComponentType.Type,
                         configuration.RuntimePlatform,
-                        args))
-                    {
-                        deviceManagers.Add(Registrar.GetDataProvider<IMixedRealityInputDeviceManager>(configuration.ComponentName));
-                    }
+                        args);
                 }
             }
+
+            // Ensure data providers are enabled (performed by the base class)
+            base.Enable();
 
             InputEnabled?.Invoke();
         }
@@ -232,6 +254,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public override void Reset()
         {
+            base.Reset();
             Disable();
             Initialize();
             Enable();
@@ -240,35 +263,85 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public override void Disable()
         {
-            GazeProvider = null;
+            base.Disable();
 
-            if (!Application.isPlaying)
+            // Input System adds a gaze provider component on the main camera, which needs to be removed when the input system is disabled/removed.
+            // Otherwise the component would keep references to dead objects.
+            // Unity's way to remove component is to destroy it.
+            if (GazeProvider != null)
             {
-                var component = CameraCache.Main.GetComponent<IMixedRealityGazeProvider>() as Component;
-
-                if (component != null)
+                if (Application.isPlaying)
                 {
-                    UnityEngine.Object.DestroyImmediate(component);
+                    GazeProvider.GazePointer.BaseCursor.Destroy();
+                    UnityEngine.Object.Destroy(GazeProvider as Component);
                 }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(GazeProvider as Component);
+                }
+
+                GazeProvider = null;
             }
 
-            if (deviceManagers.Count > 0)
+            foreach(var provider in GetDataProviders<IMixedRealityInputDeviceManager>())
             {
-                // Unregister the input device managers.
-                for (int i = 0; i < deviceManagers.Count; i++)
+                if (provider != null)
                 {
-                    if (deviceManagers[i] != null)
-                    {
-                        Registrar.UnregisterDataProvider<IMixedRealityInputDeviceManager>(deviceManagers[i]);
-                    }
+                    UnregisterDataProvider<IMixedRealityInputDeviceManager>(provider);
                 }
             }
-            deviceManagers.Clear();
 
             InputDisabled?.Invoke();
         }
 
+        public override void Destroy()
+        {
+            if (isInputModuleAdded)
+            {
+                var inputModule = CameraCache.Main.gameObject.GetComponent<MixedRealityInputModule>();
+                if (inputModule)
+                {
+                    if (Application.isPlaying)
+                    {
+                        inputModule.DeactivateModule();
+                        UnityEngine.Object.Destroy(inputModule);
+                    }
+                    else
+                    {
+                        UnityEngine.Object.DestroyImmediate(inputModule);
+                    }
+                }
+            }
+
+            base.Destroy();
+        }
         #endregion IMixedRealityService Implementation
+
+        #region IMixedRealityDataProviderAccess Implementation
+
+        /// <inheritdoc />
+        public override IReadOnlyList<T> GetDataProviders<T>()
+        {
+            if (!typeof(IMixedRealityInputDeviceManager).IsAssignableFrom(typeof(T)))
+            {
+                return null;
+            }
+
+            return base.GetDataProviders<T>();
+        }
+
+        /// <inheritdoc />
+        public override T GetDataProvider<T>(string name = null)
+        {
+            if (!typeof(IMixedRealityInputDeviceManager).IsAssignableFrom(typeof(T)))
+            {
+                return default(T);
+            }
+
+            return base.GetDataProvider<T>(name);
+        }
+
+        #endregion IMixedRealityDataProviderAccess Implementation
 
         #region IMixedRealityEventSystem Implementation
 
@@ -294,7 +367,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 return;
             }
 
-            Debug.Assert(baseInputEventData.InputSource.Pointers != null, $"InputSource {baseInputEventData.InputSource.SourceName} doesn't have any registered pointers! Input Sources without pointers should use the GazeProvider's pointer as a default fallback.");
+            if (baseInputEventData.InputSource.Pointers == null) { Debug.LogError($"InputSource {baseInputEventData.InputSource.SourceName} doesn't have any registered pointers! Input Sources without pointers should use the GazeProvider's pointer as a default fallback."); }
 
             var modalEventHandled = false;
             // Get the focused object for each pointer of the event source
@@ -307,6 +380,57 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 DispatchEventToFallbackHandlers(baseInputEventData, eventHandler);
             }
+        }
+
+        /// <summary>
+        /// Handles focus changed events
+        /// We send all focus events to all global listeners and the actual focus change receivers. the use flag is completely ignored to avoid any interception.
+        /// </summary>
+        private void HandleFocusChangedEvents(FocusEventData focusEventData, ExecuteEvents.EventFunction<IMixedRealityFocusChangedHandler> eventHandler)
+        {
+            Debug.Assert(focusEventData != null);
+
+            DispatchEventToGlobalListeners(focusEventData, eventHandler);
+
+            // Raise Focus Events on the old and new focused objects.
+            if (focusEventData.OldFocusedObject != null)
+            {
+                ExecuteEvents.ExecuteHierarchy(focusEventData.OldFocusedObject, focusEventData, eventHandler);
+            }
+
+            if (focusEventData.NewFocusedObject != null)
+            {
+                ExecuteEvents.ExecuteHierarchy(focusEventData.NewFocusedObject, focusEventData, eventHandler);
+            }
+
+            // Raise Focus Events on the pointers cursor if it has one.
+            if (focusEventData.Pointer != null && focusEventData.Pointer.BaseCursor != null)
+            {
+                try
+                {
+                    // When shutting down a game, we can sometime get old references to game objects that have been cleaned up.
+                    // We'll ignore when this happens.
+                    ExecuteEvents.ExecuteHierarchy(focusEventData.Pointer.BaseCursor.GameObjectReference, focusEventData, eventHandler);
+
+                }
+                catch (Exception)
+                {
+                    // ignored.
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles focus enter and exit
+        /// We send the focus event to all global listeners and the actual focus change receiver. the use flag is completely ignored to avoid any interception.
+        /// </summary>
+        private void HandleFocusEvent(GameObject eventTarget, FocusEventData focusEventData, ExecuteEvents.EventFunction<IMixedRealityFocusHandler> eventHandler)
+        {
+            Debug.Assert(focusEventData != null);
+
+            DispatchEventToGlobalListeners(focusEventData, eventHandler);
+
+            ExecuteEvents.ExecuteHierarchy(eventTarget, focusEventData, eventHandler);
         }
 
         /// <summary>
@@ -351,10 +475,22 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             Debug.Assert(baseInputEventData != null);
             Debug.Assert(!baseInputEventData.used);
-            Debug.Assert(baseInputEventData.InputSource != null, $"Failed to find an input source for {baseInputEventData}");
+            if (baseInputEventData.InputSource == null) { Debug.Assert(baseInputEventData.InputSource != null, $"Failed to find an input source for {baseInputEventData}"); }
 
             // Send the event to global listeners
             base.HandleEvent(baseInputEventData, eventHandler);
+        }
+
+        /// <summary>
+        /// Dispatch a focus event to all global event listeners
+        /// </summary>
+        private void DispatchEventToGlobalListeners<T>(FocusEventData focusEventData, ExecuteEvents.EventFunction<T> eventHandler) where T : IEventSystemHandler
+        {
+            Debug.Assert(focusEventData != null);
+            Debug.Assert(!focusEventData.used);
+
+            // Send the event to global listeners
+            base.HandleEvent(focusEventData, eventHandler);
         }
 
         private void DispatchEventToFallbackHandlers<T>(BaseInputEventData baseInputEventData, ExecuteEvents.EventFunction<T> eventHandler) where T : IEventSystemHandler
@@ -418,8 +554,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <summary>
         /// Register a <see href="https://docs.unity3d.com/ScriptReference/GameObject.html">GameObject</see> to listen to events that will receive all input events, regardless
         /// of which other <see href="https://docs.unity3d.com/ScriptReference/GameObject.html">GameObject</see>s might have handled the event beforehand.
-        /// <remarks>Useful for listening to events when the <see href="https://docs.unity3d.com/ScriptReference/GameObject.html">GameObject</see> is currently not being raycasted against by the <see cref="FocusProvider"/>.</remarks>
         /// </summary>
+        /// <remarks>Useful for listening to events when the <see href="https://docs.unity3d.com/ScriptReference/GameObject.html">GameObject</see> is currently not being raycasted against by the <see cref="FocusProvider"/>.</remarks>
         /// <param name="listener">Listener to add.</param>
         public override void Register(GameObject listener)
         {
@@ -598,7 +734,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             // Create input event
             sourceStateEventData.Initialize(source, controller);
 
-            Debug.Assert(!DetectedInputSources.Contains(source), $"{source.SourceName} has already been registered with the Input Manager!");
+            if (DetectedInputSources.Contains(source)) { Debug.LogError($"{source.SourceName} has already been registered with the Input Manager!"); }
 
             DetectedInputSources.Add(source);
 
@@ -626,7 +762,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             // Create input event
             sourceStateEventData.Initialize(source, controller);
 
-            Debug.Assert(DetectedInputSources.Contains(source), $"{source.SourceName} was never registered with the Input Manager!");
+            if (!DetectedInputSources.Contains(source)) { Debug.LogError($"{source.SourceName} was never registered with the Input Manager!"); }
 
             DetectedInputSources.Remove(source);
 
@@ -749,31 +885,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             focusEventData.Initialize(pointer, oldFocusedObject, newFocusedObject);
 
-            // Raise Focus Events on the old and new focused objects.
-            if (oldFocusedObject != null)
-            {
-                ExecuteEvents.ExecuteHierarchy(oldFocusedObject, focusEventData, OnPreFocusChangedHandler);
-            }
-
-            if (newFocusedObject != null)
-            {
-                ExecuteEvents.ExecuteHierarchy(newFocusedObject, focusEventData, OnPreFocusChangedHandler);
-            }
-
-            // Raise Focus Events on the pointers cursor if it has one.
-            if (pointer.BaseCursor != null)
-            {
-                try
-                {
-                    // When shutting down a game, we can sometime get old references to game objects that have been cleaned up.
-                    // We'll ignore when this happens.
-                    ExecuteEvents.ExecuteHierarchy(pointer.BaseCursor.GameObjectReference, focusEventData, OnPreFocusChangedHandler);
-                }
-                catch (Exception)
-                {
-                    // ignored.
-                }
-            }
+            HandleFocusChangedEvents(focusEventData, OnPreFocusChangedHandler);
         }
 
         private static readonly ExecuteEvents.EventFunction<IMixedRealityFocusChangedHandler> OnPreFocusChangedHandler =
@@ -788,31 +900,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             focusEventData.Initialize(pointer, oldFocusedObject, newFocusedObject);
 
-            // Raise Focus Events on the old and new focused objects.
-            if (oldFocusedObject != null)
-            {
-                ExecuteEvents.ExecuteHierarchy(oldFocusedObject, focusEventData, OnFocusChangedHandler);
-            }
-
-            if (newFocusedObject != null)
-            {
-                ExecuteEvents.ExecuteHierarchy(newFocusedObject, focusEventData, OnFocusChangedHandler);
-            }
-
-            // Raise Focus Events on the pointers cursor if it has one.
-            if (pointer.BaseCursor != null)
-            {
-                try
-                {
-                    // When shutting down a game, we can sometime get old references to game objects that have been cleaned up.
-                    // We'll ignore when this happens.
-                    ExecuteEvents.ExecuteHierarchy(pointer.BaseCursor.GameObjectReference, focusEventData, OnFocusChangedHandler);
-                }
-                catch (Exception)
-                {
-                    // ignored.
-                }
-            }
+            HandleFocusChangedEvents(focusEventData, OnFocusChangedHandler);
         }
 
         private static readonly ExecuteEvents.EventFunction<IMixedRealityFocusChangedHandler> OnFocusChangedHandler =
@@ -827,7 +915,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             focusEventData.Initialize(pointer);
 
-            ExecuteEvents.ExecuteHierarchy(focusedObject, focusEventData, OnFocusEnterEventHandler);
+            HandleFocusEvent(focusedObject, focusEventData, OnFocusEnterEventHandler);
         }
 
         private static readonly ExecuteEvents.EventFunction<IMixedRealityFocusHandler> OnFocusEnterEventHandler =
@@ -842,7 +930,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             focusEventData.Initialize(pointer);
 
-            ExecuteEvents.ExecuteHierarchy(unfocusedObject, focusEventData, OnFocusExitEventHandler);
+            HandleFocusEvent(unfocusedObject, focusEventData, OnFocusExitEventHandler);
         }
 
         private static readonly ExecuteEvents.EventFunction<IMixedRealityFocusHandler> OnFocusExitEventHandler =
@@ -868,17 +956,33 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public void RaisePointerDown(IMixedRealityPointer pointer, MixedRealityInputAction inputAction, Handedness handedness = Handedness.None, IMixedRealityInputSource inputSource = null)
         {
+            pointer.IsFocusLocked = (pointer.Result?.Details.Object != null);
+
             pointerEventData.Initialize(pointer, inputAction, handedness, inputSource);
-            
+
             HandlePointerEvent(pointerEventData, OnPointerDownEventHandler);
-            
-            if (pointer.Result?.Details.Object != null)
-            {
-                pointer.IsFocusLocked = true;
-            }
         }
 
         #endregion Pointer Down
+
+        #region Pointer Dragged
+
+        private static readonly ExecuteEvents.EventFunction<IMixedRealityPointerHandler> OnPointerDraggedEventHandler =
+            delegate (IMixedRealityPointerHandler handler, BaseEventData eventData)
+            {
+                var casted = ExecuteEvents.ValidateEventData<MixedRealityPointerEventData>(eventData);
+                handler.OnPointerDragged(casted);
+            };
+
+        /// <inheritdoc />
+        public void RaisePointerDragged(IMixedRealityPointer pointer, MixedRealityInputAction inputAction, Handedness handedness = Handedness.None, IMixedRealityInputSource inputSource = null)
+        {
+            pointerEventData.Initialize(pointer, inputAction, handedness, inputSource);
+
+            HandlePointerEvent(pointerEventData, OnPointerDraggedEventHandler);
+        }
+
+        #endregion Pointer Dragged
 
         #region Pointer Click
 
@@ -903,7 +1007,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             // Pass handler through HandleEvent to perform modal/fallback logic
             HandlePointerEvent(pointerEventData, OnInputClickedEventHandler);
 
-            // NOTE: In Unity UI, a "click" happens on every pointer up, so we have RaisePointerUp call the pointerClickHandler.
+            // NOTE: In Unity UI, a "click" happens on every pointer up, so we have RaisePointerUp call the PointerHandler.
         }
 
         #endregion Pointer Click
@@ -923,7 +1027,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             pointerEventData.Initialize(pointer, inputAction, handedness, inputSource);
 
             HandlePointerEvent(pointerEventData, OnPointerUpEventHandler);
-            
+
             pointer.IsFocusLocked = false;
         }
 
@@ -942,6 +1046,25 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 handler.OnInputDown(casted);
             };
 
+        private static readonly ExecuteEvents.EventFunction<IMixedRealityBaseInputHandler> OnInputDownWithActionEventHandler =
+            delegate (IMixedRealityBaseInputHandler handler, BaseEventData eventData)
+            {
+                var inputData = ExecuteEvents.ValidateEventData<InputEventData>(eventData);
+                Debug.Assert(inputData.MixedRealityInputAction != MixedRealityInputAction.None);
+
+                var inputHandler = handler as IMixedRealityInputHandler;
+                if (inputHandler != null)
+                {
+                    inputHandler.OnInputDown(inputData);
+                }
+
+                var actionHandler = handler as IMixedRealityInputActionHandler;
+                if (actionHandler != null)
+                {
+                    actionHandler.OnActionStarted(inputData);
+                }
+            };
+
         /// <inheritdoc />
         public void RaiseOnInputDown(IMixedRealityInputSource source, Handedness handedness, MixedRealityInputAction inputAction)
         {
@@ -951,7 +1074,14 @@ namespace Microsoft.MixedReality.Toolkit.Input
             inputEventData.Initialize(source, handedness, inputAction);
 
             // Pass handler through HandleEvent to perform modal/fallback logic
-            HandleEvent(inputEventData, OnInputDownEventHandler);
+            if (inputEventData.MixedRealityInputAction == MixedRealityInputAction.None)
+            {
+                HandleEvent(inputEventData, OnInputDownEventHandler);
+            }
+            else
+            {
+                HandleEvent(inputEventData, OnInputDownWithActionEventHandler);
+            }
         }
 
         #endregion Input Down
@@ -965,6 +1095,25 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 handler.OnInputUp(casted);
             };
 
+        private static readonly ExecuteEvents.EventFunction<IMixedRealityBaseInputHandler> OnInputUpWithActionEventHandler =
+            delegate (IMixedRealityBaseInputHandler handler, BaseEventData eventData)
+            {
+                var inputData = ExecuteEvents.ValidateEventData<InputEventData>(eventData);
+                Debug.Assert(inputData.MixedRealityInputAction != MixedRealityInputAction.None);
+
+                var inputHandler = handler as IMixedRealityInputHandler;
+                if (inputHandler != null)
+                {
+                    inputHandler.OnInputUp(inputData);
+                }
+
+                var actionHandler = handler as IMixedRealityInputActionHandler;
+                if (actionHandler != null)
+                {
+                    actionHandler.OnActionEnded(inputData);
+                }
+            };
+
         /// <inheritdoc />
         public void RaiseOnInputUp(IMixedRealityInputSource source, Handedness handedness, MixedRealityInputAction inputAction)
         {
@@ -974,7 +1123,14 @@ namespace Microsoft.MixedReality.Toolkit.Input
             inputEventData.Initialize(source, handedness, inputAction);
 
             // Pass handler through HandleEvent to perform modal/fallback logic
-            HandleEvent(inputEventData, OnInputUpEventHandler);
+            if (inputEventData.MixedRealityInputAction == MixedRealityInputAction.None)
+            {
+                HandleEvent(inputEventData, OnInputUpEventHandler);
+            }
+            else
+            {
+                HandleEvent(inputEventData, OnInputUpWithActionEventHandler);
+            }
         }
 
         #endregion Input Up
@@ -1101,12 +1257,39 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 handler.OnGestureStarted(casted);
             };
 
+        private static readonly ExecuteEvents.EventFunction<IMixedRealityBaseInputHandler> OnGestureStartedWithAction =
+            delegate (IMixedRealityBaseInputHandler handler, BaseEventData eventData)
+            {
+                var inputData = ExecuteEvents.ValidateEventData<InputEventData>(eventData);
+                Debug.Assert(inputData.MixedRealityInputAction != MixedRealityInputAction.None);
+
+                var gestureHandler = handler as IMixedRealityGestureHandler;
+                if (gestureHandler != null)
+                {
+                    gestureHandler.OnGestureStarted(inputData);
+                }
+
+                var actionHandler = handler as IMixedRealityInputActionHandler;
+                if (actionHandler != null)
+                {
+                    actionHandler.OnActionStarted(inputData);
+                }
+            };
+
         /// <inheritdoc />
         public void RaiseGestureStarted(IMixedRealityController controller, MixedRealityInputAction action)
         {
             action = ProcessRules(action, true);
             inputEventData.Initialize(controller.InputSource, controller.ControllerHandedness, action);
-            HandleEvent(inputEventData, OnGestureStarted);
+
+            if (action == MixedRealityInputAction.None)
+            {
+                HandleEvent(inputEventData, OnGestureStarted);
+            }
+            else
+            {
+                HandleEvent(inputEventData, OnGestureStartedWithAction);
+            }
         }
 
         private static readonly ExecuteEvents.EventFunction<IMixedRealityGestureHandler> OnGestureUpdated =
@@ -1191,12 +1374,39 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 handler.OnGestureCompleted(casted);
             };
 
+        private static readonly ExecuteEvents.EventFunction<IMixedRealityBaseInputHandler> OnGestureCompletedWithAction =
+            delegate (IMixedRealityBaseInputHandler handler, BaseEventData eventData)
+            {
+                var inputData = ExecuteEvents.ValidateEventData<InputEventData>(eventData);
+                Debug.Assert(inputData.MixedRealityInputAction != MixedRealityInputAction.None);
+
+                var gestureHandler = handler as IMixedRealityGestureHandler;
+                if (gestureHandler != null)
+                {
+                    gestureHandler.OnGestureCompleted(inputData);
+                }
+
+                var actionHandler = handler as IMixedRealityInputActionHandler;
+                if (actionHandler != null)
+                {
+                    actionHandler.OnActionEnded(inputData);
+                }
+            };
+
         /// <inheritdoc />
         public void RaiseGestureCompleted(IMixedRealityController controller, MixedRealityInputAction action)
         {
             action = ProcessRules(action, false);
             inputEventData.Initialize(controller.InputSource, controller.ControllerHandedness, action);
-            HandleEvent(inputEventData, OnGestureCompleted);
+
+            if (action == MixedRealityInputAction.None)
+            {
+                HandleEvent(inputEventData, OnGestureCompleted);
+            }
+            else
+            {
+                HandleEvent(inputEventData, OnGestureCompletedWithAction);
+            }
         }
 
         private static readonly ExecuteEvents.EventFunction<IMixedRealityGestureHandler<Vector2>> OnGestureVector2PositionCompleted =
@@ -1285,14 +1495,43 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 handler.OnSpeechKeywordRecognized(casted);
             };
 
+        private static readonly ExecuteEvents.EventFunction<IMixedRealityBaseInputHandler> OnSpeechKeywordRecognizedWithActionEventHandler =
+            delegate (IMixedRealityBaseInputHandler handler, BaseEventData eventData)
+            {
+                var speechData = ExecuteEvents.ValidateEventData<SpeechEventData>(eventData);
+                Debug.Assert(speechData.MixedRealityInputAction != MixedRealityInputAction.None);
+
+                var speechHandler = handler as IMixedRealitySpeechHandler;
+                if (speechHandler != null)
+                {
+                    speechHandler.OnSpeechKeywordRecognized(speechData);
+                }
+
+                var actionHandler = handler as IMixedRealityInputActionHandler;
+                if (actionHandler != null)
+                {
+                    actionHandler.OnActionStarted(speechData);
+                    actionHandler.OnActionEnded(speechData);
+                }
+            };
+
         /// <inheritdoc />
         public void RaiseSpeechCommandRecognized(IMixedRealityInputSource source, RecognitionConfidenceLevel confidence, TimeSpan phraseDuration, DateTime phraseStartTime, SpeechCommands command)
         {
             // Create input event
             speechEventData.Initialize(source, confidence, phraseDuration, phraseStartTime, command);
 
+            FocusProvider?.OnSpeechKeywordRecognized(speechEventData);
+
             // Pass handler through HandleEvent to perform modal/fallback logic
-            HandleEvent(speechEventData, OnSpeechKeywordRecognizedEventHandler);
+            if (command.Action == MixedRealityInputAction.None)
+            {
+                HandleEvent(speechEventData, OnSpeechKeywordRecognizedEventHandler);
+            }
+            else
+            {
+                HandleEvent(speechEventData, OnSpeechKeywordRecognizedWithActionEventHandler);
+            }
         }
 
         #endregion Speech Keyword Events

@@ -4,7 +4,9 @@
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Windows.Input;
+using Microsoft.MixedReality.Toolkit.Windows.Utilities;
 using UnityEngine;
+using System;
 
 #if UNITY_WSA
 using System.Collections.Generic;
@@ -13,34 +15,90 @@ using UnityEngine.XR.WSA.Input;
 using WsaGestureSettings = UnityEngine.XR.WSA.Input.GestureSettings;
 #endif // UNITY_WSA
 
+#if WINDOWS_UWP
+using WindowsInputSpatial = global::Windows.UI.Input.Spatial;
+#endif // WINDOWS_UWP
+
 namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
 {
     [MixedRealityDataProvider(
         typeof(IMixedRealityInputSystem),
         SupportedPlatforms.WindowsUniversal,
         "Windows Mixed Reality Device Manager")]
-    public class WindowsMixedRealityDeviceManager : BaseInputDeviceManager
+    public class WindowsMixedRealityDeviceManager : BaseInputDeviceManager, IMixedRealityCapabilityCheck
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="registrar">The <see cref="IMixedRealityServiceRegistrar"/> instance that loaded the data provider.</param>
         /// <param name="inputSystem">The <see cref="Microsoft.MixedReality.Toolkit.Input.IMixedRealityInputSystem"/> instance that receives data from this provider.</param>
-        /// <param name="inputSystemProfile">The input system configuration profile.</param>
-        /// <param name="playspace">The <see href="https://docs.unity3d.com/ScriptReference/Transform.html">Transform</see> of the playspace object.</param>
         /// <param name="name">Friendly name of the service.</param>
         /// <param name="priority">Service priority. Used to determine order of instantiation.</param>
         /// <param name="profile">The service's configuration profile.</param>
         public WindowsMixedRealityDeviceManager(
             IMixedRealityServiceRegistrar registrar,
             IMixedRealityInputSystem inputSystem,
-            MixedRealityInputSystemProfile inputSystemProfile,
-            Transform playspace,
             string name = null,
             uint priority = DefaultPriority,
-            BaseMixedRealityProfile profile = null) : base(registrar, inputSystem, inputSystemProfile, playspace, name, priority, profile) { }
+            BaseMixedRealityProfile profile = null) : base(registrar, inputSystem, name, priority, profile) { }
+
+        #region IMixedRealityCapabilityCheck Implementation
+
+        /// <inheritdoc />
+        public bool CheckCapability(MixedRealityCapability capability)
+        {
+            if (WindowsApiChecker.UniversalApiContractV8_IsAvailable) // Windows 10 1903 or later
+            {
+#if WINDOWS_UWP
+                switch (capability)
+                {
+                    case MixedRealityCapability.ArticulatedHand:
+                    case MixedRealityCapability.GGVHand:
+                        return WindowsInputSpatial.SpatialInteractionManager.IsSourceKindSupported(WindowsInputSpatial.SpatialInteractionSourceKind.Hand);
+
+                    case MixedRealityCapability.MotionController:
+                        return WindowsInputSpatial.SpatialInteractionManager.IsSourceKindSupported(WindowsInputSpatial.SpatialInteractionSourceKind.Controller);
+                }
+#endif // WINDOWS_UWP
+            }
+            else // Pre-Windows 10 1903.
+            {
+                if (!UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
+                {
+                    // HoloLens supports GGV hands
+                    return (capability == MixedRealityCapability.GGVHand);
+                }
+                else
+                {
+                    // Windows Mixed Reality Immersive devices support motion controllers
+                    return (capability == MixedRealityCapability.MotionController);
+                }
+            }
+
+            return false;
+        }
+
+        #endregion IMixedRealityCapabilityCheck Implementation
 
 #if UNITY_WSA
+
+        /// <summary>
+        /// The initial size of interactionmanagerStates.
+        /// </summary>
+        /// <remarks>
+        /// This value is arbitrary but chosen to be a number larger than the typical expected number (to avoid
+        /// having to do further allocations).
+        /// </remarks>
+        public const int MaxInteractionSourceStates = 20;
+
+        /// <summary>
+        /// This number controls how much the interactionmanagerStates array should grow by each time it must
+        /// be resized (larger) in order to accommodate more InteractionSourceState values.
+        /// </summary>
+        /// <remarks>
+        /// This must be a value greater than 1.
+        /// </remarks>
+        private const int InteractionManagerStatesGrowthFactor = 2;
 
         /// <summary>
         /// Dictionary to capture all active controllers detected
@@ -50,7 +108,12 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         /// <summary>
         /// Cache of the states captured from the Unity InteractionManager for UWP
         /// </summary>
-        InteractionSourceState[] interactionmanagerStates;
+        InteractionSourceState[] interactionManagerStates = new InteractionSourceState[MaxInteractionSourceStates];
+
+        /// <summary>
+        /// The number of states captured most recently
+        /// </summary>
+        private int numInteractionManagerStates;
 
         /// <summary>
         /// The current source state reading for the Unity InteractionManager for UWP
@@ -277,22 +340,19 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
             InteractionManager.InteractionSourcePressed += InteractionManager_InteractionSourcePressed;
             InteractionManager.InteractionSourceReleased += InteractionManager_InteractionSourceReleased;
 
-            interactionmanagerStates = InteractionManager.GetCurrentReading();
+            UpdateInteractionManagerReading();
 
-            // Avoids a Unity Editor bug detecting a controller from the previous run during the first frame
-#if !UNITY_EDITOR
-            // NOTE: We update the source state data, in case an app wants to query it on source detected.
-            for (var i = 0; i < interactionmanagerStates?.Length; i++)
+            //NOTE: We update the source state data, in case an app wants to query it on source detected.
+            for (var i = 0; i < numInteractionManagerStates; i++)
             {
-                var controller = GetController(interactionmanagerStates[i].source);
+                var controller = GetController(interactionManagerStates[i].source);
 
                 if (controller != null)
                 {
-                    controller.UpdateController(interactionmanagerStates[i]);
+                    controller.UpdateController(interactionManagerStates[i]);
                     inputSystem?.RaiseSourceDetected(controller.InputSource, controller);
                 }
             }
-#endif
 
             if ((inputSystem != null) &&
                 InputSystemProfile.GesturesProfile != null &&
@@ -307,28 +367,37 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         {
             base.Update();
 
-            interactionmanagerStates = InteractionManager.GetCurrentReading();
+            UpdateInteractionManagerReading();
 
-            for (var i = 0; i < interactionmanagerStates?.Length; i++)
+            for (var i = 0; i < numInteractionManagerStates; i++)
             {
                 // SourceDetected gets raised when a new controller is detected and, if previously present, 
                 // when OnEnable is called. Do not create a new controller here.
-                var controller = GetController(interactionmanagerStates[i].source, false);
+                var controller = GetController(interactionManagerStates[i].source, false);
 
                 if (controller != null)
                 {
-                    controller.UpdateController(interactionmanagerStates[i]);
+                    controller.UpdateController(interactionManagerStates[i]);
                 }
             }
 
-            LastInteractionManagerStateReading = interactionmanagerStates;
+            LastInteractionManagerStateReading = interactionManagerStates;
         }
 
         private void RegisterGestureEvents()
         {
             if (gestureRecognizer == null)
             {
-                gestureRecognizer = new GestureRecognizer();
+                try
+                {
+                    gestureRecognizer = new GestureRecognizer();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"Failed to create gesture recognizer. OS version might not support it. Exception: {ex}");
+                    gestureRecognizer = null;
+                    return;
+                }
             }
 
             gestureRecognizer.HoldStarted += GestureRecognizer_HoldStarted;
@@ -359,7 +428,16 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         {
             if (navigationGestureRecognizer == null)
             {
-                navigationGestureRecognizer = new GestureRecognizer();
+                try
+                {
+                    navigationGestureRecognizer = new GestureRecognizer();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"Failed to create gesture recognizer. OS version might not support it. Exception: {ex}");
+                    navigationGestureRecognizer = null;
+                    return;
+                }
             }
 
             navigationGestureRecognizer.NavigationStarted += NavigationGestureRecognizer_NavigationStarted;
@@ -382,9 +460,11 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         {
             UnregisterGestureEvents();
             gestureRecognizer?.Dispose();
+            gestureRecognizer = null;
 
             UnregisterNavigationEvents();
             navigationGestureRecognizer?.Dispose();
+            navigationGestureRecognizer = null;
 
             InteractionManager.InteractionSourceDetected -= InteractionManager_InteractionSourceDetected;
             InteractionManager.InteractionSourceLost -= InteractionManager_InteractionSourceLost;
@@ -408,12 +488,12 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         /// <param name="interactionSource">Source State provided by the SDK</param>
         /// <param name="addController">Should the Source be added as a controller if it isn't found?</param>
         /// <returns>New or Existing Controller Input Source</returns>
-        private WindowsMixedRealityController GetController(InteractionSource interactionSource, bool addController = true)
+        private BaseWindowsMixedRealitySource GetController(InteractionSource interactionSource, bool addController = true)
         {
             //If a device is already registered with the ID provided, just return it.
             if (activeControllers.ContainsKey(interactionSource.id))
             {
-                var controller = activeControllers[interactionSource.id] as WindowsMixedRealityController;
+                var controller = activeControllers[interactionSource.id] as BaseWindowsMixedRealitySource;
                 Debug.Assert(controller != null);
                 return controller;
             }
@@ -439,14 +519,21 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
 
             IMixedRealityPointer[] pointers = null;
             InputSourceType inputSourceType = InputSourceType.Other;
-            switch(interactionSource.kind)
+            switch (interactionSource.kind)
             {
                 case InteractionSourceKind.Controller:
-                    pointers = RequestPointers(SupportedControllerType.WindowsMixedReality, controllingHand);
+                    if (interactionSource.supportsPointing)
+                    {
+                        pointers = RequestPointers(SupportedControllerType.WindowsMixedReality, controllingHand);
+                    }
+                    else
+                    {
+                        pointers = RequestPointers(SupportedControllerType.GGVHand, controllingHand);
+                    }
                     inputSourceType = InputSourceType.Controller;
                     break;
                 case InteractionSourceKind.Hand:
-                    if(interactionSource.supportsPointing)
+                    if (interactionSource.supportsPointing)
                     {
                         pointers = RequestPointers(SupportedControllerType.ArticulatedHand, controllingHand);
                     }
@@ -468,10 +555,10 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
             string nameModifier = controllingHand == Handedness.None ? interactionSource.kind.ToString() : controllingHand.ToString();
             var inputSource = inputSystem?.RequestNewGenericInputSource($"Mixed Reality Controller {nameModifier}", pointers, inputSourceType);
 
-            WindowsMixedRealityController detectedController;
-            if (interactionSource.kind == InteractionSourceKind.Hand)
+            BaseWindowsMixedRealitySource detectedController;
+            if (interactionSource.supportsPointing)
             {
-                if (interactionSource.supportsPointing)
+                if (interactionSource.kind == InteractionSourceKind.Hand)
                 {
                     detectedController = new WindowsMixedRealityArticulatedHand(TrackingState.NotTracked, controllingHand, inputSource);
                     if (!detectedController.SetupConfiguration(typeof(WindowsMixedRealityArticulatedHand), inputSourceType))
@@ -481,24 +568,26 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
                         return null;
                     }
                 }
-                else
+                else if (interactionSource.kind == InteractionSourceKind.Controller)
                 {
-                    detectedController = new WindowsMixedRealityGGVHand(TrackingState.NotTracked, controllingHand, inputSource);
-                    if (!detectedController.SetupConfiguration(typeof(WindowsMixedRealityGGVHand), inputSourceType))
+                    detectedController = new WindowsMixedRealityController(TrackingState.NotTracked, controllingHand, inputSource);
+                    if (!detectedController.SetupConfiguration(typeof(WindowsMixedRealityController), inputSourceType))
                     {
                         // Controller failed to be setup correctly.
                         // Return null so we don't raise the source detected.
                         return null;
                     }
-
                 }
-
+                else
+                {
+                    Debug.Log($"Unhandled source type {interactionSource.kind} detected.");
+                    return null;
+                }
             }
             else
             {
-                detectedController = new WindowsMixedRealityController(TrackingState.NotTracked, controllingHand, inputSource);
-
-                if (!detectedController.SetupConfiguration(typeof(WindowsMixedRealityController), inputSourceType))
+                detectedController = new WindowsMixedRealityGGVHand(TrackingState.NotTracked, controllingHand, inputSource);
+                if (!detectedController.SetupConfiguration(typeof(WindowsMixedRealityGGVHand), inputSourceType))
                 {
                     // Controller failed to be setup correctly.
                     // Return null so we don't raise the source detected.
@@ -551,15 +640,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         /// <param name="args">SDK source detected event arguments</param>
         private void InteractionManager_InteractionSourceDetected(InteractionSourceDetectedEventArgs args)
         {
-
-            // Avoids a Unity Editor bug detecting a controller from the previous run during the first frame
-#if UNITY_EDITOR
-            if (Time.frameCount <= 1)
-            {
-                return;
-            }
-#endif
-
             bool raiseSourceDetected = !activeControllers.ContainsKey(args.state.source.id);
 
             var controller = GetController(args.state.source);
@@ -581,7 +661,16 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         {
             if (args.state.source.kind == InteractionSourceKind.Voice)
             {
-                GetController(args.state.source)?.UpdateController(args.state);
+                var controller = GetController(args.state.source);
+                if (controller != null)
+                {
+                    controller.UpdateController(args.state);
+                    // On WMR, the voice recognizer does not actually register the phrase 'select'
+                    // when you add it to the speech commands profile. Therefore, simulate
+                    // the "select" voice command running to ensure that we get a select voice command
+                    // registered. This is used by FocusProvider to detect when the select pointer is active
+                    InputSystem?.RaiseSpeechCommandRecognized(controller.InputSource, RecognitionConfidenceLevel.High, TimeSpan.MinValue, DateTime.Now, new SpeechCommands("select", KeyCode.Alpha1, MixedRealityInputAction.None));
+                }
             }
         }
 
@@ -725,6 +814,48 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         }
 
         #endregion Navigation Recognizer Events
+
+        #region Private Methods
+
+        /// <summary>
+        /// Gets the latest interaction manager states and counts from InteractionManager
+        /// </summary>
+        /// <remarks>
+        /// Abstracts away some of the array resize handling and another underlying Unity issue
+        /// when InteractionManager.GetCurrentReading is called when there are no detected sources.
+        /// </remarks>
+        private void UpdateInteractionManagerReading()
+        {
+            int newSourceStateCount = InteractionManager.numSourceStates;
+            // If there isn't enough space in the cache to hold the results, we should grow it so that it can, but also
+            // grow it in a way that is unlikely to require re-allocations each time.
+            if (newSourceStateCount > interactionManagerStates.Length)
+            {
+                interactionManagerStates = new InteractionSourceState[newSourceStateCount * InteractionManagerStatesGrowthFactor];
+            }
+
+            // Note that InteractionManager.GetCurrentReading throws when invoked when the number of
+            // source states is zero. In that case, we want to just update the number of read states to be zero.
+            if (newSourceStateCount == 0)
+            {
+                // clean up existing controllers that didn't trigger the InteractionSourceLost event.
+                // this can happen eg. when unity is registering cached controllers from a previous play session in the editor.
+                // those actually don't exist in the current session and therefor won't receive the InteractionSourceLost once  
+                // Unity's InteractionManager catches up
+                for (int i = 0; i < numInteractionManagerStates; ++i)
+                {
+                    RemoveController(interactionManagerStates[i].source);
+                }
+
+                numInteractionManagerStates = newSourceStateCount;
+            }
+            else
+            {
+                numInteractionManagerStates = InteractionManager.GetCurrentReading(interactionManagerStates);
+            }
+        }
+
+        #endregion Private Methods
 
 #endif // UNITY_WSA
 

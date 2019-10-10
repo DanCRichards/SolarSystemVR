@@ -10,6 +10,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
     /// layout parameters.  The collection can be used to quickly create 
     /// control panels or sets of prefab/objects.
     /// </summary>
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_ObjectCollection.html")]
     public class GridObjectCollection : BaseObjectCollection
     {
         [Tooltip("Type of surface to map the collection to")]
@@ -27,7 +28,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
         [Tooltip("Should the objects in the collection be rotated / how should they be rotated")]
         [SerializeField]
-        private OrientationType orientType = OrientationType.FaceOrigin;
+        private OrientationType orientType = OrientationType.None;
 
         /// <summary>
         /// Should the objects in the collection face the origin of the collection
@@ -77,6 +78,20 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         {
             get { return radialRange; }
             set { radialRange = value; }
+        }
+
+        [SerializeField]
+        [Tooltip("Distance for plane layout")]
+        [Range(0f, 100f)]
+        private float distance = 1f;
+
+        /// <summary>
+        /// This is the Distance for an offset for the Plane mapping and is ignored for the other mappings.
+        /// </summary>
+        public float Distance
+        {
+            get { return distance; }
+            set { distance = value; }
         }
 
         [Tooltip("Number of rows per column")]
@@ -147,19 +162,15 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// </summary>
         protected override void LayoutChildren()
         {
-            float startOffsetX;
-            float startOffsetY;
             var nodeGrid = new Vector3[NodeList.Count];
             Vector3 newPos;
 
             // Now lets lay out the grid
             Columns = Mathf.CeilToInt((float)NodeList.Count / rows);
-            startOffsetX = (Columns * 0.5f) * CellWidth;
-            startOffsetY = (rows * 0.5f) * CellHeight;
             HalfCell = new Vector2(CellWidth * 0.5f, CellHeight * 0.5f);
 
             // First start with a grid then project onto surface
-            ResolveGridLayout(nodeGrid, startOffsetX, startOffsetY, layout);
+            ResolveGridLayout(nodeGrid, layout);
 
             switch (SurfaceType)
             {
@@ -168,7 +179,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                     {
                         ObjectCollectionNode node = NodeList[i];
                         newPos = nodeGrid[i];
-                        //Debug.Log(newPos);
+                        newPos.z = distance;
                         node.Transform.localPosition = newPos;
                         UpdateNodeFacing(node);
                         NodeList[i] = node;
@@ -225,22 +236,37 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
             }
         }
 
-        protected void ResolveGridLayout(Vector3[] grid, float offsetX, float offsetY, LayoutOrder order)
+        protected void ResolveGridLayout(Vector3[] grid, LayoutOrder order)
         {
             int cellCounter = 0;
-            float iMax;
-            float jMax;
+            int iMax, jMax;
 
-            if (order == LayoutOrder.RowThenColumn)
+            switch (order)
             {
-                iMax = Rows;
-                jMax = Columns;
+                case LayoutOrder.RowThenColumn:
+                    iMax = Rows;
+                    jMax = Columns;
+                    break;
+                case LayoutOrder.ColumnThenRow:
+                    iMax = Columns;
+                    jMax = Rows;
+                    break;
+                case LayoutOrder.Vertical:
+                    iMax = 1;
+                    jMax = NodeList.Count;
+                    break;
+                case LayoutOrder.Horizontal:
+                    iMax = NodeList.Count;
+                    jMax = 1;
+                    break;
+                default:
+                    iMax = Mathf.CeilToInt((float)NodeList.Count / rows);
+                    jMax = rows;
+                    break;
             }
-            else
-            {
-                iMax = Columns;
-                jMax = Rows;
-            }
+
+            float startOffsetX = (iMax * 0.5f) * CellWidth;
+            float startOffsetY = (jMax * 0.5f) * CellHeight;
 
             for (int i = 0; i < iMax; i++)
             {
@@ -248,8 +274,8 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                 {
                     if (cellCounter < NodeList.Count)
                     {
-                        grid[cellCounter].Set(((i * CellWidth) - offsetX + HalfCell.x) + NodeList[cellCounter].Offset.x,
-                                             (-(j * CellHeight) + offsetY - HalfCell.y) + NodeList[cellCounter].Offset.y,
+                        grid[cellCounter].Set((-startOffsetX + (i * CellWidth) + HalfCell.x) + NodeList[cellCounter].Offset.x,
+                                             (startOffsetY - (j * CellHeight) - HalfCell.y) + NodeList[cellCounter].Offset.y,
                                              0.0f);
                     }
                     cellCounter++;

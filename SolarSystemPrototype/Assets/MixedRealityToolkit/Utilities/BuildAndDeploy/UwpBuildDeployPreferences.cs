@@ -3,19 +3,21 @@
 
 using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 using Microsoft.MixedReality.Toolkit.WindowsDevicePortal;
+using System;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Build.Editor
 {
     public static class UwpBuildDeployPreferences
     {
-        public const string MIN_SDK_VERSION = "10.0.17134.0";
+        public static Version MIN_SDK_VERSION = new Version("10.0.18362.0");
         private const string EDITOR_PREF_BUILD_CONFIG = "BuildDeployWindow_BuildConfig";
         private const string EDITOR_PREF_FORCE_REBUILD = "BuildDeployWindow_ForceRebuild";
         private const string EDITOR_PREF_CONNECT_INFOS = "BuildDeployWindow_DeviceConnections";
         private const string EDITOR_PREF_FULL_REINSTALL = "BuildDeployWindow_FullReinstall";
         private const string EDITOR_PREF_USE_SSL = "BuildDeployWindow_UseSSL";
         private const string EDITOR_PREF_PROCESS_ALL = "BuildDeployWindow_ProcessAll";
+        private const string EDITOR_PREF_GAZE_INPUT_CAPABILITY_ENABLED = "BuildDeployWindow_GazeInputCapabilityEnabled";
 
         /// <summary>
         /// The current Build Configuration. (Debug, Release, or Master)
@@ -73,6 +75,16 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
         {
             get => EditorPreferences.Get(EDITOR_PREF_PROCESS_ALL, false);
             set => EditorPreferences.Set(EDITOR_PREF_PROCESS_ALL, value);
+        }
+
+        /// <summary>
+        /// If true, the 'Gaze Input' capability will be added to the AppX manifest
+        /// after the Unity build.
+        /// </summary>
+        public static bool GazeInputCapabilityEnabled
+        {
+            get => EditorPreferences.Get(EDITOR_PREF_GAZE_INPUT_CAPABILITY_ENABLED, false);
+            set => EditorPreferences.Set(EDITOR_PREF_GAZE_INPUT_CAPABILITY_ENABLED, value);
         }
     }
 }

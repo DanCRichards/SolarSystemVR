@@ -699,18 +699,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.csproj">
-      <Project>{C9E05CC0-BA05-37C2-435D-E7851C8009C2}</Project>
-      <Name>Microsoft.MixedReality.Toolkit</Name>
-    </ProjectReference>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Core.Inspectors.csproj">
-      <Project>{3176CD06-AA02-3A9D-F608-6116FD90234F}</Project>
-      <Name>Microsoft.MixedReality.Toolkit.Core.Inspectors</Name>
-    </ProjectReference>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.Core.Utilities.Editor.csproj">
-      <Project>{6D9B53FC-DD93-1AF0-7550-FC51E2D714AA}</Project>
-      <Name>Microsoft.MixedReality.Toolkit.Core.Utilities.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="Microsoft.MixedReality.Toolkit.Services.InputSimulation.csproj">
       <Project>{2A50EB57-0E0E-5DB2-4F55-9302236065C1}</Project>
       <Name>Microsoft.MixedReality.Toolkit.Services.InputSimulation</Name>

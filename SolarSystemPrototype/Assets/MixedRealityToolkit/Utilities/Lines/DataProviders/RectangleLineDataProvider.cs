@@ -76,8 +76,8 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
         #region MonoBehaviour Implementation
 
-        protected override void OnValidate()
-        {
+        private void OnValidate()
+        {   // This is an appropriate use of OnValidate.
             BuildPoints();
         }
 
@@ -111,7 +111,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// <inheritdoc />
         protected override void SetPointInternal(int pointIndex, Vector3 point)
         {
-            if (pointIndex <= 7 && pointIndex >= 0)
+            if (pointIndex < PointCount && pointIndex >= 0)
             {
                 points[pointIndex] = point;
             }
@@ -120,7 +120,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// <inheritdoc />
         protected override Vector3 GetPointInternal(int pointIndex)
         {
-            return pointIndex <= 7 && pointIndex >= 0 ? points[pointIndex] : Vector3.zero;
+            return pointIndex < PointCount && pointIndex >= 0 ? points[pointIndex] : Vector3.zero;
         }
 
         /// <inheritdoc />

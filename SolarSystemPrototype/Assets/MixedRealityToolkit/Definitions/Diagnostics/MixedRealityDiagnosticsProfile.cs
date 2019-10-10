@@ -10,8 +10,9 @@ namespace Microsoft.MixedReality.Toolkit.Diagnostics
     /// <summary>
     /// Configuration profile settings for setting up diagnostics.
     /// </summary>
-    [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Mixed Reality Diagnostics Profile", fileName = "MixedRealityDiagnosticsProfile", order = (int)CreateProfileMenuItemIndices.Diagnostics)]
+    [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Profiles/Mixed Reality Diagnostics Profile", fileName = "MixedRealityDiagnosticsProfile", order = (int)CreateProfileMenuItemIndices.Diagnostics)]
     [MixedRealityServiceProfile(typeof(IMixedRealityDiagnosticsSystem))]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Diagnostics/DiagnosticsSystemGettingStarted.html")]
     public class MixedRealityDiagnosticsProfile : BaseMixedRealityProfile
     {
         [SerializeField]
@@ -32,6 +33,24 @@ namespace Microsoft.MixedReality.Toolkit.Diagnostics
         /// Show or hide the profiler UI.
         /// </summary>
         public bool ShowProfiler => showProfiler;
+
+        [SerializeField]
+        [Tooltip("Display the frame info (per frame stats).")]
+        private bool showFrameInfo = true;
+
+        /// <summary>
+        /// Show or hide the frame info (per frame stats).
+        /// </summary>
+        public bool ShowFrameInfo => showFrameInfo;
+
+        [SerializeField]
+        [Tooltip("Display the memory stats (used, peak, and limit).")]
+        private bool showMemoryStats = true;
+
+        /// <summary>
+        /// Show or hide the memory stats (used, peak, and limit).
+        /// </summary>
+        public bool ShowMemoryStats => showMemoryStats;
 
         [SerializeField]
         [FormerlySerializedAs("frameRateDuration")]
@@ -79,5 +98,17 @@ namespace Microsoft.MixedReality.Toolkit.Diagnostics
         /// How quickly to interpolate the window towards its target position and rotation.
         /// </summary>
         public float WindowFollowSpeed => windowFollowSpeed;
+
+        [SerializeField]
+        [Tooltip("A material that the diagnostics system can use to render objects with instanced color support.")]
+        private Material defaultInstancedMaterial = null;
+
+        /// <summary>
+        /// A material that the diagnostics system can use to render objects with instanced color support.
+        /// A asset reference is required here to make sure the shader permutation is pulled into player builds.
+        /// </summary>
+        public Material DefaultInstancedMaterial => defaultInstancedMaterial;
+
+        
     }
 }

@@ -699,10 +699,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Microsoft.MixedReality.Toolkit.csproj">
-      <Project>{C9E05CC0-BA05-37C2-435D-E7851C8009C2}</Project>
-      <Name>Microsoft.MixedReality.Toolkit</Name>
-    </ProjectReference>
     <ProjectReference Include="Microsoft.MixedReality.Toolkit.Services.InputSystem.csproj">
       <Project>{81383DD1-BF77-D255-8369-F998B521F02F}</Project>
       <Name>Microsoft.MixedReality.Toolkit.Services.InputSystem</Name>

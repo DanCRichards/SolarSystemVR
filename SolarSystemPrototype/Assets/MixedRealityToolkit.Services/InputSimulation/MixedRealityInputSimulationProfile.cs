@@ -6,8 +6,9 @@ using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Input
 {
-    [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Mixed Reality Simulated Input Profile", fileName = "MixedRealityInputSimulationProfile", order = (int)CreateProfileMenuItemIndices.InputSimulation)]
-    [MixedRealityServiceProfile(typeof(InputSimulationService))]
+    [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Profiles/Mixed Reality Simulated Input Profile", fileName = "MixedRealityInputSimulationProfile", order = (int)CreateProfileMenuItemIndices.InputSimulation)]
+    [MixedRealityServiceProfile(typeof(IInputSimulationService))]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html")]
     public class MixedRealityInputSimulationProfile : BaseMixedRealityProfile
     {
         [Header("Camera Control")]
@@ -69,12 +70,12 @@ namespace Microsoft.MixedReality.Toolkit.Input
         // The right stick has no default settings in the Input Manager and will need to be setup for a game controller to look
         [SerializeField]
         [Tooltip("Look Horizontal Axis - Right Stick On Controller")]
-        private string lookHorizontal = "LookHorizontal";
+        private string lookHorizontal = ControllerMappingLibrary.AXIS_4;
         public string LookHorizontal => lookHorizontal;
         // Look vertical string for right stick of game controller
         [SerializeField]
         [Tooltip("Look Vertical Axis - Right Stick On Controller ")]
-        private string lookVertical = "LookVertical";
+        private string lookVertical = ControllerMappingLibrary.AXIS_5;
         public string LookVertical => lookVertical;
 
         [Header("Eye Simulation")]
@@ -87,7 +88,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         [SerializeField]
         [Tooltip("Enable hand simulation")]
         private HandSimulationMode handSimulationMode = HandSimulationMode.Articulated;
-        public HandSimulationMode HandSimulationMode => handSimulationMode;
+        public HandSimulationMode HandSimulationMode { get => handSimulationMode; set => handSimulationMode = value; }
 
         [Header("Hand Control Settings")]
         [SerializeField]
@@ -113,17 +114,17 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         [Header("Hand Gesture Settings")]
         [SerializeField]
-        private SimulatedHandPose.GestureId defaultHandGesture = SimulatedHandPose.GestureId.Open;
-        public SimulatedHandPose.GestureId DefaultHandGesture => defaultHandGesture;
+        private ArticulatedHandPose.GestureId defaultHandGesture = ArticulatedHandPose.GestureId.Open;
+        public ArticulatedHandPose.GestureId DefaultHandGesture => defaultHandGesture;
         [SerializeField]
-        private SimulatedHandPose.GestureId leftMouseHandGesture = SimulatedHandPose.GestureId.Pinch;
-        public SimulatedHandPose.GestureId LeftMouseHandGesture => leftMouseHandGesture;
+        private ArticulatedHandPose.GestureId leftMouseHandGesture = ArticulatedHandPose.GestureId.Pinch;
+        public ArticulatedHandPose.GestureId LeftMouseHandGesture => leftMouseHandGesture;
         [SerializeField]
-        private SimulatedHandPose.GestureId middleMouseHandGesture = SimulatedHandPose.GestureId.None;
-        public SimulatedHandPose.GestureId MiddleMouseHandGesture => middleMouseHandGesture;
+        private ArticulatedHandPose.GestureId middleMouseHandGesture = ArticulatedHandPose.GestureId.None;
+        public ArticulatedHandPose.GestureId MiddleMouseHandGesture => middleMouseHandGesture;
         [SerializeField]
-        private SimulatedHandPose.GestureId rightMouseHandGesture = SimulatedHandPose.GestureId.None;
-        public SimulatedHandPose.GestureId RightMouseHandGesture => rightMouseHandGesture;
+        private ArticulatedHandPose.GestureId rightMouseHandGesture = ArticulatedHandPose.GestureId.None;
+        public ArticulatedHandPose.GestureId RightMouseHandGesture => rightMouseHandGesture;
         [SerializeField]
         [Tooltip("Gesture interpolation per second")]
         private float handGestureAnimationSpeed = 8.0f;
@@ -134,9 +135,10 @@ namespace Microsoft.MixedReality.Toolkit.Input
         private float holdStartDuration = 0.5f;
         public float HoldStartDuration => holdStartDuration;
         [SerializeField]
-        [Tooltip("The total amount of input source movement that needs to happen to start a manipulation")]
-        private float manipulationStartThreshold = 0.03f;
-        public float ManipulationStartThreshold => manipulationStartThreshold;
+        [Tooltip("The total amount of input source movement that needs to happen to start navigation")]
+        [UnityEngine.Serialization.FormerlySerializedAs("manipulationStartThreshold")]
+        private float navigationStartThreshold = 0.03f;
+        public float NavigationStartThreshold => navigationStartThreshold;
 
         [Header("Hand Placement Settings")]
         [SerializeField]

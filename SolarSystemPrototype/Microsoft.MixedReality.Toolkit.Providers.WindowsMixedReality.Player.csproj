@@ -50,8 +50,8 @@
     <Reference Include="Microsoft.MixedReality.Toolkit">
       <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.MixedReality.Toolkit.Utilities.Gltf">
-      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Utilities.Gltf.dll</HintPath>
+    <Reference Include="Microsoft.MixedReality.Toolkit.Gltf">
+      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Gltf.dll</HintPath>
     </Reference>
     <Reference Include="MetroSupport/Managed/il2cpp/UnityEngine">
       <HintPath>C:\Program Files\Unity2018-5\Editor\Data\PlaybackEngines\MetroSupport/Managed/il2cpp/UnityEngine.dll</HintPath>
@@ -865,11 +865,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\BaseWindowsMixedRealitySource.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\Extensions\GestureRecognizerExtensions.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\Extensions\InteractionSourceExtensions.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\WindowsMixedRealityArticulatedHand.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\WindowsMixedRealityController.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\WindowsMixedRealityDeviceManager.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\WindowsMixedRealityEyeGazeDataProvider.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\WindowsMixedRealityGGVHand.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\WindowsMixedRealityHandRecorder.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\WindowsMixedRealitySpatialMeshObserver.cs" />
     <Compile Include="Assets\MixedRealityToolkit.Providers\WindowsMixedReality\WindowsMixedRealityUtilities.cs" />
   </ItemGroup>

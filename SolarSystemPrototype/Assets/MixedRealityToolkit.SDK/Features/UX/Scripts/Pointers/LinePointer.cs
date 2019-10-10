@@ -81,11 +81,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         #region MonoBehaviour Implementation
 
-        protected virtual void OnValidate()
-        {
-            CheckInitialization();
-        }
-
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -114,7 +109,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             lineBase.UpdateMatrix();
 
             // Set our first and last points
-            if (IsFocusLocked && Result?.Details != null)
+            if (IsFocusLocked && IsTargetPositionLockedOnFocusLock && Result != null)
             {
                 // Make the final point 'stick' to the target at the distance of the target
                 SetLinePoints(Position, Result.Details.Point, Result.Details.RayDistance);
@@ -143,34 +138,29 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <inheritdoc />
         public override void OnPostSceneQuery()
         {
-            Gradient lineColor = LineColorNoTarget;
+            base.OnPostSceneQuery();
 
-            if (!IsActive)
+            bool isEnabled = IsInteractionEnabled;
+            LineBase.enabled = isEnabled;
+            BaseCursor?.SetVisibility(isEnabled);
+
+            if (!isEnabled) 
             {
-                lineBase.enabled = false;
-                BaseCursor?.SetVisibility(false);
                 return;
             }
 
-            lineBase.enabled = true;
-            BaseCursor?.SetVisibility(true);
-
             // The distance the ray travels through the world before it hits something. Measured in world-units (as opposed to normalized distance).
             float clearWorldLength;
-            // Used to ensure the line doesn't extend beyond the cursor
-            float cursorOffsetWorldLength = (BaseCursor != null) ? BaseCursor.SurfaceCursorDistance : 0;
-
-            // If we hit something
+            Gradient lineColor = LineColorNoTarget;
             if (Result?.CurrentPointerTarget != null)
             {
+                // We hit something
                 clearWorldLength = Result.Details.RayDistance;
-
                 lineColor = LineColorValid;
             }
             else
             {
                 clearWorldLength = DefaultPointerExtent;
-
                 lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
             }
 
@@ -180,18 +170,19 @@ namespace Microsoft.MixedReality.Toolkit.Input
             }
 
             int maxClampLineSteps = LineCastResolution;
-
             foreach (BaseMixedRealityLineRenderer lineRenderer in lineRenderers)
             {
                 // Renderers are enabled by default if line is enabled
-                lineRenderer.enabled = true;
                 maxClampLineSteps = Mathf.Max(maxClampLineSteps, lineRenderer.LineStepCount);
                 lineRenderer.LineColor = lineColor;
             }
 
+            // Used to ensure the line doesn't extend beyond the cursor
+            float cursorOffsetWorldLength = (BaseCursor != null) ? BaseCursor.SurfaceCursorDistance : 0;
+
             // If focus is locked, we're sticking to the target
             // So don't clamp the world length
-            if (IsFocusLocked)
+            if (IsFocusLocked && IsTargetPositionLockedOnFocusLock)
             {
                 float cursorOffsetLocalLength = LineBase.GetNormalizedLengthFromWorldLength(cursorOffsetWorldLength);
                 LineBase.LineEndClamp = 1 - cursorOffsetLocalLength;
@@ -200,7 +191,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 // Otherwise clamp the line end by the clear distance
                 float clearLocalLength = lineBase.GetNormalizedLengthFromWorldLength(clearWorldLength - cursorOffsetWorldLength, maxClampLineSteps);
-                lineBase.LineEndClamp = clearLocalLength;
+                LineBase.LineEndClamp = clearLocalLength;
             }
         }
 

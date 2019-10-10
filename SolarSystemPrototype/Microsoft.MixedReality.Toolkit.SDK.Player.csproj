@@ -50,14 +50,17 @@
     <Reference Include="Microsoft.MixedReality.Toolkit">
       <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.MixedReality.Toolkit.Core.Utilities.Async">
-      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Core.Utilities.Async.dll</HintPath>
+    <Reference Include="Microsoft.MixedReality.Toolkit.Async">
+      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Async.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.MixedReality.Toolkit.Services.InputSystem">
       <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Services.InputSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.MixedReality.Toolkit.Services.InputAnimation">
+      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Services.InputAnimation.dll</HintPath>
     </Reference>
     <Reference Include="MetroSupport/Managed/il2cpp/UnityEngine">
       <HintPath>C:\Program Files\Unity2018-5\Editor\Data\PlaybackEngines\MetroSupport/Managed/il2cpp/UnityEngine.dll</HintPath>
@@ -233,8 +236,11 @@
     <Reference Include="MetroSupport/Managed/il2cpp/UnityEngine.XRModule">
       <HintPath>C:\Program Files\Unity2018-5\Editor\Data\PlaybackEngines\MetroSupport/Managed/il2cpp/UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.MixedReality.Toolkit.Core.Inspectors">
-      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Core.Inspectors.dll</HintPath>
+    <Reference Include="Microsoft.MixedReality.Toolkit.Editor.Inspectors">
+      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Editor.Inspectors.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.MixedReality.Toolkit.Editor.Utilities">
+      <HintPath>Library/ScriptAssemblies/Microsoft.MixedReality.Toolkit.Editor.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>C:/Program Files/Unity2018-5/Editor/Data/UnityExtensions/Unity/GUISystem/Standalone/UnityEngine.UI.dll</HintPath>
@@ -874,28 +880,47 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\Boundary\Scripts\BoundarySystemManager.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\Camera\Scripts\CameraSystemManager.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\Diagnostics\Scripts\DiagnosticsSystemManager.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\Input\Scripts\InputSystemManager.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\SpatialAwareness\Scripts\SpatialAwarenessSystemManager.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\Support\Scripts\BaseServiceManager.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\Teleport\Scripts\TeleportSystemManager.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\Utilities\StabilizationPlaneModifier.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\Utilities\WorldAnchorManager.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Experimental\Features\UX\MixedRealityKeyboard.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Audio\Influencers\AudioInfluencerController.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Audio\Influencers\AudioLoFiEffect.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Audio\Influencers\AudioLoFiSourceQuality.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Audio\Influencers\AudioOccluder.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Events\HandPanEventData.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Events\InputActionUnityEvent.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Events\ManipulationEvent.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Events\ManipulationEventData.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Events\PanUnityEvent.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Events\PointerUnityEvent.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Events\TouchEvent.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Events\TouchEventData.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\BaseEyeFocusHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\BaseFocusHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\BaseInputHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\ControllerPoseSynchronizer.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\CursorContextManipulationHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\DictationHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\EyeTrackingTarget.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\InputActionHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\ManipulationHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\PointerClickHandler.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\PointerHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\SpeechInputHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\TeleportHotSpot.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\TouchHandler.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Input\Handlers\TransformScaleHandler.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\HeadPositionOffset.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\Solvers\AttachToController.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\Solvers\ConstantViewSize.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\Solvers\ControllerFinder.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\Solvers\HandConstraint.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\Solvers\HandConstraintPalmUp.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\Solvers\InBetween.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\Solvers\Momentum.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\Utilities\Solvers\Orbital.cs" />
@@ -909,9 +934,11 @@
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableEvent.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableOnClickReceiver.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableOnFocusReceiver.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableOnGrabReceiver.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableOnHoldReceiver.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableOnPressReceiver.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableOnToggleReceiver.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableOnTouchReceiver.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableReceiver.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\InteractableReceiverList.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Events\ReceiverBase.cs" />
@@ -926,6 +953,7 @@
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Layout\ButtonSize.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Layout\ButtonSizeOffset.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Profile\InteractableProfileItem.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Selection\SelectionModes.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Simulation\InteractablePointerSimulator.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\States\InteractableStateModel.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\States\InteractableStates.cs" />
@@ -935,6 +963,8 @@
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\InteractableAudioTheme.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\InteractableColorChildrenTheme.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\InteractableColorTheme.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\InteractableCustomSetting.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\InteractableGrabScaleTheme.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\InteractableMaterialTheme.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\InteractableOffsetTheme.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\InteractableRotationTheme.cs" />
@@ -951,6 +981,7 @@
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\ScaleOffsetColorTheme.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\Theme.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\ThemeEaseSettings.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\Themes\VisualProfile.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\TypeResolution\InteractableType.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\TypeResolution\InteractableTypeFinder.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Interactable\Scripts\TypeResolution\InteractableTypesContainer.cs" />
@@ -971,6 +1002,7 @@
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Controllers\WindowsMixedRealityControllerVisualizer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\AnimatedCursor.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\BaseCursor.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\CursorContextInfo.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\CursorModifier.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\FingerCursor.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\InteractiveMeshCursor.cs" />
@@ -978,23 +1010,37 @@
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\ObjectCursor.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\SpriteCursor.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Cursors\TeleportCursor.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Loader\LoaderController.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\BaseControllerPointer.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\BaseMousePointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\DefaultPointerMediator.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\DefaultPrimaryPointerSelector.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\GGVPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\LinePointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\MousePointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\ParabolicTeleportPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\PokePointer.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\ScreenSpaceMousePointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\ShellHandRayPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\SpherePointer.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\SpherePointerGrabPoint.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\SpherePointerVisual.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\TeleportPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Pointers\TouchPointer.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\PressableButtons\PhysicalPressEventRouter.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\PressableButtons\PressableButton.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Receivers\InteractionReceiver.cs" />
-    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Slate\HandInteractionPan.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\PressableButtons\PressableButtonHoloLens2.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\ProgressIndicators\IProgressIndicator.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\ProgressIndicators\ProgressIndicatorLoadingBar.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\ProgressIndicators\ProgressIndicatorObjectDisplay.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\ProgressIndicators\ProgressIndicatorOrbsRotator.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\ProgressIndicators\ProgressIndicatorState.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Slate\FollowMeToggle.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Slate\HandInteractionPanZoom.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Sliders\PinchSlider.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Sliders\SliderEvent.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Sliders\SliderEventData.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Sliders\SliderSounds.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Tooltips\IToolTipBackground.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Tooltips\IToolTipHighlight.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Tooltips\ToolTip.cs" />
@@ -1014,7 +1060,10 @@
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Utilities\Billboard.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Utilities\Easing.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Utilities\GazeHandHelper.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Utilities\InputRecordingControls.cs" />
     <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Utilities\InteractableHighlight.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Utilities\InteractableOnFocus.cs" />
+    <Compile Include="Assets\MixedRealityToolkit.SDK\Features\UX\Scripts\Utilities\ToggleHandVisualisation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
