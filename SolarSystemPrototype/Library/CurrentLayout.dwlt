@@ -70,10 +70,10 @@ MonoBehaviour:
     y: 0
     width: 1216
     height: 551
-  m_MinSize: {x: 306, y: 224}
-  m_MaxSize: {x: 8006, y: 4024}
+  m_MinSize: {x: 304, y: 224}
+  m_MaxSize: {x: 8004, y: 4024}
   vertical: 0
-  controlID: 123
+  controlID: 28
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -162,10 +162,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 581, y: 348}
-  m_MaxSize: {x: 12006, y: 8048}
+  m_MinSize: {x: 579, y: 348}
+  m_MaxSize: {x: 12004, y: 8048}
   vertical: 0
-  controlID: 121
+  controlID: 26
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -187,10 +187,10 @@ MonoBehaviour:
     y: 0
     width: 1216
     height: 947
-  m_MinSize: {x: 306, y: 348}
-  m_MaxSize: {x: 8006, y: 8048}
+  m_MinSize: {x: 304, y: 348}
+  m_MaxSize: {x: 8004, y: 8048}
   vertical: 1
-  controlID: 122
+  controlID: 27
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -239,8 +239,8 @@ MonoBehaviour:
     y: 551
     width: 1216
     height: 396
-  m_MinSize: {x: 102, y: 124}
-  m_MaxSize: {x: 4002, y: 4024}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 19}
@@ -391,7 +391,7 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 23424
+  m_LastSelectedObjectID: -28444
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -421,9 +421,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 3e15feff
-      m_LastClickedID: -125634
-      m_ExpandedIDs: 3e15feff
+      m_SelectedIDs: b0fbffff
+      m_LastClickedID: -1104
+      m_ExpandedIDs: 16f9ffff6efbffff7cfbffffaefbffffb0fbffff8a540000ae540000e4540000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -558,9 +558,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -11.80159, y: -0.1714474, z: -3.9867349}
+    m_Target: {x: -9.248394, y: -2.1092844, z: -2.3506458}
     speed: 2
-    m_Value: {x: -11.80159, y: -0.1714474, z: -3.9867349}
+    m_Value: {x: -9.248394, y: -2.1092844, z: -2.3506458}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -588,13 +588,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.033959713, y: -0.8923237, z: -0.068103105, w: 0.44493502}
+    m_Target: {x: 0.32903835, y: -0.59521264, z: 0.291073, w: 0.6728538}
     speed: 2
-    m_Value: {x: -0.033959713, y: -0.8923237, z: -0.068103105, w: 0.44493502}
+    m_Value: {x: 0.32903835, y: -0.59521264, z: 0.291073, w: 0.6728538}
   m_Size:
-    m_Target: 9.475942
+    m_Target: 6.0798006
     speed: 2
-    m_Value: 9.475942
+    m_Value: 6.0798006
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -670,20 +670,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/MixedRealityToolkit.Providers/WindowsMixedReality
+    - Assets/Resources/Scripts
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/MixedRealityToolkit.Providers/WindowsMixedReality
+  - Assets/Resources/Scripts
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\dric372\Documents\Github\InfoSys320\SolarSystemPrototype
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 14cf0000
-    m_LastClickedID: 53012
-    m_ExpandedIDs: 00000000d4c900004ecb000032cc000040cc0000aacf000022d5000028d500002ad5000002d60000a4d60000a8db000000ca9a3b
+    scrollPos: {x: 0, y: 585}
+    m_SelectedIDs: fe3b0000
+    m_LastClickedID: 15358
+    m_ExpandedIDs: 00000000dc36000018370000503a0000e23b0000fe3b0000d83f00001e430000e8430000824900008e4a00001e4b0000264b00002a4b00000e4c0000e84c0000a24e000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -711,7 +711,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000d4c900004ecb000032cc000040cc0000aacf000022d500002ad5000002d60000a4d60000
+    m_ExpandedIDs: 00000000dc360000503a0000e23b0000fe3b0000e8430000824900001e4b0000264b00002a4b0000e84c0000a24e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -736,24 +736,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 3e15feff
-    m_LastClickedInstanceID: -125634
+    m_SelectedInstanceIDs: e490ffff
+    m_LastClickedInstanceID: -28444
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000b436000000000000b46a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: getPlanetInfo
+      m_OriginalName: getPlanetInfo
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 10344
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 10}
     m_CreateAssetUtility:
