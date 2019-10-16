@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Net;
 using System;
 using System.IO;
 using APIObjects;
-using TMPro;
 
 namespace ApiManager
 {

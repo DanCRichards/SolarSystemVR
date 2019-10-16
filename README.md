@@ -12,6 +12,11 @@ You will need
 git clone http://www.github.com/DanCRichards/InfoSys320
 open Unity
 ```
+#Running Project
+- Use Unity 2018.4.51f
+- When opening the file, if an error message says
+``` Windows Mixed Reality Needs to Change the following settings ```
+- Press Ignore.
 
 # Project Members
 - Dan Richards
