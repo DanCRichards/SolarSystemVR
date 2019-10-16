@@ -2577,6 +2577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObject: {fileID: 831530711}
   boundsOverride: {fileID: 831530714}
+  boundsCalculationMethod: 0
   activation: 3
   scaleMinimum: 0.2
   scaleMaximum: 2
@@ -2978,6 +2979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1895117421}
   boundsOverride: {fileID: 1895117424}
+  boundsCalculationMethod: 0
   activation: 3
   scaleMinimum: 0.2
   scaleMaximum: 2
@@ -4998,6 +5000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1329966375}
   - component: {fileID: 1329966376}
+  - component: {fileID: 1329966377}
   m_Layer: 0
   m_Name: Banner
   m_TagString: Untagged
@@ -5022,6 +5025,20 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1329966376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329966374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2547b4dd088644d6aaf64f45df657c79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pivotAxis: 1
+  targetTransform: {fileID: 0}
+--- !u!114 &1329966377
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5460,6 +5477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObject: {fileID: 409178425}
   boundsOverride: {fileID: 409178428}
+  boundsCalculationMethod: 0
   activation: 0
   scaleMinimum: 0.2
   scaleMaximum: 2

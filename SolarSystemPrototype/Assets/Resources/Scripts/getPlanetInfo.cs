@@ -13,6 +13,7 @@ public class getPlanetInfo : MonoBehaviour
     public TextMeshPro generalInfo;
     public GameObject planetObject;
     public GameObject hammer;
+    public GameObject hammerText;
 
 
     void Start()
@@ -24,6 +25,10 @@ public class getPlanetInfo : MonoBehaviour
         latinName.text = bd.Name;
         discoveredBy.text = bd.DiscoveredBy;
         discoveryDate.text = bd.DiscoveryDate;
+        hammerText.GetComponent<TextMeshPro>().text = bd.EnglishName;
+
+
+// IMPLEMENT SOMETHING WHERE IT CAN CHANGE THE INFO OF A THE PLANET. A LOT OF PLANET'S DON'T HAVE INFO ON THEM 
         if (discoveredBy.text == "")
         {
             discoveredBy.text = "Undocumented";
@@ -54,7 +59,8 @@ public class getPlanetInfo : MonoBehaviour
         float size = diameter / (6371.00840f * 2); 
         // Earth Radius = 6371.00840
 
-        float force = -1 * ((float)bd.Gravity / 9.8f);
+
+        float force = -10 * ((float)bd.Gravity / 9.8f);
 
         Debug.Log(bd.EnglishName + " Has a gravity of " + force.ToString());
         hammer.GetComponent<ConstantForce>().force = new Vector3(0f, force, 0f);

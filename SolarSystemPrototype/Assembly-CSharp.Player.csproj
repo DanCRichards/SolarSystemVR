@@ -1054,6 +1054,7 @@
     <Compile Include="Assets\Resources\Scripts\APIManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Bodies.cs" />
     <Compile Include="Assets\Resources\Scripts\CanvasAPI.cs" />
+    <Compile Include="Assets\Resources\Scripts\CustomPlanetGravityChanger.cs" />
     <Compile Include="Assets\Resources\Scripts\getPlanetInfo.cs" />
     <Compile Include="Assets\Resources\Scripts\Objects\CourseQuizes.cs" />
     <Compile Include="Assets\Resources\Scripts\Objects\PlanetObject.cs" />
