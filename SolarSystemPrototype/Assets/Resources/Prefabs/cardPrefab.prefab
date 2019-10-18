@@ -141,6 +141,7 @@ MonoBehaviour:
   generalInfo: {fileID: 472880063214460577}
   planetObject: {fileID: 0}
   hammer: {fileID: 0}
+  hammerText: {fileID: 0}
 --- !u!1 &1012697820718079043
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +156,7 @@ GameObject:
   - component: {fileID: 5316260928542253241}
   - component: {fileID: 2671893975400520665}
   m_Layer: 0
-  m_Name: DiscoveredBy
+  m_Name: closestToSun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,7 +254,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Discovered By
+  m_text: Closest to Sun
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -322,10 +323,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: -10.183822, w: 0}
   m_textInfo:
     textComponent: {fileID: 2671893975400520665}
-    characterCount: 13
+    characterCount: 14
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -359,7 +360,7 @@ GameObject:
   - component: {fileID: 6606013770040484183}
   - component: {fileID: 7617542851853297379}
   m_Layer: 0
-  m_Name: DiscoveryDate
+  m_Name: farthestFromSun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -457,7 +458,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Discovery Date
+  m_text: Farthest from Sun
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -523,13 +524,13 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -13.0103445, w: 0}
+  m_margin: {x: 0, y: 0, z: -15.669121, w: 0}
   m_textInfo:
     textComponent: {fileID: 7617542851853297379}
-    characterCount: 14
+    characterCount: 17
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -767,7 +768,7 @@ GameObject:
   - component: {fileID: 684173614889600430}
   - component: {fileID: 3227653239868752338}
   m_Layer: 0
-  m_Name: DiscoveredBayChangeable
+  m_Name: closestToSunChangeable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1583,7 +1584,7 @@ GameObject:
   - component: {fileID: 91738507288107202}
   - component: {fileID: 5699492631741661890}
   m_Layer: 0
-  m_Name: DiscoverDateChangeable
+  m_Name: farthestFromSunChangeable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

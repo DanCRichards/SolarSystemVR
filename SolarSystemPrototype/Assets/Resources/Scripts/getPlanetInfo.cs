@@ -15,7 +15,6 @@ public class getPlanetInfo : MonoBehaviour
     public GameObject hammer;
     public GameObject hammerText;
 
-
     void Start()
        {
         Body bd = APIManager.getPlanetInfo(planet);
@@ -23,10 +22,12 @@ public class getPlanetInfo : MonoBehaviour
         Debug.Log(bd.EnglishName);
         planetTitle.text = bd.EnglishName;
         latinName.text = bd.Name;
-        discoveredBy.text = bd.DiscoveredBy;
-        discoveryDate.text = bd.DiscoveryDate;
+        long aphelion = bd.Aphelion;
+        long perihelion = bd.Perihelion;
+        
+        discoveredBy.text = aphelion.ToString() + " m" ;
+        discoveryDate.text = perihelion.ToString() + " m";
         hammerText.GetComponent<TextMeshPro>().text = bd.EnglishName;
-
 
 // IMPLEMENT SOMETHING WHERE IT CAN CHANGE THE INFO OF A THE PLANET. A LOT OF PLANET'S DON'T HAVE INFO ON THEM 
         if (discoveredBy.text == "")
