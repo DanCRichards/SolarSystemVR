@@ -15,7 +15,6 @@ public class getPlanetInfo : MonoBehaviour
     public GameObject hammer;
     public GameObject hammerText;
 
-
     void Start()
        {
         Body bd = APIManager.getPlanetInfo(planet);
@@ -23,10 +22,14 @@ public class getPlanetInfo : MonoBehaviour
         Debug.Log(bd.EnglishName);
         planetTitle.text = bd.EnglishName;
         latinName.text = bd.Name;
-        discoveredBy.text = bd.DiscoveredBy;
-        discoveryDate.text = bd.DiscoveryDate;
+        long aphelion = bd.Aphelion;
+        long perihelion = bd.Perihelion;
+        
+        discoveredBy.text = aphelion.ToString() + " m" ;
+        discoveryDate.text = perihelion.ToString() + " m";
         hammerText.GetComponent<TextMeshPro>().text = bd.EnglishName;
 
+<<<<<<< HEAD
         float force = -10 * ((float)bd.Gravity / 9.8f);
         float diameter = 2 * (float)bd.MeanRadius;
         float size;
@@ -47,6 +50,9 @@ public class getPlanetInfo : MonoBehaviour
 
 
         // IMPLEMENT SOMETHING WHERE IT CAN CHANGE THE INFO OF A THE PLANET. A LOT OF PLANET'S DON'T HAVE INFO ON THEM 
+=======
+// IMPLEMENT SOMETHING WHERE IT CAN CHANGE THE INFO OF A THE PLANET. A LOT OF PLANET'S DON'T HAVE INFO ON THEM 
+>>>>>>> 26f476ea808f6fa722d8ca3de94917b82421c7f3
         if (discoveredBy.text == "")
         {
             discoveredBy.text = "Undocumented";
