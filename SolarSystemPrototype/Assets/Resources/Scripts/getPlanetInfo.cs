@@ -27,8 +27,26 @@ public class getPlanetInfo : MonoBehaviour
         discoveryDate.text = bd.DiscoveryDate;
         hammerText.GetComponent<TextMeshPro>().text = bd.EnglishName;
 
+        float force = -10 * ((float)bd.Gravity / 9.8f);
+        float diameter = 2 * (float)bd.MeanRadius;
+        float size;
+        if(bd.Name == "Saturn")
+        {
+             size = diameter / (6371.00840f * 2 * 12);
+        }
+        else
+        {
+             size = diameter / (6371.00840f * 2);
+        }
+       
 
-// IMPLEMENT SOMETHING WHERE IT CAN CHANGE THE INFO OF A THE PLANET. A LOT OF PLANET'S DON'T HAVE INFO ON THEM 
+
+        Debug.Log(bd.EnglishName + " Has a gravity of " + force.ToString());
+        hammer.GetComponent<ConstantForce>().force = new Vector3(0f, force, 0f);
+        planetObject.transform.localScale = new Vector3(size, size, size);
+
+
+        // IMPLEMENT SOMETHING WHERE IT CAN CHANGE THE INFO OF A THE PLANET. A LOT OF PLANET'S DON'T HAVE INFO ON THEM 
         if (discoveredBy.text == "")
         {
             discoveredBy.text = "Undocumented";
@@ -55,16 +73,11 @@ public class getPlanetInfo : MonoBehaviour
             }
         }
 
-        float diameter = 2 * (float)bd.MeanRadius;
-        float size = diameter / (6371.00840f * 2); 
+      
         // Earth Radius = 6371.00840
 
 
-        float force = -10 * ((float)bd.Gravity / 9.8f);
-
-        Debug.Log(bd.EnglishName + " Has a gravity of " + force.ToString());
-        hammer.GetComponent<ConstantForce>().force = new Vector3(0f, force, 0f);
-        planetObject.transform.localScale = new Vector3(size, size, size);            
+                 
     }
 
 
