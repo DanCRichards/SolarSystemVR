@@ -11,6 +11,7 @@ public class CanvasApi
     private static readonly HttpClient client = new HttpClient();
     // This is super secret. 
     private static readonly string token = "Bearer 6199~udNLPgpFNfN8fUwuKZ525yUcZmgq2nsuCnb40I21YJ8vMuL1J53b1ryZayvOknT5";
+	// Goodluck this API Key doesn't exist anymore :) But helps you understand what you need. 
     private static readonly int classNumber = 38864;
     private static long quizID;
     private static QuizSubmissionQuestions quizSubmissionQuestions;
